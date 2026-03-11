@@ -8,7 +8,7 @@ from omsapi import OMSAPI
 
 #fill your values
 my_app_id='cms-l1scout-analysis'
-my_app_secret='310Z6dQW39l3CllRc4YGAIM89bToEPoP'
+my_app_secret='XXX'
 omsapi = OMSAPI("https://cmsoms.cern.ch/agg/api", "v1", cert_verify=False)
 omsapi.auth_oidc(my_app_id,my_app_secret)
 
