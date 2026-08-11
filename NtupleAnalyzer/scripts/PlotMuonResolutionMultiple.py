@@ -10,7 +10,7 @@ def gaussian_norm(x, mu, sigma):
     return 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(-(x - mu)**2 / (2 * sigma**2))
 
 # === Load ROOT File ===
-filename = "output_ZmumuKBMTF/DY.root"
+filename = "output_ZmumuKBMTF/.root"
 histnames = {
     r"15 < $p_T$ < 25 GeV": "h_reso_pt15to25",
     r"25 < $p_T$ < 35 GeV": "h_reso_pt25to35",

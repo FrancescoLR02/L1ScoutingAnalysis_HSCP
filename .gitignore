@@ -1,17 +1,14 @@
-# Ignore all .root files
 *.root
-
-# Ignore all .csv files
-*.csv
-
-# Ignore all .txt files
-*.txt
-
-# Ignore all .pdf files
-*.pdf
-
-# Ignore all .png files
-*.png
-
-# Ignore all .exe files
 *.exe
+*.so
+*.d
+*.pcm
+*.o
+*.pyc
+__pycache__/
+# condor
+*.log
+*.err
+*.out
+condor_logs/
+tmp/

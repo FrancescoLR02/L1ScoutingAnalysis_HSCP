@@ -1,0 +1,102 @@
+from ROOT import RDataFrame, TFile, TChain, TTree, TFile, TH1D, TLorentzVector,TCanvas
+import numpy as np
+import sys
+from math import cos,sin,sqrt,pi
+import ROOT
+import time as timer
+time_start=timer.time()
+ROOT.gInterpreter.AddIncludePath('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib')
+ROOT.gInterpreter.Declare('#include "MODbasic_sel.h"')
+ROOT.gInterpreter.ProcessLine('.L /eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/MODbasic_sel.cpp+')
+#ROOT.gSystem.Load('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/basic_sel_cpp.so')
+
+
+### sample: output root file name
+input_file = sys.argv[1]
+output_file = sys.argv[2]
+
+isdata = False
+ngen=1.
+
+print ("isdata ", isdata)
+
+weight = 1.0
+
+if (isdata):
+    weight = 1.0
+
+df = RDataFrame(0)
+df = RDataFrame("Events",input_file)
+
+nentries = df.Count().GetValue()
+
+print ("Before selection total entries", nentries)
+
+df = df.Filter("nL1KBMTFSkimmed>0")
+
+df = df.Define("idx1", "GetIndex(1, nL1KBMTFSkimmed, L1KBMTFSkimmed_pt, L1KBMTFSkimmed_eta, L1KBMTFSkimmed_phi, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)").Define("idx2", "GetIndex(2, nL1KBMTFSkimmed, L1KBMTFSkimmed_pt, L1KBMTFSkimmed_eta, L1KBMTFSkimmed_phi, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)")
+
+#df = df.Define("nstub1", "GetNstub(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub)").Define("nstub2", "GetNstub(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub)")
+df = df.Define("nstub1","L1KBMTFSkimmed_nStub[idx1]").Define("nstub2","L1KBMTFSkimmed_nStub[idx2]") 
+
+#df = df.Filter("(nstub1>2 || nstub2>2)")
+       #.Define("eLoss1", "L1KBMTFSkimmed_eLoss[idx1]").Define("eLoss2", "L1KBMTFSkimmed_eLoss[idx2]") \
+
+df = df.Define("bxspread1", "GetBxSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
+       .Define("bxspread2", "GetBxSpread(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
+       .Define("isL1MuMatched1", "IsL1MuMatched(nL1KBMTFSkimmed, idx1,L1KBMTFSkimmed_pt,L1KBMTFSkimmed_eta,L1KBMTFSkimmed_phi,nSkimmedL1Mu,SkimmedL1Mu_pt,SkimmedL1Mu_eta,SkimmedL1Mu_phi)") \
+       .Define("isL1MuMatched2", "IsL1MuMatched(nL1KBMTFSkimmed, idx2,L1KBMTFSkimmed_pt,L1KBMTFSkimmed_eta,L1KBMTFSkimmed_phi,nSkimmedL1Mu,SkimmedL1Mu_pt,SkimmedL1Mu_eta,SkimmedL1Mu_phi)") \
+       .Define("stationspread1", "GetStationSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Station, L1KBMTFSkimmed_s2Station, L1KBMTFSkimmed_s3Station, L1KBMTFSkimmed_s4Station)") \
+       .Define("stationspread2", "GetStationSpread(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Station, L1KBMTFSkimmed_s2Station, L1KBMTFSkimmed_s3Station, L1KBMTFSkimmed_s4Station)") \
+       .Define("firstbx1", "GetFirstBx(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
+       .Define("firstbx2", "GetFirstBx(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
+       .Define("eta1","L1KBMTFSkimmed_eta[idx1]").Define("eta2","L1KBMTFSkimmed_eta[idx2]") \
+       .Define("pt1", "L1KBMTFSkimmed_pt[idx1]").Define("pt2", "L1KBMTFSkimmed_pt[idx2]") \
+       .Define("recobeta1", "L1KBMTFSkimmed_beta[idx1]").Define("recobeta2", "L1KBMTFSkimmed_beta[idx2]") \
+       .Define("HwK1", "L1KBMTFSkimmed_hwK[idx1]").Define("HwK2", "L1KBMTFSkimmed_hwK[idx2]") \
+       .Define("phi1","L1KBMTFSkimmed_phi[idx1]").Define("phi2","L1KBMTFSkimmed_phi[idx2]") \
+       .Define("dxy1","L1KBMTFSkimmed_hwDXY[idx1]").Define("dxy2","L1KBMTFSkimmed_hwDXY[idx2]") \
+       .Define("qual1","L1KBMTFSkimmed_hwQual[idx1]").Define("qual2","L1KBMTFSkimmed_hwQual[idx2]") \
+       .Define("charge1","L1KBMTFSkimmed_hwCharge[idx1]").Define("charge2","L1KBMTFSkimmed_hwCharge[idx2]") \
+       .Define("ngen","{}".format(nentries)) \
+       .Define("genbeta1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)") \
+       .Define("genpt1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)") \
+       .Define("geneta1","Get_geneta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid)") \
+       .Define("genbeta2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)") \
+       .Define("genpt2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)") \
+       .Define("geneta2","Get_geneta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid)") \
+       .Define("genK1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_K)") \
+       .Define("genK2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_K)") \
+       .Define("genCharge1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_charge)") \
+       .Define("genCharge2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_charge)") \
+       .Define("genMass1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_mass)") \
+       .Define("genMass2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_mass)") \
+       .Define("genPhi1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_phi)") \
+       .Define("genPhi2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_phi)") \
+
+
+
+#df = df.Filter("(bxspread1>0 && nstub1>2) || (bxspread2>0 && nstub2>2)")
+
+columns = ROOT.std.vector("string")()
+for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", "event", "ngen", \
+        #"nL1KBMTFSkimmed", "L1KBMTFSkimmed_hwCharge", "L1KBMTFSkimmed_hwQual", \
+        "idx1", "idx2", \
+        "bxspread1", "bxspread2", "stationspread1", "stationspread2", "nstub1", "nstub2", "isL1MuMatched1", "isL1MuMatched2", \
+        "firstbx1","firstbx2", "pt1", "pt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", "recobeta1", "recobeta2", 'HwK1', 'HwK2', \
+        "genbeta1","genpt1","genbeta2","genpt2", "geneta1", "geneta2", "genK1", "genK2", "genCharge1", "genCharge2", "genMass1", "genMass2", "genPhi1", "genPhi2", \
+        "L1MET_pt"):
+        #"L1KBMTFSkimmed_hwDXY", "L1KBMTFSkimmed_nStub", "L1KBMTFSkimmed_pt", \
+        #"L1KBMTFSkimmed_s1Station", "L1KBMTFSkimmed_s1Wheel", "L1KBMTFSkimmed_s1Sector", "L1KBMTFSkimmed_s1Bx", \
+        #"L1KBMTFSkimmed_s2Station", "L1KBMTFSkimmed_s2Wheel", "L1KBMTFSkimmed_s2Sector", "L1KBMTFSkimmed_s2Bx",
+        #"L1KBMTFSkimmed_s3Station", "L1KBMTFSkimmed_s3Wheel", "L1KBMTFSkimmed_s3Sector", "L1KBMTFSkimmed_s3Bx",
+        #"L1KBMTFSkimmed_s4Station", "L1KBMTFSkimmed_s4Wheel", "L1KBMTFSkimmed_s4Sector", "L1KBMTFSkimmed_s4Bx"):
+    columns.push_back(c)
+
+df.Snapshot("Events",output_file,columns)
+
+nentries_after = df.Count().GetValue()
+print ("After selection entries", nentries_after)
+
+time_end=timer.time()
+print('totally cost',time_end-time_start)

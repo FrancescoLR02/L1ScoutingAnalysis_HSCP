@@ -1,9 +1,13 @@
 import os
 
 # Define input and output directories
-input_dir = "/eos/cms/store/group/cmst3/group/slowmuons/Mu8Skim/L1Scouting"
-output_dir = "/eos/cms/store/group/cmst3/group/slowmuons/ZmumuKBMTFSkims"
-exe_script = "/afs/cern.ch/work/c/ccaillol/L1ScoutingAnalysisRDataFrame/CMSSW_14_0_12/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/scripts/FinalSelection_ZmumuKBMTF.py"
+#input_dir = "/eos/cms/store/group/cmst3/group/slowmuons/Mu8Skim/L1Scouting"
+#output_dir = "/eos/cms/store/group/cmst3/group/slowmuons/ZmumuKBMTFSkims"
+#exe_script = "/afs/cern.ch/work/c/ccaillol/L1ScoutingAnalysisRDataFrame/CMSSW_14_0_12/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/scripts/FinalSelection_ZmumuKBMTF.py"
+
+input_dir = '/eos/user/f/flarover/CRAB_DATA/L1ScoutingSelection/crab_ScoutingSelection_2025G/260421_081217/0000/'
+output_dir = '/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/scripts/Drell-Yan/Data'
+exe_script = '/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/scripts/FinalSelection_ZmumuKBMTF.py'
 
 # Ensure output and logs directory exist
 os.makedirs(output_dir, exist_ok=True)
@@ -40,7 +44,7 @@ for input_file in os.listdir(input_dir):
 
 echo "Setting up CMS environment..."
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-cd /afs/cern.ch/work/c/ccaillol/L1ScoutingAnalysisRDataFrame/CMSSW_14_0_12/src
+cd /eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src
 eval `scramv1 runtime -sh`
 
 echo "Running python script..."

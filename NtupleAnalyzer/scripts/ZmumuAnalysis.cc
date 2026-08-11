@@ -102,7 +102,8 @@ int main(int argc, char** argv) {
     TH1F* h_met_OS=new TH1F("h_met_OS", "h_met_OS", 20,0,100); h_met_OS->Sumw2();
     TH1F* h_met_SS=new TH1F("h_met_SS", "h_met_SS", 20,0,100); h_met_SS->Sumw2();
 
-    float lumiweight= (40400.0/15.046) + (5820.0/15.060) + (12320.0/15.048);
+    //float lumiweight= (40400.0/15.046) + (5820.0/15.060) + (12320.0/15.048);
+    float lumiweight = 68.165642 + 35.022010 + 458.565962;
 
     static TRandom3 randGen(1234);
 
@@ -117,8 +118,8 @@ int main(int argc, char** argv) {
 	   qual1 = static_cast<int>(qual1_short);
 	   charge1 = static_cast<int>(charge1_short);
 	   dxy2 = static_cast<int>(dxy2_short);
-           qual2 = static_cast<int>(qual2_short);
-           charge2 = static_cast<int>(charge2_short);
+      qual2 = static_cast<int>(qual2_short);
+      charge2 = static_cast<int>(charge2_short);
 	}
         if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
         fflush(stdout);
@@ -137,7 +138,7 @@ int main(int argc, char** argv) {
         }*/
 
 	// Muon energy resolution
-        double smearFactor1 = randGen.Gaus(1.0, 0.11);
+   double smearFactor1 = randGen.Gaus(1.0, 0.11);
 	double smearFactor2 = randGen.Gaus(1.0, 0.11);
 	if (name!="data_obs"){
 	   pt1 = pt1 * smearFactor1;

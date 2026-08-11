@@ -5,9 +5,9 @@ from math import cos,sin,sqrt,pi
 import ROOT
 import time as timer
 time_start=timer.time()
-ROOT.gInterpreter.AddIncludePath('/afs/cern.ch/work/c/ccaillol/L1ScoutingAnalysisRDataFrame/CMSSW_14_0_12/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib')
-ROOT.gInterpreter.Declare('#include "basic_sel.h"')
-ROOT.gSystem.Load('/afs/cern.ch/work/c/ccaillol/L1ScoutingAnalysisRDataFrame/CMSSW_14_0_12/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/RDFfunc.so')
+ROOT.gInterpreter.AddIncludePath('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib')
+ROOT.gInterpreter.Declare('#include "MODbasic_sel.h"')
+ROOT.gSystem.Load('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/MODbasic_sel_cpp.so')
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
@@ -30,7 +30,6 @@ else:
     df = RDataFrame("Events",input_file)
 
 nentries = df.Count().GetValue()
-print(nentries)
 
 print ("isdata ", isdata)
 
@@ -55,7 +54,9 @@ df_var = df_var.Define("mmumu","(my_mu1+my_mu2).M()").Define("DRmumu","my_mu1.De
                .Define("dxy1","SkimmedL1Mu_hwDXY[idx1]") \
                .Define("pt2","my_mu2.Pt()").Define("eta2","my_mu2.Eta()").Define("phi2","my_mu2.Phi()") \
                .Define("charge2","SkimmedL1Mu_hwCharge[idx2]").Define("qual2","SkimmedL1Mu_hwQual[idx2]") \
-               .Define("dxy2","SkimmedL1Mu_hwDXY[idx2]")
+               .Define("dxy2","SkimmedL1Mu_hwDXY[idx2]") \
+            #    .Define("hwK1","SkimmedL1Mu_hwK[idx1]") \
+            #    .Define("hwK2","SkimmedL1Mu_hwK[idx2]") \
 
 df = df_var.Filter("mmumu>50 && DRmumu>0.3").Define("xsweight","{}".format(weight))
 
@@ -66,14 +67,18 @@ if isdata:
           .Define("genbeta2","{}".format(weight)).Define("genpt2","{}".format(weight)) 
 else:
    df = df.Define("is_colliding", "true").Define("is_earlier_colliding", "true")
-   df = df.Define("genbeta1","Get_genbeta(my_mu1.Eta(), my_mu1.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)").Define("genpt1","Get_genbeta(my_mu1.Eta(), my_mu1.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)") \
-          .Define("genbeta2","Get_genbeta(my_mu2.Eta(), my_mu2.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)") \
-          .Define("genpt2","Get_genbeta(my_mu2.Eta(), my_mu2.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)")
+   df = df.Define("genbeta1","Get_genbeta(my_mu1.Eta(), my_mu1.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)") \
+        .Define("genpt1","Get_genbeta(my_mu1.Eta(), my_mu1.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)") \
+        .Define("genbeta2","Get_genbeta(my_mu2.Eta(), my_mu2.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)") \
+        .Define("genpt2","Get_genbeta(my_mu2.Eta(), my_mu2.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)") \
+        .Define("genK1","Get_genbeta(my_mu1.Eta(), my_mu1.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_K)") \
+        .Define("genK2","Get_genbeta(my_mu2.Eta(), my_mu2.Phi(), nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_K)") \
+
 
 columns = ROOT.std.vector("string")()
 for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", "xsweight", "is_colliding", "is_earlier_colliding", \
         "pt1","eta1","phi1","charge1","qual1","dxy1","pt2","eta2","phi2","charge2","qual2","dxy2", \
-        "genbeta1","genpt1","genbeta2","genpt2","mmumu", "isOS", "DRmumu"):
+        "genbeta1","genpt1","genbeta2","genpt2","mmumu", "isOS", "DRmumu", "genK1", "genK2"):
     columns.push_back(c)
 
 df.Snapshot("Events",output_file,columns)

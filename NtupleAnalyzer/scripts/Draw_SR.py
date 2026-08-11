@@ -80,7 +80,7 @@ c=ROOT.TCanvas("canvas","",0,0,800,800)
 c.cd()
 #c.SetLogy()
 
-file=ROOT.TFile("datacard.root","r")
+file=ROOT.TFile("/eos/user/f/flarover/HSCP_2025/COMBINE/CMSSW_15_0_10/src/auxiliaries/shapes/slow.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
@@ -101,17 +101,17 @@ for i in range (0,ncat):
    Fake=file.Get(categories[i]).Get("Fake")
    HSCP3000 = file.Get(categories[i]).Get("HSCP3000")
    HSCP4500 = file.Get(categories[i]).Get("HSCP4500")
-   HSCP6000 = file.Get(categories[i]).Get("HSCP6000")
+   HSCP1000 = file.Get(categories[i]).Get("HSCP1000")
 
-   if not isVR and "wrong" not in categories[i] and "fail" not in categories[i] and "metm3" not in categories[i] and "metm4" not in categories[i]:
-       for k in range(4,Data.GetNbinsX()+1):
-           Data.SetBinContent(k,0)
-           Data.SetBinError(k,0)
+#    if not isVR and "wrong" not in categories[i] and "fail" not in categories[i] and "metm3" not in categories[i] and "metm4" not in categories[i]:
+#        for k in range(4,Data.GetNbinsX()+1):
+#            Data.SetBinContent(k,0)
+#            Data.SetBinError(k,0)
 
-       if Data.GetNbinsX()+1<6:
-           for k in range(3,Data.GetNbinsX()+1):
-              Data.SetBinContent(k,0)
-              Data.SetBinError(k,0)
+#        if Data.GetNbinsX()+1<6:
+#            for k in range(3,Data.GetNbinsX()+1):
+#               Data.SetBinContent(k,0)
+#               Data.SetBinError(k,0)
 
    Data.GetXaxis().SetTitle("")
    Data.GetXaxis().SetTitleSize(0)
@@ -136,8 +136,8 @@ for i in range (0,ncat):
    HSCP3000.SetLineWidth(5)
    HSCP4500.SetLineColor(ROOT.TColor.GetColor("#964a8b"))
    HSCP4500.SetLineWidth(5)
-   HSCP6000.SetLineColor(ROOT.TColor.GetColor("#e42536"))
-   HSCP6000.SetLineWidth(5)
+   HSCP1000.SetLineColor(ROOT.TColor.GetColor("#e42536"))
+   HSCP1000.SetLineWidth(5)
 
    stack=ROOT.THStack("stack","stack")
    stack.Add(Fake)
@@ -177,7 +177,7 @@ for i in range (0,ncat):
    if not isVR: 
        HSCP3000.Draw("histsame")
        HSCP4500.Draw("histsame")
-       HSCP6000.Draw("histsame")
+       HSCP1000.Draw("histsame")
 
    legende=make_legend()
    if "inverted" in name[i]:
@@ -187,7 +187,7 @@ for i in range (0,ncat):
    if not isVR:
       legende.AddEntry(HSCP3000,"m = 3 TeV","l")
       legende.AddEntry(HSCP4500,"m = 4.5 TeV","l")
-      legende.AddEntry(HSCP6000,"m = 6 TeV","l")
+      legende.AddEntry(HSCP1000,"m = 1 TeV","l")
    legende.AddEntry(errorBand,"Stat. unc.","f")
    legende.Draw()
 
@@ -225,8 +225,8 @@ for i in range (0,ncat):
    pad2.Draw()
    pad2.cd()
    h1=Data.Clone()
-   h1.SetMaximum(1.7)
-   h1.SetMinimum(0.3)
+   h1.SetMaximum(1.5)
+   h1.SetMinimum(0.5)
    h1.SetMarkerStyle(20)
    h3=errorBand.Clone()
    hwoE=errorBand.Clone()
@@ -262,6 +262,6 @@ for i in range (0,ncat):
    ROOT.gPad.RedrawAxis()
 
    c.Modified()
-   c.SaveAs("plots/"+name[i]+".pdf")
+   #c.SaveAs("plots/"+name[i]+".pdf")
    c.SaveAs("plots/"+name[i]+".png")
 

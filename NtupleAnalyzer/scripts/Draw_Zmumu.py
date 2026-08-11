@@ -67,7 +67,7 @@ args = parser.parse_args()
 
 c=ROOT.TCanvas("canvas","",0,0,800,800)
 c.cd()
-c.SetLogy()
+#c.SetLogy()
 
 myfile=ROOT.TFile("datacard_"+args.selection+".root","r")
 
@@ -85,9 +85,13 @@ if args.selection=="ZmumuKBMTF":
 
 sf=1.0
 for k in range(0,len(dirOS)):
-   Data=myfile.Get(dirOS[k]).Get("data_obs").Clone()
-   DY=myfile.Get(dirOS[k]).Get("DYall").Clone()
-   Fake=myfile.Get(dirOS[k]).Get("Fake").Clone()
+   mydir=myfile.Get(dirOS[k])
+   if not mydir:
+      print("WARNING: no directory "+dirOS[k]+" in the datacard, skipping")
+      continue
+   Data=mydir.Get("data_obs").Clone()
+   DY=mydir.Get("DYall").Clone()
+   Fake=mydir.Get("Fake").Clone()
    
    if k==0 and Fake.GetBinContent(1)>0: 
        sf=(Data.GetBinContent(1)-DY.GetBinContent(1))/(Fake.GetBinContent(1))
@@ -157,10 +161,10 @@ for k in range(0,len(dirOS)):
    pad1.SetFrameLineStyle(0)
    pad1.SetFrameBorderMode(0)
    pad1.SetFrameBorderSize(10)
-   pad1.SetLogy()
+   #pad1.SetLogy()
    
    Data.GetXaxis().SetLabelSize(0)
-   Data.SetMaximum(max(Data.GetMaximum()*20.55,errorBand.GetMaximum()*20.55))
+   Data.SetMaximum(max(Data.GetMaximum(),errorBand.GetMaximum()))
    #Data.SetMinimum(0.1)
    Data.SetMinimum(100)
    Data.Draw("e")

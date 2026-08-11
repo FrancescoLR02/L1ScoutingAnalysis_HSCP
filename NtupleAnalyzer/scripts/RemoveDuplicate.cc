@@ -5,12 +5,15 @@
 
 using namespace std;
 
+//!  g++ -O3 RemoveDuplicate.cc -o RemoveDuplicate.exe $(root-config --cflags --glibs)
+
+
 int main(int argc, char** argv) {
 
     std::string input = *(argv + 1);
     std::string output = *(argv + 2);
 
-    TFile *inFile = new TFile(input.c_str());
+    TFile *inFile = TFile::Open(input.c_str());
     cout<<"XXXXXXXXXXXXX "<<input.c_str()<<" XXXXXXXXXXXX"<<endl;
     TTree *oldTree = (TTree*) inFile->Get("Events");
     
@@ -26,6 +29,7 @@ int main(int argc, char** argv) {
     oldTree->SetBranchAddress("eta1", &eta1);
     oldTree->SetBranchAddress("nstub1", &nstub1);
     oldTree->SetBranchAddress("bxspread1", &bxspread1);
+    oldTree->SetBranchAddress("idx2", &idx2);
 
     // Create output file and clone tree structure
     TFile *outFile = new TFile(output.c_str(), "RECREATE");
@@ -38,6 +42,7 @@ int main(int argc, char** argv) {
     float prev_eta1 = 100;
     int best_nstub = 0;
     int best_bxspread = 0;
+    int best_idx2=100;
     Long64_t best_entry = -1;
 
     // Loop over entries
@@ -60,12 +65,14 @@ int main(int argc, char** argv) {
             best_nstub = nstub1;
 	    best_bxspread = bxspread1;
             best_entry = i;
+	    best_idx2 = idx2;
         } else {
             // If still in the same group, update the max if needed
-            if (bxspread1>best_bxspread or (bxspread1==best_bxspread and nstub1 > best_nstub)) {
+            if (bxspread1>best_bxspread or (bxspread1==best_bxspread and nstub1 > best_nstub) or (bxspread1==best_bxspread and nstub1==best_nstub and idx2<best_idx2)) {
                 best_nstub = nstub1;
 		best_bxspread = bxspread1;
                 best_entry = i;
+		best_idx2 = idx2;
             }
         }
 
@@ -92,4 +99,3 @@ int main(int argc, char** argv) {
     //delete oldTree;
     //delete newTree;
 }
-
