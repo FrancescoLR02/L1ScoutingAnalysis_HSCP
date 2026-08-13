@@ -23,10 +23,12 @@
    Float_t         genbeta2;
    Float_t         geneta1;
    Float_t         geneta2;
+   Float_t         recobeta1;
+   Float_t         recobeta2;
    Float_t         genpt1;
    Float_t         genpt2;
-   Double_t         dxy1;
-   Double_t         dxy2;
+   Float_t         dxy1;
+   Float_t         dxy2;
    Short_t         qual1;
    Short_t         qual2;
    Short_t         charge1;

@@ -76,6 +76,10 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("phi1", &phi1);
     arbre->SetBranchAddress("phi2", &phi2);
 
+    arbre->SetBranchAddress("recobeta1", &recobeta1);
+    arbre->SetBranchAddress("recobeta2", &recobeta2);
+    
+
     TH1F* h_qual_nstub2 = new TH1F("h_qual_nstub2","h_qual_nstub2",4,12,16); h_qual_nstub2->Sumw2();
     TH1F* h_qual_nstub3 = new TH1F("h_qual_nstub3","h_qual_nstub3",4,12,16); h_qual_nstub3->Sumw2();
     TH1F* h_qual_nstub4 = new TH1F("h_qual_nstub4","h_qual_nstub4",4,12,16); h_qual_nstub4->Sumw2();
@@ -86,9 +90,11 @@ int main(int argc, char** argv) {
     TH1F* h_dxy3stubs_wrong = new TH1F("h_dxy3stubs_wrong","h_dxy3stubs_wrong",80,0,4); h_dxy3stubs_wrong->Sumw2();
     TH1F* h_dxy4stubs_wrong = new TH1F("h_dxy4stubs_wrong","h_dxy4stubs_wrong",80,0,4); h_dxy4stubs_wrong->Sumw2();
 
-    TH1F* h_beta = new TH1F("h_beta","h_beta",30,0,1.1); h_beta->Sumw2();
-    TH1F* h_beta_wrong = new TH1F("h_beta_wrong","h_beta_wrong",30,0,1.1); h_beta_wrong->Sumw2();
-    TH1F* h_beta_nonCollBunch = new TH1F("h_beta_nonCollBunch","h_beta_nonCollBunch",30,0,1.1); h_beta_nonCollBunch>Sumw2();
+    TH1F* h_recobeta = new TH1F("h_recobeta","h_recobeta",40,0.1,1.01); h_recobeta->Sumw2();
+    TH1F* h_recobeta_wrong = new TH1F("h_recobeta_wrong","h_recobeta_wrong",40,0.1,1.01); h_recobeta_wrong->Sumw2();
+    TH1F* h_recobeta_nonColliding = new TH1F("h_recobeta_nonColliding","h_recobeta_nonColliding",40,0.1,1.01); h_recobeta_nonColliding->Sumw2();
+    TH1F* h_genbeta = new TH1F("h_genbeta","h_genbeta",40,0.1,1.01); h_genbeta->Sumw2();
+    TH1F* h_genbeta_wrong = new TH1F("h_genbeta_wrong","h_genbeta_wrong",40,0.1,1.01); h_genbeta_wrong->Sumw2();
 
     TH1F* h_nstub = new TH1F("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
     TH1F* h_ptbefore = new TH1F("h_ptbefore","h_ptbefore",49,20,1000); h_ptbefore->Sumw2();
@@ -404,13 +410,17 @@ int main(int argc, char** argv) {
 
       //if (name!="data_obs" or is_earlier_colliding) continue; // FIXME keep only noncolliding bunches
 
-      if (region == "VR"){
-         if (name=="data_obs" and is_earlier_colliding) continue; // FIXME keep only noncolliding bunches in data, dont touch mc
-      }
+
+      // if (name=="data_obs" and is_earlier_colliding) { // FIXME keep only noncolliding bunches in data, dont touch mc
+      //    h_beta_nonCollBunch->Fill(recobeta1);
+
+      // }
       
-      if (region == "SR"){
-         if (name=="data_obs" and !is_earlier_colliding) continue; // FIXME keep only colliding bunches
+      if (name=="data_obs" and !is_earlier_colliding) {
+          h_recobeta_nonColliding->Fill(recobeta1);
+          continue;
       }
+
 
       float xsweight=1.0;
       if (name!="data_obs") xsweight=(lumiweight*fidweight)/ngen;
@@ -543,6 +553,8 @@ int main(int argc, char** argv) {
             if (pt2>100 and dxy2<1 and qual2>12) h_2track->Fill(4.5);
             if (nstub1 == 3) h_dxy3stubs->Fill(dxy1);
             if (nstub1 == 4) h_dxy4stubs->Fill(dxy1);
+            h_recobeta->Fill(recobeta1);
+            h_genbeta->Fill(genbeta1);
          }
 
          //if (!is_tagged) cout<<"nstub pt bxspread "<<nstub1<<" "<<pt1<<" "<<bxspread1<<endl;
@@ -1084,7 +1096,7 @@ int main(int argc, char** argv) {
                h_stub3_bx122_slow_wrong->Fill(pt1,w2); is_accepted=true;
                h_phi_2BX_wrong->Fill(phi1,w2);
                if (bxspread1==1010) h_stub3_bx122_slow_wrongU->Fill(pt1,w2); is_wrong = true;//FIXME same up and down
-               if (bxspread1==1010) h_stub3_bx122_slow_wrongD->Fill(pt1,w2);is_wrong = true;
+               if (bxspread1==1010) h_stub3_bx122_slow_wrongD->Fill(pt1,w2); is_wrong = true;
             }
             else if (qual1<14){
                h_stub3_bx122_slow_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -1117,6 +1129,8 @@ int main(int argc, char** argv) {
       if(is_wrong){
          if(nstub1 == 3) h_dxy3stubs_wrong->Fill(dxy1);
          if(nstub1 == 4) h_dxy4stubs_wrong->Fill(dxy1);
+         h_recobeta_wrong->Fill(recobeta1);
+         h_genbeta_wrong->Fill(genbeta1);
       }
       ////////
 
@@ -1151,9 +1165,23 @@ int main(int argc, char** argv) {
     h_dxy4stubs->Write();
     h_dxy3stubs_wrong->Write();
     h_dxy4stubs_wrong->Write();
+
+   //  h_recobeta->Write();
+   //  h_recobeta_wrong->Write();
+   //  h_recobeta_nonColliding->Write();
+   //  h_genbeta->Write();
+   //  h_genbeta_wrong->Write();
+
+
     h_nstub->Write();
     h_ptbefore->Write();
     h_ptafter->Write();
+
+    WriteHistToFile(fout, h_recobeta, name, "recoBeta");
+    WriteHistToFile(fout, h_recobeta_wrong, name, "recoBeta_wrong");
+    WriteHistToFile(fout, h_recobeta_nonColliding, name, "recoBeta_nonColliding");
+    WriteHistToFile(fout, h_genbeta, name, "genBeta");
+    WriteHistToFile(fout, h_genbeta_wrong, name, "genBeta_wrong");
 
     WriteHistToFile(fout,h_phi_2BX,name,"phi_2BX");
     WriteHistToFile(fout,h_phi_2BX_wrong,name,"phi_2BX_wrong");

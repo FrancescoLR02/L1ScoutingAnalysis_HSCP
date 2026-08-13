@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
     TH1F* h_met_SS=new TH1F("h_met_SS", "h_met_SS", 20,0,100); h_met_SS->Sumw2();
 
     //float lumiweight= (40400.0/15.046) + (5820.0/15.060) + (12320.0/15.048);
-    float lumiweight = 68.165642 + 35.022010 + 458.565962;
+    float lumiweight = 3918//68.165642 + 35.022010 + 458.565962;
 
     static TRandom3 randGen(1234);
 

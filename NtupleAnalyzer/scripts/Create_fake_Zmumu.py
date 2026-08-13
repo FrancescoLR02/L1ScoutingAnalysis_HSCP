@@ -1,40 +1,78 @@
+# if __name__ == "__main__":
+
+#     import ROOT
+#     import argparse
+
+#     is_control=0
+
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('--selection')
+#     parser.add_argument('--data', default="Scouting_2025", help='Data file in output_<selection>/, without .root')
+#     options = parser.parse_args()
+
+#     fDY=ROOT.TFile("output_"+options.selection+"/DY.root","r")
+#     fData=ROOT.TFile("output_"+options.selection+"/"+options.data+".root","r")
+#     fout=ROOT.TFile("output_"+options.selection+"/Fake.root","recreate")
+
+#     dirOS=["OS"]
+#     dirSS=["SS"]
+#     if options.selection=="ZmumuKBMTF":
+#         dirOS=["OS","met_OS","nstub_OS", "pt_OS"]
+#         dirSS=["SS","met_SS","nstub_SS", "pt_SS"]
+
+#     for k in range(0,len(dirOS)):
+#        h_in=fData.Get(dirSS[k]+"/data_obs")
+#        if not h_in:
+#           print("WARNING: no "+dirSS[k]+"/data_obs in "+options.data+".root, skipping")
+#           continue
+#        dir0=fout.mkdir(dirOS[k])
+#        h0=h_in.Clone()
+#        #h0.Add(fDY.Get("SS/DY"),-1) #FIXME
+#        h0.SetName("Fake")
+#        #h0.Scale(5.12)
+#        #h0.Scale(6.81)
+#        h0.Scale(2.42)
+#        dir0.cd()
+#        h0.Write()
+
+#     fout.Close()
+
+
 if __name__ == "__main__":
 
-    import ROOT
-    import argparse
+   import ROOT
+   import argparse
 
-    is_control=0
+   is_control=0
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--selection')
-    parser.add_argument('--data', default="Scouting_2025", help='Data file in output_<selection>/, without .root')
-    options = parser.parse_args()
+   parser = argparse.ArgumentParser()
+   parser.add_argument('--selection')
+   options = parser.parse_args()
 
-    fDY=ROOT.TFile("output_"+options.selection+"/DY.root","r")
-    fData=ROOT.TFile("output_"+options.selection+"/"+options.data+".root","r")
-    fout=ROOT.TFile("output_"+options.selection+"/Fake.root","recreate")
+   #  fDY=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/"+options.selection+"/DY.root","r")
+   #  fData=ROOT.TFile("output_"+options.selection+"/Scouting_2024.root","r")
+   #  fout=ROOT.TFile("output_"+options.selection+"/Fake.root","recreate")
 
-    dirOS=["OS"]
-    dirSS=["SS"]
-    if options.selection=="ZmumuKBMTF":
-        dirOS=["OS","met_OS","nstub_OS", "pt_OS"]
-        dirSS=["SS","met_SS","nstub_SS", "pt_SS"]
+   fData=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/DY.root", "r")
+   fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/Fake.root", "recreate")
 
-    for k in range(0,len(dirOS)):
-       h_in=fData.Get(dirSS[k]+"/data_obs")
-       if not h_in:
-          print("WARNING: no "+dirSS[k]+"/data_obs in "+options.data+".root, skipping")
-          continue
-       dir0=fout.mkdir(dirOS[k])
-       h0=h_in.Clone()
-       #h0.Add(fDY.Get("SS/DY"),-1) #FIXME
-       h0.SetName("Fake")
-       #h0.Scale(5.12)
-       #h0.Scale(6.81)
-       h0.Scale(2.42)
-       dir0.cd()
-       h0.Write()
+
+
+   dirOS=["OS"]
+   dirSS=["SS"]
+   if options.selection=="ZmumuKBMTF":
+      dirOS=["OS","met_OS","nstub_OS", "pt_OS"]
+      dirSS=["SS","met_SS","nstub_SS", "pt_SS"]
+      
+   for k in range(0,len(dirOS)):
+      dir0=fout.mkdir(dirOS[k])
+      h0=fData.Get(dirSS[k]+"/data_obs").Clone()
+      #h0.Add(fDY.Get("SS/DY"),-1) #FIXME
+      h0.SetName("Fake")
+      #h0.Scale(5.12)
+      #h0.Scale(6.81)
+      h0.Scale(2.42)
+      dir0.cd()
+      h0.Write()
 
     fout.Close()
-
-
