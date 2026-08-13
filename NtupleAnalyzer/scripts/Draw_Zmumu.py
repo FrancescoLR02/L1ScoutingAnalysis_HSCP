@@ -91,7 +91,7 @@ for k in range(0,len(dirOS)):
       print("WARNING: no directory "+dirOS[k]+" in the datacard, skipping")
       continue
    Data=mydir.Get("data_obs").Clone()
-   DY=mydir.Get("DYall").Clone()
+   DY=mydir.Get("DY").Clone()
    Fake=mydir.Get("Fake").Clone()
    
    if k==0 and Fake.GetBinContent(1)>0: 
@@ -156,7 +156,7 @@ for k in range(0,len(dirOS)):
    pad1.SetTicky(1)
    pad1.SetLeftMargin(0.18)
    pad1.SetRightMargin(0.05)
-   pad1.SetTopMargin(0.122)
+   pad1.SetTopMargin(0.2)
    pad1.SetBottomMargin(0.026)
    pad1.SetFrameFillStyle(0)
    pad1.SetFrameLineStyle(0)
@@ -173,19 +173,19 @@ for k in range(0,len(dirOS)):
    errorBand.Draw("e2same")
    Data.Draw("esame")
    
-   legende=make_legend()
-   legende.AddEntry(Data,"Observed ","elp")
-   legende.AddEntry(Fake,"Nonprompt","f")
-   legende.AddEntry(DY,"Z/#gamma* #rightarrow #mu#mu","f")
-   legende.AddEntry(errorBand,"Stat. unc. ","f")
-   legende.Draw()
+#    legende=make_legend()
+#    legende.AddEntry(Data,"Observed ","elp")
+#    legende.AddEntry(Fake,"Nonprompt","f")
+#    legende.AddEntry(DY,"Z/#gamma* #rightarrow #mu#mu","f")
+#    legende.AddEntry(errorBand,"Stat. unc. ","f")
+#    legende.Draw()
    
-   l1=add_lumi()
-   l1.Draw("same")
-   l2=add_CMS()
-   l2.Draw("same")
-   l3=add_Preliminary()
-   l3.Draw("same")
+#    l1=add_lumi()
+#    l1.Draw("same")
+#    l2=add_CMS()
+#    l2.Draw("same")
+#    l3=add_Preliminary()
+#    l3.Draw("same")
    
    lowX=0.06
    lowY=0.85
@@ -197,7 +197,7 @@ for k in range(0,len(dirOS)):
    lumi1.SetTextSize(0.05)
    lumi1.SetTextFont (   42 )
    if args.selection=="ZmumuKBMTF": 
-       lumi1.AddText("re-KBMTF, |#eta| < 0.83, p_{T} > 15 GeV")
+       lumi1.AddText("mod-KBMTF, |#eta| < 0.83, p_{T} > 15 GeV")
    else:
        lumi1.AddText("L1 muons, |#eta| < 0.83, p_{T} > 15 GeV")
    lumi1.Draw("same")
