@@ -62,6 +62,8 @@ ROOT.gROOT.SetBatch(True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--selection', '-s', default=None, help='Output name')
+parser.add_argument('--folder')
+
 args = parser.parse_args()
 
 
@@ -70,7 +72,7 @@ c.cd()
 #c.SetLogy()
 
 #myfile=ROOT.TFile("datacard_"+args.selection+".root","r")
-myfile=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/datacard_ZmumuKBMTF.root", "r")
+myfile=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/"+args.folder+"KBMTF/Zmumu/output_modZmumu/datacard_ZmumuKBMTF.root", "r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
@@ -253,6 +255,6 @@ for k in range(0,len(dirOS)):
    pad1.Draw()
    ROOT.gPad.RedrawAxis()
    c.Modified()
-   c.SaveAs("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/plots/"+args.selection+"_"+name[k]+".pdf")
-   c.SaveAs("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/plots/"+args.selection+"_"+name[k]+".png")
+   c.SaveAs("/eos/user/f/flarover/DATA/AnalysisHSCP/"+args.folder+"KBMTF/Zmumu/output_modZmumu/plots/"+args.selection+"_"+name[k]+".pdf")
+   c.SaveAs("/eos/user/f/flarover/DATA/AnalysisHSCP/"+args.folder+"KBMTF/Zmumu/output_modZmumu/plots/"+args.selection+"_"+name[k]+".png")
 

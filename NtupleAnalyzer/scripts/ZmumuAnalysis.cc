@@ -120,7 +120,8 @@ int main(int argc, char** argv) {
 
 
    //float lumiweight= (40400.0/15.046) + (5820.0/15.060) + (12320.0/15.048);
-   float lumiweight = 3718;//68.165642 + 35.022010 + 458.565962;
+   float lumiweight = 68.165642 + 35.022010 + 458.565962;
+   //float lumiweight = 3918;
 
    static TRandom3 randGen(1234);
    float ptmin=0.0;
@@ -132,22 +133,22 @@ int main(int argc, char** argv) {
       if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
       fflush(stdout);
 
-      float aweight=6346 * 0.3664 * lumiweight/134550;//xsweight*lumiweight;
+      float aweight=6346 * 0.3664 * lumiweight/1478803;//xsweight*lumiweight;
 
       
-      // Muon energy calibration
-      if (name=="data_obs"){
-         pt1=0.9*pt1;
-         pt2=0.9*pt2;
-      }
-      else{
-         pt1=0.9*pt1;
-            pt2=0.9*pt2;
-         }
+      // // Muon energy calibration
+      // if (name=="data_obs"){
+      //    pt1=pt1;
+      //    pt2=pt2;
+      // }
+      // else{
+      //    pt1=0.99*pt1;
+      //    pt2=0.99*pt2;
+      //    }
 
       // Muon energy resolution
-      double smearFactor1 = randGen.Gaus(1.0, 0.11);
-      double smearFactor2 = randGen.Gaus(1.0, 0.11);
+      double smearFactor1 = randGen.Gaus(1.0, 0.08);
+      double smearFactor2 = randGen.Gaus(1.0, 0.08);
       if (name!="data_obs"){
          pt1 = pt1 * smearFactor1;
          pt2 = pt2 * smearFactor2;
@@ -156,12 +157,19 @@ int main(int argc, char** argv) {
       // Muon reconstruction efficiency
       //float musf=1.00;
       //aweight = aweight*musf*musf;
-      if (nstub1==2) aweight = aweight*1.05*1.025;
-      else if (nstub1==3) aweight = aweight*1.01*1.025;
-      else if (nstub1==4) aweight = aweight*0.86*1.025;
-      if (nstub2==2) aweight = aweight*1.05*1.025;
-      else if (nstub2==3) aweight = aweight*1.01*1.025;
-      else if (nstub2==4) aweight = aweight*0.86*1.025;
+      // if (nstub1==2) aweight = aweight*1.05*1.025;
+      // else if (nstub1==3) aweight = aweight*1.01*1.025;
+      // else if (nstub1==4) aweight = aweight*0.86*1.025;
+      // if (nstub2==2) aweight = aweight*1.05*1.025;
+      // else if (nstub2==3) aweight = aweight*1.01*1.025;
+      // else if (nstub2==4) aweight = aweight*0.86*1.025;
+
+      if (nstub1==2) aweight = aweight*1.14*1.025;
+      else if (nstub1==3) aweight = aweight*1.04*1.025;
+      else if (nstub1==4) aweight = aweight*0.78*1.025;
+      if (nstub2==2) aweight = aweight*1.14*1.025;
+      else if (nstub2==3) aweight = aweight*1.04*1.025;
+      else if (nstub2==4) aweight = aweight*0.78*1.025;
       
 
       TLorentzVector my_mu1; my_mu1.SetPtEtaPhiM(pt1,eta1,phi1,0.105);

@@ -47,14 +47,15 @@ if __name__ == "__main__":
 
    parser = argparse.ArgumentParser()
    parser.add_argument('--selection')
+   parser.add_argument('--folder')
    options = parser.parse_args()
 
    #  fDY=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/"+options.selection+"/DY.root","r")
    #  fData=ROOT.TFile("output_"+options.selection+"/Scouting_2024.root","r")
    #  fout=ROOT.TFile("output_"+options.selection+"/Fake.root","recreate")
 
-   fData=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/DY.root", "r")
-   fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Zmumu/output_modZmumu/Fake.root", "recreate")
+   fData=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/"+options.folder+"KBMTF/Zmumu/output_modZmumu/DY.root", "r")
+   fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/"+options.folder+"KBMTF/Zmumu/output_modZmumu/Fake.root", "recreate")
 
 
 
@@ -70,8 +71,8 @@ if __name__ == "__main__":
       #h0.Add(fDY.Get("SS/DY"),-1) #FIXME
       h0.SetName("Fake")
       #h0.Scale(5.12)
-      #h0.Scale(6.81)
-      h0.Scale(2.42)
+      h0.Scale(6.81)
+      #h0.Scale(2.42)
       dir0.cd()
       h0.Write()
 
