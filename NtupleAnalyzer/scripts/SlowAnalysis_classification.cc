@@ -28,15 +28,16 @@
 #include "myHelper.h"
 #include "fiducial_weight.h"
 
-using namespace std;
+// g++ -O3 SlowAnalysis_classification.cc -o SlowAnalysis_classification.exe $(root-config --cflags --glibs)
 
-//!  g++ -O3 SlowAnalysis_classification.cc -o SlowAnalysis_classification.exe $(root-config --cflags --glibs)
+using namespace std;
 
 int main(int argc, char** argv) {
 
     std::string input = *(argv + 1);
     std::string output = *(argv + 2);
     std::string name = *(argv + 3);
+    //std::string region = *(argv + 4);
 
     TFile *f_Double = TFile::Open(input.c_str(), "READ");
     cout<<"XXXXXXXXXXXXX "<<input.c_str()<<" XXXXXXXXXXXX"<<endl;
@@ -74,11 +75,14 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("eta2", &eta2);
     arbre->SetBranchAddress("phi1", &phi1);
     arbre->SetBranchAddress("phi2", &phi2);
+    
 
     TH1F* h_qual_nstub2 = new TH1F("h_qual_nstub2","h_qual_nstub2",4,12,16); h_qual_nstub2->Sumw2();
     TH1F* h_qual_nstub3 = new TH1F("h_qual_nstub3","h_qual_nstub3",4,12,16); h_qual_nstub3->Sumw2();
     TH1F* h_qual_nstub4 = new TH1F("h_qual_nstub4","h_qual_nstub4",4,12,16); h_qual_nstub4->Sumw2();
-    TH1F* h_dxy = new TH1F("h_dxy","h_dxy",4,0,4); h_dxy->Sumw2();
+   TH1F* h_dxy = new TH1F("h_dxy","h_dxy",4,0,4); h_dxy->Sumw2();
+
+
     TH1F* h_nstub = new TH1F("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
     TH1F* h_ptbefore = new TH1F("h_ptbefore","h_ptbefore",49,20,1000); h_ptbefore->Sumw2();
     TH1F* h_ptafter = new TH1F("h_ptafter","h_ptafter",49,20,1000); h_ptafter->Sumw2();
@@ -91,28 +95,6 @@ int main(int argc, char** argv) {
 
    float bins_highpt[] = {150, 200, 250, 300, 350, 450, 550, 650, 750};
    int  binnum_highpt = sizeof(bins_highpt)/sizeof(Float_t) - 1;
-   
-   // float bins_highpt[] = {50,100,150,250,350,450,550};
-   // int  binnum_highpt = sizeof(bins_highpt)/sizeof(Float_t) - 1;
-
-
-   // float bins_mediumpt[]         = {50, 150, 300, 500};
-   // int  binnum_mediumpt = sizeof(bins_mediumpt)/sizeof(Float_t) - 1;
-
-   // float bins_mediumpt_sparse[]  = {50, 200, 500};                            // cat 5
-   // int  binnum_mediumpt_sparse = sizeof(bins_mediumpt_sparse)/sizeof(Float_t) - 1;
-
-   // float bins_mediumpt_loose[]   = {50, 150, 300, 500};                       // cat 6
-   // int  binnum_mediumpt_loose = sizeof(bins_mediumpt_loose)/sizeof(Float_t) - 1;
-
-   // float bins_mediumpt_merged[]  = {50, 150, 300, 500};                       // cats 13, 14
-   // int  binnum_mediumpt_merged = sizeof(bins_mediumpt_merged)/sizeof(Float_t) - 1;
-
-   // float bins_highpt[]           = {150, 300, 500, 750};
-   // int  binnum_highpt = sizeof(bins_highpt)/sizeof(Float_t) - 1;
-
-   // float bins_highpt_merged[]    = {150, 300, 500, 750};                      // cat 16
-   // int  binnum_highpt_merged = sizeof(bins_highpt_merged)/sizeof(Float_t) - 1;
 
    float bins_bx123[]            = {100, 200, 300, 400, 500};                       // cats 2, 9
    int  binnum_bx123 = sizeof(bins_bx123)/sizeof(Float_t) - 1;
@@ -320,8 +302,6 @@ int main(int argc, char** argv) {
    TH1F* h_stub3_bx122_fast_2tracks_wrongU_fail = new TH1F("h_stub3_bx122_fast_2tracks_wrongU_fail", "h_stub3_bx122_fast_2tracks_wrongU_fail", binnum_mediumpt, bins_mediumpt); h_stub3_bx122_fast_2tracks_wrongU_fail->Sumw2();
    TH1F* h_stub3_bx122_fast_2tracks_wrongD_fail = new TH1F("h_stub3_bx122_fast_2tracks_wrongD_fail", "h_stub3_bx122_fast_2tracks_wrongD_fail", binnum_mediumpt, bins_mediumpt); h_stub3_bx122_fast_2tracks_wrongD_fail->Sumw2();
 
-
-
    TH1F* h_phi_2BX = new TH1F("h_phi_2BX", "h_phi_2BX", 50,-3.14159, 3.14159); h_phi_2BX->Sumw2();
    TH1F* h_phi_2BX_wrong = new TH1F("h_phi_2BX_wrong", "h_phi_2BX_wrong", 50,-3.14159, 3.14159); h_phi_2BX_wrong->Sumw2();
 
@@ -418,6 +398,21 @@ int main(int argc, char** argv) {
 	if (name=="data_obs" and !is_earlier_colliding) continue; // FIXME keep only colliding bunches
 
 	float xsweight=1.0;
+
+   if(name == "HSCP_1000") ngen = 529527;
+   else if(name == "HSCP_1500") ngen = 529700;
+   else if(name == "HSCP_2000") ngen = 528600;
+   else if(name == "HSCP_2500") ngen = 527900;
+   else if(name == "HSCP_3000") ngen = 529100;
+   else if(name == "HSCP_3500") ngen = 528300;
+   else if(name == "HSCP_4000") ngen = 528000;
+   else if(name == "HSCP_4500") ngen = 528000;
+   else if(name == "HSCP_5000") ngen = 527000;
+   else if(name == "HSCP_5500") ngen = 527700;
+   else if(name == "HSCP_6000") ngen = 529062;
+
+
+
 	if (name!="data_obs") xsweight=(lumiweight*fidweight)/ngen;
 	//if (name.find("GluinoBall") != std::string::npos or name.find("ZPrimeTo2TauPrime") != std::string::npos or name.find("HSCP") != std::string::npos) xsweight = 0.1*xsweight; //FIXME rescaling to compute limits !!!!!!!!!
 
@@ -437,8 +432,8 @@ int main(int argc, char** argv) {
 	
 	h_ptbefore->Fill(pt1);
 	// Muon energy resolution
-        double smearFactor1 = randGen.Gaus(1.0, 0.1148);
-        double smearFactor2 = randGen.Gaus(1.0, 0.1148);
+        double smearFactor1 = randGen.Gaus(1.0, 0.1);
+        double smearFactor2 = randGen.Gaus(1.0, 0.1);
         if (name!="data_obs"){
            pt1 = pt1 * smearFactor1;
            pt2 = pt2 * smearFactor2;
@@ -453,7 +448,7 @@ int main(int argc, char** argv) {
 	}
 
 	if (pt1>15){ 
-           h_cutflow->Fill(1.5);
+      h_cutflow->Fill(1.5);
 	   h_cutflow_gt2BX->Fill(1.5);
 	   h_cutflow_2BX->Fill(1.5);
 	   h_cutflow_2BX_2tracks->Fill(1.5);
@@ -521,6 +516,8 @@ int main(int argc, char** argv) {
 	if (pt1>50 and bxspread1>0 and nstub1>2 and pass_quality_1 and has_2goodtracks){
            h_cutflow_2BX_2tracks->Fill(6.5);
         }
+
+
 	if (pt1>15 and bxspread1>0 and nstub1==3 and pass_quality_1) h_cutflow->Fill(6.5);
 	if (pt1>50 and bxspread1>0 and nstub1==3 and pass_quality_1) h_cutflow->Fill(7.5);
 	if (pt1>50 and bxspread1>0 and nstub1==3 and pass_quality_1 and has_2goodtracks) h_cutflow->Fill(8.5);
@@ -592,9 +589,9 @@ int main(int argc, char** argv) {
 
         // Muon reconstruction efficiency
         float musf=1.0;
-	if (nstub1==4) musf=0.86*1.025;
-	if (nstub1==3) musf=1.01*1.025;
-	if (nstub1==2) musf=1.05*1.025;
+	if (nstub1==4) musf=0.77*1.025;
+	if (nstub1==3) musf=1.04*1.025;
+	if (nstub1==2) musf=1.14*1.025;
 	float aweight=1.0;
         aweight = aweight*musf;
 	if (name=="data_obs") aweight=1.0;

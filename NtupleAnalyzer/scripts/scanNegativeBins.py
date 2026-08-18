@@ -2,7 +2,7 @@ import ROOT
 import sys
 
 
-f = ROOT.TFile('/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/NewCombineClassification/out_fake.root', "READ") 
+f = ROOT.TFile('/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/CombineClassification/Fake.root', "READ") 
 
 print(f"Scanning slow.root for negative bins...\n")
 print(f"{'Category (Folder)':<25} | {'Histogram Name':<45} | {'Bin':<5} | {'Value'}")
