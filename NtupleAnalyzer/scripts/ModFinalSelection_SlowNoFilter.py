@@ -5,10 +5,20 @@ from math import cos,sin,sqrt,pi
 import ROOT
 import time as timer
 time_start=timer.time()
+
+
+#! in the lib folder:
+# g++ -shared -fPIC -std=c++17 \
+#     -I. -I../interface \
+#     $(root-config --cflags) \
+#     -o libMODbasic_sel.so \
+#     MODbasic_sel.cpp \
+#     $(root-config --libs)
+
 ROOT.gInterpreter.AddIncludePath('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib')
 ROOT.gInterpreter.Declare('#include "MODbasic_sel.h"')
-ROOT.gInterpreter.ProcessLine('.L /eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/MODbasic_sel.cpp+')
-#ROOT.gSystem.Load('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/basic_sel_cpp.so')
+#ROOT.gInterpreter.ProcessLine('.L /eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/MODbasic_sel.cpp+')
+ROOT.gSystem.Load('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib/libMODbasic_sel.so')
 
 
 ### sample: output root file name
@@ -52,6 +62,7 @@ df = df.Define("bxspread1", "GetBxSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_n
        .Define("firstbx2", "GetFirstBx(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
        .Define("eta1","L1KBMTFSkimmed_eta[idx1]").Define("eta2","L1KBMTFSkimmed_eta[idx2]") \
        .Define("pt1", "L1KBMTFSkimmed_pt[idx1]").Define("pt2", "L1KBMTFSkimmed_pt[idx2]") \
+       .Define("Oldpt1", "Get_newpt(L1KBMTFSkimmed_hwK[idx1])").Define("Oldpt2", "Get_newpt(L1KBMTFSkimmed_hwK[idx2])") \
        .Define("recobeta1", "L1KBMTFSkimmed_beta[idx1]").Define("recobeta2", "L1KBMTFSkimmed_beta[idx2]") \
        .Define("HwK1", "L1KBMTFSkimmed_hwK[idx1]").Define("HwK2", "L1KBMTFSkimmed_hwK[idx2]") \
        .Define("phi1","L1KBMTFSkimmed_phi[idx1]").Define("phi2","L1KBMTFSkimmed_phi[idx2]") \
@@ -69,6 +80,8 @@ df = df.Define("bxspread1", "GetBxSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_n
        .Define("genK2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_K)") \
        .Define("genCharge1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_charge)") \
        .Define("genCharge2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_charge)") \
+        .Define("genpdgID1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pdgid)") \
+       .Define("genpdgID2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pdgid)") \
        .Define("genMass1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_mass)") \
        .Define("genMass2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_mass)") \
        .Define("genPhi1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_phi)") \
@@ -83,9 +96,9 @@ for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", "event", "ng
         #"nL1KBMTFSkimmed", "L1KBMTFSkimmed_hwCharge", "L1KBMTFSkimmed_hwQual", \
         "idx1", "idx2", \
         "bxspread1", "bxspread2", "stationspread1", "stationspread2", "nstub1", "nstub2", "isL1MuMatched1", "isL1MuMatched2", \
-        "firstbx1","firstbx2", "pt1", "pt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", "recobeta1", "recobeta2", 'HwK1', 'HwK2', \
+        "firstbx1","firstbx2", "pt1", "pt2", "Oldpt1", "Oldpt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", "recobeta1", "recobeta2", 'HwK1', 'HwK2', \
         "genbeta1","genpt1","genbeta2","genpt2", "geneta1", "geneta2", "genK1", "genK2", "genCharge1", "genCharge2", "genMass1", "genMass2", "genPhi1", "genPhi2", \
-        "L1MET_pt"):
+        "genpdgID1","genpdgID2", "L1MET_pt"):
         #"L1KBMTFSkimmed_hwDXY", "L1KBMTFSkimmed_nStub", "L1KBMTFSkimmed_pt", \
         #"L1KBMTFSkimmed_s1Station", "L1KBMTFSkimmed_s1Wheel", "L1KBMTFSkimmed_s1Sector", "L1KBMTFSkimmed_s1Bx", \
         #"L1KBMTFSkimmed_s2Station", "L1KBMTFSkimmed_s2Wheel", "L1KBMTFSkimmed_s2Sector", "L1KBMTFSkimmed_s2Bx",

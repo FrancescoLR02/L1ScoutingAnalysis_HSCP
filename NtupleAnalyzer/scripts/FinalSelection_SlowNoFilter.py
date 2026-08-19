@@ -50,6 +50,7 @@ df = df.Define("bxspread1", "GetBxSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_n
        .Define("firstbx1", "GetFirstBx(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
        .Define("firstbx2", "GetFirstBx(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
        .Define("pt1","Get_newpt(L1KBMTFSkimmed_hwK[idx1])").Define("pt2","Get_newpt(L1KBMTFSkimmed_hwK[idx2])") \
+       .Define("HwK1", "L1KBMTFSkimmed_hwK[idx1]").Define("HwK2", "L1KBMTFSkimmed_hwK[idx2]") \
        .Define("eta1","L1KBMTFSkimmed_eta[idx1]").Define("eta2","L1KBMTFSkimmed_eta[idx2]") \
        .Define("phi1","L1KBMTFSkimmed_phi[idx1]").Define("phi2","L1KBMTFSkimmed_phi[idx2]") \
        .Define("dxy1","L1KBMTFSkimmed_hwDXY[idx1]").Define("dxy2","L1KBMTFSkimmed_hwDXY[idx2]") \
@@ -73,7 +74,7 @@ for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", "event", "ng
         "idx1", "idx2", \
         "bxspread1", "bxspread2", "stationspread1", "stationspread2", "nstub1", "nstub2", "isL1MuMatched1", "isL1MuMatched2", \
         "firstbx1","firstbx2", "pt1", "pt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", \
-        "genbeta1","genpt1","genbeta2","genpt2", "geneta1", "geneta2", "genCharge1", "genCharge2",\
+        "genbeta1","genpt1","genbeta2","genpt2", "geneta1", "geneta2", "genCharge1", "genCharge2", "HwK1", "HwK2", \
         "L1MET_pt"):
         #"L1KBMTFSkimmed_hwDXY", "L1KBMTFSkimmed_nStub", "L1KBMTFSkimmed_pt", \
         #"L1KBMTFSkimmed_s1Station", "L1KBMTFSkimmed_s1Wheel", "L1KBMTFSkimmed_s1Sector", "L1KBMTFSkimmed_s1Bx", \

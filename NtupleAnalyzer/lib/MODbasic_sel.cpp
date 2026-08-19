@@ -348,7 +348,7 @@ bool IsEarlierColliding(int run, int bx, int interval, bool is_colliding){
    }
 }
 
-float Get_newpt(int oldK){
+float Get_newpt(double oldK){
   float K = oldK-9;
   if (K==0) K=1;
   float lsb = 1.25 / float(1 << 13);
@@ -374,28 +374,6 @@ float Get_newpt(int oldK){
 
   return pt/2;
 }
-
-
-// template <typename T>
-// float Get_genbeta(float eta, float phi, int ngen,
-//                   const ROOT::VecOps::RVec<Float_t> &Gen_eta,
-//                   const ROOT::VecOps::RVec<Float_t> &Gen_phi,
-//                   const ROOT::VecOps::RVec<Short_t> &Gen_pdgid,
-//                   const ROOT::VecOps::RVec<T> &Gen_val) {
-//     float out = -1.0;
-//     TLorentzVector my_reco;
-//     my_reco.SetPtEtaPhiM(100.0, eta, phi, 1.0);
-//     for (int i = 0; i < ngen; ++i) {
-//         const int id = std::abs(Gen_pdgid[i]);
-//         if (id == 13 || id == 17 || id == 16975 || id == 1000015 ||
-//             (id >= 1000993 && id <= 1093334)) {
-//             TLorentzVector tmp_gen;
-//             tmp_gen.SetPtEtaPhiM(100.0, Gen_eta[i], Gen_phi[i], 1.0);
-//             if (tmp_gen.DeltaR(my_reco) < 0.3) out = static_cast<float>(Gen_val[i]);
-//         }
-//     }
-//     return out;
-// }
 
 float Get_genpt(float eta, float phi, int ngen, ROOT::VecOps::RVec<Float_t> &Gen_eta, ROOT::VecOps::RVec<Float_t> &Gen_phi, ROOT::VecOps::RVec<Short_t> &Gen_pdgid, ROOT::VecOps::RVec<Float_t> &Gen_pt){
     float out_pt = -1.0;

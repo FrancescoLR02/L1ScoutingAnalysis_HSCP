@@ -41,7 +41,7 @@ bool IsColliding(int run, int bx);
 
 bool IsEarlierColliding(int run, int bx, int interval, bool is_colliding);
 
-float Get_newpt(int oldK);
+float Get_newpt(double oldK);
 
 //float Get_genbeta(float eta, float phi, int ngen, ROOT::VecOps::RVec<Float_t> &Gen_eta, ROOT::VecOps::RVec<Float_t> &Gen_phi, ROOT::VecOps::RVec<Short_t> &Gen_pdgid, ROOT::VecOps::RVec<Float_t> &Gen_beta);
 template <typename T>
