@@ -7,7 +7,7 @@ import time as timer
 time_start=timer.time()
 ROOT.gInterpreter.AddIncludePath('/eos/user/f/flarover/HSCP_2025/HSCPanalysis/CMSSW_15_0_10/src/L1ScoutingAnalysisRDataFrame/NtupleAnalyzer/lib')
 
-sim = False
+sim = True
 
 if (sim):
     isdata = False
@@ -52,7 +52,8 @@ if (isdata):
 
 print ("Before selection total entries", nentries)
 
-mode = 'Slow'
+if sim: mode = 'Skimmed'
+else: 'Slow'
 
 df = df.Filter(f"nL1KBMTF{mode}>1")
 
