@@ -1,8 +1,6 @@
 import ROOT
 import argparse
 
-K_SHAPE = 2.0   
-
 def add_Poisson(hist_in):
     hist_out=hist_in.Clone()
     for k in range(1,hist_in.GetSize()):
@@ -12,15 +10,22 @@ def add_Poisson(hist_in):
     return hist_out
 
 
-def inflate(h_nom, h_var, k=K_SHAPE, floor=1e-4):
-    """Amplify the nominal->variation difference by k, floor it, renormalise to nominal."""
-    h_out=h_var.Clone()
-    for j in range(1,h_nom.GetSize()-1):
-        n=h_nom.GetBinContent(j)
-        h_out.SetBinContent(j, max(n + k*(h_var.GetBinContent(j)-n), floor))
-    if h_out.Integral()>0:
-        h_out.Scale(h_nom.Integral()/h_out.Integral())
-    return h_out
+def closure_shape(h_nom, h_right, h_wrong, floor=1e-4):
+
+    w = h_wrong.Clone("tmp_w")
+    if w.Integral() > 0:
+        w.Scale(h_right.Integral()/w.Integral())
+    hUp = h_nom.Clone()
+    hDown = h_nom.Clone()
+    for j in range(1, h_nom.GetNbinsX()+1):
+        d = h_right.GetBinContent(j)/max(w.GetBinContent(j), 1e-9) - 1.0
+        nom = h_nom.GetBinContent(j)
+        hUp.SetBinContent(j, max(nom*(1.0+d), floor))
+        hDown.SetBinContent(j, max(nom*(1.0-d), floor))
+    for h in (hUp, hDown):
+        if h.Integral() > 0:
+            h.Scale(h_nom.Integral()/h.Integral())
+    return hUp, hDown
 
 
 parser = argparse.ArgumentParser()
@@ -28,11 +33,13 @@ parser.add_argument('--year')
 options = parser.parse_args()
 
 
-fin=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/NewBins_Combine/data_obs.root","r")
-fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/NewBins_Combine/FakeShapeMult.root","recreate")
+fin=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/AddedTracks_Classification/data_obs.root","r")
+fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/AddedTracks_Classification/Fake.root","recreate")
 
+# categories=["stub4_bx1234","stub4_bx123","stub4_bx1122","stub4_bx1112","stub4_bx1222","stub4_bx124","stub3_bx123_fast","stub3_bx123_slow","stub3_bx124_fast","stub3_bx124_slow","stub3_bx112_fast","stub3_bx112_slow","stub3_bx122_fast","stub3_bx122_slow",
+#        "stub4_bx1122_2tracks","stub4_bx1112_2tracks","stub4_bx1222_2tracks","stub3_bx112_fast_2tracks","stub3_bx112_slow_2tracks","stub3_bx122_fast_2tracks","stub3_bx122_slow_2tracks", ]
 categories=["stub4_bx1234","stub4_bx123","stub4_bx1122","stub4_bx1112","stub4_bx1222","stub4_bx124","stub3_bx123_fast","stub3_bx123_slow","stub3_bx124_fast","stub3_bx124_slow","stub3_bx112_fast","stub3_bx112_slow","stub3_bx122_fast","stub3_bx122_slow",
-       "stub4_bx1122_2tracks","stub4_bx1112_2tracks","stub4_bx1222_2tracks","stub3_bx112_fast_2tracks","stub3_bx112_slow_2tracks","stub3_bx122_fast_2tracks","stub3_bx122_slow_2tracks"]
+       "stub4_bx1122_2tracks","stub4_bx1112_2tracks","stub4_bx1222_2tracks","stub3_bx112_fast_2tracks","stub3_bx112_slow_2tracks","stub3_bx122_fast_2tracks","stub3_bx122_slow_2tracks", "stub3_bx123_fast_2tracks","stub3_bx123_slow_2tracks","stub3_bx124_fast_2tracks","stub3_bx124_slow_2tracks", ]
 
 
 for categ in categories:
@@ -66,21 +73,22 @@ for categ in categories:
    h_wrong.Scale(h_right.Integral()/(h_wrong.Integral()+0.0001))
    h_wrong_fail.Scale(h_right_fail.Integral()/(h_wrong_fail.Integral()+0.0001))
 
+   # closure templates: computed once from the fail region, reused for both blocks
+   h_clo_U, h_clo_D = closure_shape(h_wrong, h_right_fail, h_wrong_fail)
+   h_clo_U_fail, h_clo_D_fail = closure_shape(h_wrong_fail, h_right_fail, h_wrong_fail)
+
    dir1=fout.mkdir(categ)
    dir1.cd()
    h_wrong.SetName("Fake")
    h_wrong.Write()
    if h_wrongU and not h_wrongU.IsZombie():
        if h_wrongU.GetEntries()==h_wrongD.GetEntries():
-           h_wrongD = h_wrong_fail.Clone()
-           h_wrongD.Scale(h_wrong.Integral()/(0.0001+h_wrongD.Integral()))
-           for j in range(1,h_wrongD.GetSize()-1):
-               h_wrongU.SetBinContent(j,2*h_wrong.GetBinContent(j)-h_wrongD.GetBinContent(j))
+           #print("   -> %s : CLOSURE templates (wrongU==wrongD)" % categ)
+           h_wrongU = h_clo_U
+           h_wrongD = h_clo_D
        else:
            h_wrongU.Scale(h_wrong.Integral()/(0.0001+h_wrongU.Integral()))
            h_wrongD.Scale(h_wrong.Integral()/(0.0001+h_wrongD.Integral()))
-       h_wrongU = inflate(h_wrong, h_wrongU)
-       h_wrongD = inflate(h_wrong, h_wrongD)
        h_wrongU.SetName("Fake_CMS_EXO25010_shape_"+categ+"Up")
        h_wrongD.SetName("Fake_CMS_EXO25010_shape_"+categ+"Down")
        h_wrongU.Write()
@@ -92,15 +100,11 @@ for categ in categories:
    h_wrong_fail.Write()
    if h_wrongU_fail and not h_wrongU_fail.IsZombie():
        if h_wrongU_fail.GetEntries()==h_wrongD_fail.GetEntries():
-           h_wrongD_fail = h_wrong.Clone()
-           h_wrongD_fail.Scale(h_wrong_fail.Integral()/(0.0001+h_wrongD_fail.Integral()))
-           for j in range(1,h_wrongD_fail.GetSize()-1):
-               h_wrongU_fail.SetBinContent(j,2*h_wrong_fail.GetBinContent(j)-h_wrongD_fail.GetBinContent(j))
+           h_wrongU_fail = h_clo_U_fail
+           h_wrongD_fail = h_clo_D_fail
        else:
            h_wrongU_fail.Scale(h_wrong_fail.Integral()/(0.00001+h_wrongU_fail.Integral()))
            h_wrongD_fail.Scale(h_wrong_fail.Integral()/(0.00001+h_wrongD_fail.Integral()))
-       h_wrongU_fail = inflate(h_wrong_fail, h_wrongU_fail)
-       h_wrongD_fail = inflate(h_wrong_fail, h_wrongD_fail)
        h_wrongU_fail.SetName("Fake_CMS_EXO25010_shape_"+categ+"Up")
        h_wrongD_fail.SetName("Fake_CMS_EXO25010_shape_"+categ+"Down")
        h_wrongU_fail.Write()

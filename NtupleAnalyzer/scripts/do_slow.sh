@@ -49,7 +49,7 @@
 ###--------------------------- SIMULATION CLASSIFICATION -------------------------------------------
 IN_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming"
 #OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Classification"
-OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/New_NewBins_Combine"
+OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/AddedTracks_Classification"
 
 
 ./SlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_1000.root ${OUT_DIR}/out_HSCP1000.root HSCP_1000

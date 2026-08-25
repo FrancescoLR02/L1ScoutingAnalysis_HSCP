@@ -739,7 +739,7 @@ int main(int argc, char** argv) {
 		      if (bxspread1==1200) h_stub3_bx123_fast_2tracks_wrongD->Fill(pt1,w1);
 	      }
          else {
-	         h_stub3_bx123_fast_2tracks_fail->Fill(pt1,w1); is_accepted=true;
+	         h_stub3_bx123_fast_2tracks_wrong_fail->Fill(pt1,w1); is_accepted=true;
 		      if (bxspread1==2010) h_stub3_bx123_fast_2tracks_wrongU_fail->Fill(pt1,w1);
 		      if (bxspread1==1200) h_stub3_bx123_fast_2tracks_wrongD_fail->Fill(pt1,w1);
 	      }
@@ -794,7 +794,7 @@ int main(int argc, char** argv) {
                if (bxspread1==1200) h_stub3_bx123_slow_2tracks_wrongD->Fill(pt1,w1);
 	         }
             else {
-	            h_stub3_bx123_slow_wrong_fail->Fill(pt1,w1); is_accepted=true;
+	            h_stub3_bx123_slow_2tracks_wrong_fail->Fill(pt1,w1); is_accepted=true;
 		         if (bxspread1==2010) h_stub3_bx123_slow_2tracks_wrongU_fail->Fill(pt1,w1);
                if (bxspread1==1200) h_stub3_bx123_slow_2tracks_wrongD_fail->Fill(pt1,w1);
 	         }
