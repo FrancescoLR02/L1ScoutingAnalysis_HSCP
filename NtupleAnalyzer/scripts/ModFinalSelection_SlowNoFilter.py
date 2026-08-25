@@ -47,7 +47,10 @@ df = df.Filter("nL1KBMTFSkimmed>0")
 df = df.Define("idx1", "GetIndex(1, nL1KBMTFSkimmed, L1KBMTFSkimmed_pt, L1KBMTFSkimmed_eta, L1KBMTFSkimmed_phi, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)").Define("idx2", "GetIndex(2, nL1KBMTFSkimmed, L1KBMTFSkimmed_pt, L1KBMTFSkimmed_eta, L1KBMTFSkimmed_phi, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)")
 
 #df = df.Define("nstub1", "GetNstub(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub)").Define("nstub2", "GetNstub(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub)")
-df = df.Define("nstub1","L1KBMTFSkimmed_nStub[idx1]").Define("nstub2","L1KBMTFSkimmed_nStub[idx2]") 
+# GetIndex returns 99 when there is no such candidate (always the case for idx2 when
+# nL1KBMTFSkimmed==1). Go through GetVal so that those events get the -99 sentinel instead
+# of an out-of-bounds read on the RVec.
+df = df.Define("nstub1","GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub)").Define("nstub2","GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub)")
 
 #df = df.Filter("(nstub1>2 || nstub2>2)")
        #.Define("eLoss1", "L1KBMTFSkimmed_eLoss[idx1]").Define("eLoss2", "L1KBMTFSkimmed_eLoss[idx2]") \
@@ -60,22 +63,21 @@ df = df.Define("bxspread1", "GetBxSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_n
        .Define("stationspread2", "GetStationSpread(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Station, L1KBMTFSkimmed_s2Station, L1KBMTFSkimmed_s3Station, L1KBMTFSkimmed_s4Station)") \
        .Define("firstbx1", "GetFirstBx(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
        .Define("firstbx2", "GetFirstBx(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
-       .Define("eta1","L1KBMTFSkimmed_eta[idx1]").Define("eta2","L1KBMTFSkimmed_eta[idx2]") \
-       .Define("pt1", "L1KBMTFSkimmed_pt[idx1]").Define("pt2", "L1KBMTFSkimmed_pt[idx2]") \
-       .Define("Oldpt1", "Get_newpt(L1KBMTFSkimmed_hwK[idx1])").Define("Oldpt2", "Get_newpt(L1KBMTFSkimmed_hwK[idx2])") \
-       .Define("recobeta1", "L1KBMTFSkimmed_beta[idx1]").Define("recobeta2", "L1KBMTFSkimmed_beta[idx2]") \
-       .Define("HwK1", "L1KBMTFSkimmed_hwK[idx1]").Define("HwK2", "L1KBMTFSkimmed_hwK[idx2]") \
-       .Define("phi1","L1KBMTFSkimmed_phi[idx1]").Define("phi2","L1KBMTFSkimmed_phi[idx2]") \
-       .Define("dxy1","L1KBMTFSkimmed_hwDXY[idx1]").Define("dxy2","L1KBMTFSkimmed_hwDXY[idx2]") \
-       .Define("qual1","L1KBMTFSkimmed_hwQual[idx1]").Define("qual2","L1KBMTFSkimmed_hwQual[idx2]") \
-       .Define("charge1","L1KBMTFSkimmed_hwCharge[idx1]").Define("charge2","L1KBMTFSkimmed_hwCharge[idx2]") \
+       .Define("eta1","GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_eta)").Define("eta2","GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_eta)") \
+       .Define("pt1", "GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_pt)").Define("pt2", "GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_pt)") \
+       .Define("recobeta1", "GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_beta)").Define("recobeta2", "GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_beta)") \
+       .Define("HwK1", "GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_hwK)").Define("HwK2", "GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_hwK)") \
+       .Define("phi1","GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_phi)").Define("phi2","GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_phi)") \
+       .Define("dxy1","GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_hwDXY)").Define("dxy2","GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_hwDXY)") \
+       .Define("qual1","GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_hwQual)").Define("qual2","GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_hwQual)") \
+       .Define("charge1","GetVal(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_hwCharge)").Define("charge2","GetVal(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_hwCharge)") \
        .Define("ngen","{}".format(nentries)) \
        .Define("genbeta1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)") \
        .Define("genpt1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)") \
-       .Define("geneta1","Get_geneta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid)") \
+       .Define("geneta1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_eta)") \
        .Define("genbeta2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_beta)") \
        .Define("genpt2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_pt)") \
-       .Define("geneta2","Get_geneta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid)") \
+       .Define("geneta2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_eta)") \
        .Define("genK1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_K)") \
        .Define("genK2","Get_genbeta(eta2, phi2, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_K)") \
        .Define("genCharge1","Get_genbeta(eta1, phi1, nGen, Gen_eta, Gen_phi, Gen_pdgid, Gen_charge)") \
@@ -96,7 +98,7 @@ for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", "event", "ng
         #"nL1KBMTFSkimmed", "L1KBMTFSkimmed_hwCharge", "L1KBMTFSkimmed_hwQual", \
         "idx1", "idx2", \
         "bxspread1", "bxspread2", "stationspread1", "stationspread2", "nstub1", "nstub2", "isL1MuMatched1", "isL1MuMatched2", \
-        "firstbx1","firstbx2", "pt1", "pt2", "Oldpt1", "Oldpt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", "recobeta1", "recobeta2", 'HwK1', 'HwK2', \
+        "firstbx1","firstbx2", "pt1", "pt2","eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", "recobeta1", "recobeta2", 'HwK1', 'HwK2', \
         "genbeta1","genpt1","genbeta2","genpt2", "geneta1", "geneta2", "genK1", "genK2", "genCharge1", "genCharge2", "genMass1", "genMass2", "genPhi1", "genPhi2", \
         "genpdgID1","genpdgID2", "L1MET_pt"):
         #"L1KBMTFSkimmed_hwDXY", "L1KBMTFSkimmed_nStub", "L1KBMTFSkimmed_pt", \

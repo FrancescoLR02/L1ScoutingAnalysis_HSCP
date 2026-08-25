@@ -114,7 +114,17 @@ int main(int argc, char** argv) {
    TH1F* h_reso_pt25to35 = new TH1F("h_reso_pt25to35","h_reso_pt25to35",20,-1,1); h_reso_pt25to35->Sumw2();
    TH1F* h_reso_pt35to45 = new TH1F("h_reso_pt35to45","h_reso_pt35to45",20,-1,1); h_reso_pt35to45->Sumw2();
    TH1F* h_reso_pt45to55 = new TH1F("h_reso_pt45to55","h_reso_pt45to55",20,-1,1); h_reso_pt45to55->Sumw2();
-   TH1F* h_reso_ptgt55 = new TH1F("h_reso_ptgt55","h_reso_ptgt55",20,-1,1); h_reso_ptgt55->Sumw2();
+   TH1F* h_reso_pt55to65 = new TH1F("h_reso_pt55to65","h_reso_pt55to65",20,-1,2); h_reso_pt55to65->Sumw2();
+   TH1F* h_reso_pt65to75 = new TH1F("h_reso_pt65to75","h_reso_pt65to75",20,-1,2); h_reso_pt65to75->Sumw2();
+   TH1F* h_reso_pt75to85 = new TH1F("h_reso_pt75to85","h_reso_pt75to85",20,-1,2); h_reso_pt75to85->Sumw2();
+   TH1F* h_reso_pt85to95 = new TH1F("h_reso_pt85to95","h_reso_pt85to95",20,-1,2); h_reso_pt85to95->Sumw2();
+   TH1F* h_reso_pt95to105 = new TH1F("h_reso_pt95to105","h_reso_pt95to105",20,-1,2); h_reso_pt95to105->Sumw2();
+   TH1F* h_reso_pt105to115 = new TH1F("h_reso_pt105to115","h_reso_pt105to115",20,-1,2); h_reso_pt105to115->Sumw2();
+   TH1F* h_reso_pt115to125 = new TH1F("h_reso_pt115to125","h_reso_pt115to125",20,-1,2); h_reso_pt115to125->Sumw2();
+   TH1F* h_reso_pt125to135 = new TH1F("h_reso_pt125to135","h_reso_pt125to135",20,-1,2); h_reso_pt125to135->Sumw2();
+   TH1F* h_reso_pt135to145 = new TH1F("h_reso_pt135to145","h_reso_pt135to145",20,-1,2); h_reso_pt135to145->Sumw2();
+   
+   TH1F* h_reso_ptgt145 = new TH1F("h_reso_ptgt145","h_reso_ptgt145",20,-1,1); h_reso_ptgt145->Sumw2();
 
    TH1F* h_station = new TH1F("h_station","h_station",5,0,5); h_station->Sumw2();
 
@@ -190,6 +200,42 @@ int main(int argc, char** argv) {
       if (nstub2==3 and qual2<13) continue;
       if (nstub2==2 and qual2<12) continue;
 
+      // FIXME BX misID study
+      /*if (nstub1==2 or nstub2==2) continue;//
+      bool is_BXmisIDMB12=false;
+      bool is_BXmisIDMB34=false;
+      //if ((stub1Station1==1 and stub1Bx1!=0) or (stub2Station1==1 and stub2Bx1!=0) or (stub3Station1==1 and stub3Bx1!=0) or (stub4Station1==1 and stub4Bx1!=0) or (stub1Station2==1 and stub1Bx2!=0) or (stub2Station2==1 and stub2Bx2!=0) or (stub3Station2==1 and stub3Bx2!=0) or (stub4Station2==1 and stub4Bx2!=0)) is_BXmisIDMB12=true;
+      //if ((stub1Station1==2 and stub1Bx1!=0) or (stub2Station1==2 and stub2Bx1!=0) or (stub3Station1==2 and stub3Bx1!=0) or (stub4Station1==2 and stub4Bx1!=0) or (stub1Station2==2 and stub1Bx2!=0) or (stub2Station2==2 and stub2Bx2!=0) or (stub3Station2==2 and stub3Bx2!=0) or (stub4Station2==2 and stub4Bx2!=0)) is_BXmisIDMB12=true;
+      //if ((stub1Station1==3 and stub1Bx1!=0) or (stub2Station1==3 and stub2Bx1!=0) or (stub3Station1==3 and stub3Bx1!=0) or (stub4Station1==3 and stub4Bx1!=0) or (stub1Station2==3 and stub1Bx2!=0) or (stub2Station2==3 and stub2Bx2!=0) or (stub3Station2==3 and stub3Bx2!=0) or (stub4Station2==3 and stub4Bx2!=0)) is_BXmisIDMB34=true;
+      //if ((stub1Station1==4 and stub1Bx1!=0) or (stub2Station1==4 and stub2Bx1!=0) or (stub3Station1==4 and stub3Bx1!=0) or (stub4Station1==4 and stub4Bx1!=0) or (stub1Station2==4 and stub1Bx2!=0) or (stub2Station2==4 and stub2Bx2!=0) or (stub3Station2==4 and stub3Bx2!=0) or (stub4Station2==4 and stub4Bx2!=0)) is_BXmisIDMB34=true;
+      if ((stub1Station1==1 or stub1Station1==2) and stub1Bx1!=stub2Bx1 and stub1Bx1!=stub3Bx1 and stub1Bx1!=stub4Bx1) is_BXmisIDMB12=true;
+      if ((stub2Station1==1 or stub2Station1==2) and stub2Bx1!=stub1Bx1 and stub2Bx1!=stub3Bx1 and stub2Bx1!=stub4Bx1) is_BXmisIDMB12=true;
+      if ((stub3Station1==1 or stub3Station1==2) and stub3Bx1!=stub2Bx1 and stub3Bx1!=stub1Bx1 and stub3Bx1!=stub4Bx1) is_BXmisIDMB12=true;
+      if ((stub4Station1==1 or stub4Station1==2) and stub4Bx1!=stub2Bx1 and stub4Bx1!=stub3Bx1 and stub4Bx1!=stub1Bx1) is_BXmisIDMB12=true;
+      if ((stub1Station2==1 or stub1Station2==2) and stub1Bx2!=stub2Bx2 and stub1Bx2!=stub3Bx2 and stub1Bx2!=stub4Bx2) is_BXmisIDMB12=true;
+         if ((stub2Station2==1 or stub2Station2==2) and stub2Bx2!=stub1Bx2 and stub2Bx2!=stub3Bx2 and stub2Bx2!=stub4Bx2) is_BXmisIDMB12=true;
+         if ((stub3Station2==1 or stub3Station2==2) and stub3Bx2!=stub2Bx2 and stub3Bx2!=stub1Bx2 and stub3Bx2!=stub4Bx2) is_BXmisIDMB12=true;
+         if ((stub4Station2==1 or stub4Station2==2) and stub4Bx2!=stub2Bx2 and stub4Bx2!=stub3Bx2 and stub4Bx2!=stub1Bx2) is_BXmisIDMB12=true;
+
+      if ((stub1Station1==3 or stub1Station1==4) and stub1Bx1!=stub2Bx1 and stub1Bx1!=stub3Bx1 and stub1Bx1!=stub4Bx1) is_BXmisIDMB34=true;
+         if ((stub2Station1==3 or stub2Station1==4) and stub2Bx1!=stub1Bx1 and stub2Bx1!=stub3Bx1 and stub2Bx1!=stub4Bx1) is_BXmisIDMB34=true;
+         if ((stub3Station1==3 or stub3Station1==4) and stub3Bx1!=stub2Bx1 and stub3Bx1!=stub1Bx1 and stub3Bx1!=stub4Bx1) is_BXmisIDMB34=true;
+         if ((stub4Station1==3 or stub4Station1==4) and stub4Bx1!=stub2Bx1 and stub4Bx1!=stub3Bx1 and stub4Bx1!=stub1Bx1) is_BXmisIDMB34=true;
+      if ((stub1Station2==3 or stub1Station2==4) and stub1Bx2!=stub2Bx2 and stub1Bx2!=stub3Bx2 and stub1Bx2!=stub4Bx2) is_BXmisIDMB34=true;
+         if ((stub2Station2==3 or stub2Station2==4) and stub2Bx2!=stub1Bx2 and stub2Bx2!=stub3Bx2 and stub2Bx2!=stub4Bx2) is_BXmisIDMB34=true;
+         if ((stub3Station2==3 or stub3Station2==4) and stub3Bx2!=stub2Bx2 and stub3Bx2!=stub1Bx2 and stub3Bx2!=stub4Bx2) is_BXmisIDMB34=true;
+         if ((stub4Station2==3 or stub4Station2==4) and stub4Bx2!=stub2Bx2 and stub4Bx2!=stub3Bx2 and stub4Bx2!=stub1Bx2) is_BXmisIDMB34=true;
+      //if (!is_BXmisIDMB12) continue;
+      //if (is_BXmisIDMB12 or is_BXmisIDMB34) continue;
+      //if (!is_BXmisIDMB12 and !is_BXmisIDMB34) continue;
+      //if (bxspread1!=0 or bxspread2!=0) continue;
+
+      //if (bxspread1==0 and bxspread2==0) continue;
+      //cout<<bxspread1<<" "<<bxspread2<<endl;
+
+      //if (nstub1!=4 or nstub2!=4) continue;
+      */
+
       //if (nstub1!=2 or nstub2!=2) continue;
 
       if (name=="data_obs") aweight=1.0;
@@ -202,13 +248,32 @@ int main(int argc, char** argv) {
          else if (pt1>=25 and pt1<35) h_reso_pt25to35->Fill((pt1-genpt1)/genpt1);
          else if (pt1>=35 and pt1<45) h_reso_pt35to45->Fill((pt1-genpt1)/genpt1);
          else if (pt1>=45 and pt1<55) h_reso_pt45to55->Fill((pt1-genpt1)/genpt1);
-         else if (pt1>=55 and pt1<65) h_reso_ptgt55->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=55 and pt1<65) h_reso_pt55to65->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=65 and pt1<75) h_reso_pt65to75->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=75 and pt1<85) h_reso_pt75to85->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=85 and pt1<95) h_reso_pt85to95->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=95 and pt1<105) h_reso_pt95to105->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=105 and pt1<115) h_reso_pt105to115->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=115 and pt1<125) h_reso_pt115to125->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=125 and pt1<135) h_reso_pt125to135->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=135 and pt1<145) h_reso_pt135to145->Fill((pt1-genpt1)/genpt1);
+         else if (pt1>=145 and pt1<155) h_reso_ptgt145->Fill((pt1-genpt1)/genpt1);
+         
 
          if (pt2>=15 and pt2<25) h_reso_pt15to25->Fill((pt2-genpt2)/genpt2);
          else if (pt2>=25 and pt2<35) h_reso_pt25to35->Fill((pt2-genpt2)/genpt2);
          else if (pt2>=35 and pt2<45) h_reso_pt35to45->Fill((pt2-genpt2)/genpt2);
          else if (pt2>=45 and pt2<55) h_reso_pt45to55->Fill((pt2-genpt2)/genpt2);
-         else if (pt2>=55 and pt2<65) h_reso_ptgt55->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=55 and pt2<65) h_reso_pt55to65->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=65 and pt2<75) h_reso_pt65to75->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=75 and pt2<85) h_reso_pt75to85->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=85 and pt2<95) h_reso_pt85to95->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=95 and pt2<105) h_reso_pt95to105->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=105 and pt2<115) h_reso_pt105to115->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=115 and pt2<125) h_reso_pt115to125->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=125 and pt2<135) h_reso_pt125to135->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=135 and pt2<145) h_reso_pt135to145->Fill((pt2-genpt2)/genpt2);
+         else if (pt2>=145 and pt2<155) h_reso_ptgt145->Fill((pt2-genpt2)/genpt2);
       }
 
       float new_mmumu=(my_mu1+my_mu2).M();
@@ -299,7 +364,16 @@ int main(int argc, char** argv) {
    h_reso_pt25to35->Write();
    h_reso_pt35to45->Write();
    h_reso_pt45to55->Write();
-   h_reso_ptgt55->Write();
+   h_reso_pt55to65->Write();
+   h_reso_pt65to75->Write();
+   h_reso_pt75to85->Write();
+   h_reso_pt85to95->Write();
+   h_reso_pt95to105->Write();
+   h_reso_pt105to115->Write();
+   h_reso_pt115to125->Write();
+   h_reso_pt125to135->Write();
+   h_reso_pt135to145->Write();
+   h_reso_ptgt145->Write();
 
    TDirectory* dir1=fout->mkdir("OS");
    dir1->cd();

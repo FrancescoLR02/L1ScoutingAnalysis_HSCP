@@ -348,7 +348,7 @@ bool IsEarlierColliding(int run, int bx, int interval, bool is_colliding){
    }
 }
 
-float Get_newpt(double oldK){
+float getCecile_pT(double oldK){
   float K = oldK-9;
   if (K==0) K=1;
   float lsb = 1.25 / float(1 << 13);
@@ -375,15 +375,111 @@ float Get_newpt(double oldK){
   return pt/2;
 }
 
+float getOriginal_pT(double K){
+
+  int charge = (K >= 0) ? +1 : -1;
+  float lsb = 1.25 / float(1 << 13);
+  double FK = fabs(K);
+
+  if (FK > 2047) 
+    FK = 2047.; 
+  if (FK < 8)
+    FK = 8.; 
+
+  FK = FK * lsb;
+
+  //step 1 -material and B-field
+  FK = .8569 * FK / (1.0 + 0.1144 * FK);
+  //step 2 - misalignment
+  FK = FK - charge * 1.23e-03;
+  //Get to BMTF scale
+  FK = FK / 1.17;
+
+  double pt = 0;
+  if (FK != 0)
+    pt = 1 / FK;
+
+  if (pt < 4)
+    pt = 4;
+
+  return pt;
+}
+
+
+float getNoBMTFScale_pT(double K){
+
+  int charge = (K >= 0) ? +1 : -1;
+  float lsb = 1.25 / float(1 << 13);
+  double FK = fabs(K);
+
+  if (FK > 2047) 
+    FK = 2047.; 
+  if (FK < 8)
+    FK = 8.; 
+
+  FK = FK * lsb;
+
+  //step 1 -material and B-field
+  FK = .8569 * FK / (1.0 + 0.1144 * FK);
+  //step 2 - misalignment
+  FK = FK - charge * 1.23e-03;
+  //Get to BMTF scale
+  //FK = FK / 1.17;
+
+  double pt = 0;
+  if (FK != 0)
+    pt = 1 / FK;
+
+  if (pt < 4)
+    pt = 4;
+
+  return pt;
+}
+
+float getNoCharge_pT(double K){
+
+  int charge = (K >= 0) ? +1 : -1;
+  float lsb = 1.25 / float(1 << 13);
+  double FK = fabs(K);
+
+  if (FK > 2047) 
+    FK = 2047.; 
+  if (FK < 8)
+    FK = 8.; 
+
+  FK = FK * lsb;
+
+  //step 1 -material and B-field
+  FK = .8569 * FK / (1.0 + 0.1144 * FK);
+  //step 2 - misalignment
+  FK = FK - 1.23e-03;
+  //Get to BMTF scale
+  FK = FK / 1.17;
+
+  double pt = 0;
+  if (FK != 0)
+    pt = 1 / FK;
+
+  if (pt < 4)
+    pt = 4;
+
+  return pt;
+}
+
 float Get_genpt(float eta, float phi, int ngen, ROOT::VecOps::RVec<Float_t> &Gen_eta, ROOT::VecOps::RVec<Float_t> &Gen_phi, ROOT::VecOps::RVec<Short_t> &Gen_pdgid, ROOT::VecOps::RVec<Float_t> &Gen_pt){
     float out_pt = -1.0;
+    float best_dr = 0.3;   //keep the closest candidate in the cone, not the last one
     TLorentzVector my_reco;
     my_reco.SetPtEtaPhiM(100.0, eta, phi, 1.0);
     for (int i = 0; i<ngen; ++i){
        if (fabs(Gen_pdgid[i])==13 or fabs(Gen_pdgid[i])==17 or fabs(Gen_pdgid[i])==16975 or fabs(Gen_pdgid[i])==1000015 or (fabs(Gen_pdgid[i])>=1000993 and fabs(Gen_pdgid[i])<=1093334)){
           TLorentzVector tmp_gen;
           tmp_gen.SetPtEtaPhiM(100.0, Gen_eta[i], Gen_phi[i], 1.0);
-          if (tmp_gen.DeltaR(my_reco)<0.3) out_pt = Gen_pt[i];
+          float dr = tmp_gen.DeltaR(my_reco);
+          if (dr<best_dr){
+             best_dr = dr;
+             out_pt = Gen_pt[i];
+          }
        }
     }
     return out_pt;
@@ -391,13 +487,18 @@ float Get_genpt(float eta, float phi, int ngen, ROOT::VecOps::RVec<Float_t> &Gen
 
 float Get_geneta(float eta, float phi, int ngen, ROOT::VecOps::RVec<Float_t> &Gen_eta, ROOT::VecOps::RVec<Float_t> &Gen_phi, ROOT::VecOps::RVec<Short_t> &Gen_pdgid){
     float out_eta = -2.0;
+    float best_dr = 0.3;   //keep the closest candidate in the cone, not the last one
     TLorentzVector my_reco;
     my_reco.SetPtEtaPhiM(100.0, eta, phi, 1.0);
     for (int i = 0; i<ngen; ++i){
        if (fabs(Gen_pdgid[i])==13 or fabs(Gen_pdgid[i])==17 or fabs(Gen_pdgid[i])==16975 or fabs(Gen_pdgid[i])==1000015 or (fabs(Gen_pdgid[i])>=1000993 and fabs(Gen_pdgid[i])<=1093334)){
           TLorentzVector tmp_gen;
           tmp_gen.SetPtEtaPhiM(100.0, Gen_eta[i], Gen_phi[i], 1.0);
-          if (tmp_gen.DeltaR(my_reco)<0.3) out_eta = Gen_eta[i];
+          float dr = tmp_gen.DeltaR(my_reco);
+          if (dr<best_dr){
+             best_dr = dr;
+             out_eta = Gen_eta[i];
+          }
        }
     }
     return out_eta;

@@ -41,7 +41,22 @@ bool IsColliding(int run, int bx);
 
 bool IsEarlierColliding(int run, int bx, int interval, bool is_colliding);
 
-float Get_newpt(double oldK);
+float getCecile_pT(double oldK);
+float getOriginal_pT(double oldK);
+float getNoBMTFScale_pT(double oldK);
+float getNoCharge_pT(double oldK);
+
+
+//GetIndex returns 99 when there is no such candidate, so every access to a candidate
+//collection has to go through here: RVec::operator[] does not check the bounds and
+//reading out of range silently fills the output branches with whatever is in memory.
+template <typename T>
+T GetVal(int ncand, int index, const ROOT::VecOps::RVec<T> &v, double def = -99.) {
+    if (index < 0 || index >= ncand || index >= (int)v.size())
+        return static_cast<T>(def);
+    return v[index];
+}
+
 
 //float Get_genbeta(float eta, float phi, int ngen, ROOT::VecOps::RVec<Float_t> &Gen_eta, ROOT::VecOps::RVec<Float_t> &Gen_phi, ROOT::VecOps::RVec<Short_t> &Gen_pdgid, ROOT::VecOps::RVec<Float_t> &Gen_beta);
 template <typename T>
@@ -50,7 +65,8 @@ float Get_genbeta(float eta, float phi, int ngen,
                   const ROOT::VecOps::RVec<Float_t> &Gen_phi,
                   const ROOT::VecOps::RVec<Short_t> &Gen_pdgid,
                   const ROOT::VecOps::RVec<T> &Gen_val) {
-    float out = -1.0f;
+    float out = -99.0f;
+    float best_dr = 0.3f;   //keep the closest candidate in the cone, not the last one
     TLorentzVector my_reco;
     my_reco.SetPtEtaPhiM(100.0, eta, phi, 1.0);
     for (int i = 0; i < ngen; ++i) {
@@ -59,7 +75,11 @@ float Get_genbeta(float eta, float phi, int ngen,
             (id >= 1000993 && id <= 1093334)) {
             TLorentzVector tmp_gen;
             tmp_gen.SetPtEtaPhiM(100.0, Gen_eta[i], Gen_phi[i], 1.0);
-            if (tmp_gen.DeltaR(my_reco) < 0.3) out = static_cast<float>(Gen_val[i]);
+            const float dr = tmp_gen.DeltaR(my_reco);
+            if (dr < best_dr) {
+                best_dr = dr;
+                out = static_cast<float>(Gen_val[i]);
+            }
         }
     }
     return out;

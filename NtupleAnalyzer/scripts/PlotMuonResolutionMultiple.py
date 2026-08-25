@@ -10,13 +10,16 @@ def gaussian_norm(x, mu, sigma):
     return 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(-(x - mu)**2 / (2 * sigma**2))
 
 # === Load ROOT File ===
-filename = "output_ZmumuKBMTF/.root"
+filename = "/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Zmumu/output_modZmumu/datacard_ZmumuKBMTF.root"
 histnames = {
-    r"15 < $p_T$ < 25 GeV": "h_reso_pt15to25",
-    r"25 < $p_T$ < 35 GeV": "h_reso_pt25to35",
+    #r"15 < $p_T$ < 25 GeV": "h_reso_pt15to25",
+    #r"25 < $p_T$ < 35 GeV": "h_reso_pt25to35",
     r"35 < $p_T$ < 45 GeV": "h_reso_pt35to45",
     r"45 < $p_T$ < 55 GeV": "h_reso_pt45to55",
-    r"55 < $p_T$ < 65 GeV": "h_reso_ptgt55"
+    r"55 < $p_T$ < 65 GeV": "h_reso_pt55to65",
+    r"65 < $p_T$ < 75 GeV": "h_reso_pt65to75",
+    r"75 < $p_T$ < 85 GeV": "h_reso_pt75to85",
+    r"85 < $p_T$ < 95 GeV": "h_reso_pt85to95",
 }
 
 # === Plotting Setup ===

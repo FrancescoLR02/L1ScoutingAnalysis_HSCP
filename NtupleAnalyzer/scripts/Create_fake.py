@@ -15,8 +15,8 @@ parser.add_argument('--year')
 options = parser.parse_args()
 
 
-fin=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/CombineClassification/data_obs.root","r")
-fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/CombineClassification/Fake.root","recreate")
+fin=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/New_NewBins_Combine/data_obs.root","r")
+fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/New_NewBins_Combine/Fake.root","recreate")
 
 #categories=["stub4_bx1234","stub4_bx123","stub4_bx1122","stub4_bx1112","stub4_bx1222","stub4_bx124","stub3_bx123_fast","stub3_bx123_slow","stub3_bx124_fast","stub3_bx124_slow","stub3_bx112_fast","stub3_bx112_slow","stub3_bx122_fast","stub3_bx122_slow"]
 categories=["stub4_bx1234","stub4_bx123","stub4_bx1122","stub4_bx1112","stub4_bx1222","stub4_bx124","stub3_bx123_fast","stub3_bx123_slow","stub3_bx124_fast","stub3_bx124_slow","stub3_bx112_fast","stub3_bx112_slow","stub3_bx122_fast","stub3_bx122_slow",
