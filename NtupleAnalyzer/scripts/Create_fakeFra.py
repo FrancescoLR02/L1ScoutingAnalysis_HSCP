@@ -30,16 +30,19 @@ def closure_shape(h_nom, h_right, h_wrong, floor=1e-4):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--year')
+parser.add_argument('--input', required=False, help='Input ROOT file')
+parser.add_argument('--output', required=False, help='Output ROOT file')
 options = parser.parse_args()
 
 
-fin=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/AddedTracks_Classification/data_obs.root","r")
-fout=ROOT.TFile("/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/AddedTracks_Classification/Fake.root","recreate")
+
+fin = ROOT.TFile(options.input, "r")
+fout = ROOT.TFile(options.output, "recreate")
 
 # categories=["stub4_bx1234","stub4_bx123","stub4_bx1122","stub4_bx1112","stub4_bx1222","stub4_bx124","stub3_bx123_fast","stub3_bx123_slow","stub3_bx124_fast","stub3_bx124_slow","stub3_bx112_fast","stub3_bx112_slow","stub3_bx122_fast","stub3_bx122_slow",
 #        "stub4_bx1122_2tracks","stub4_bx1112_2tracks","stub4_bx1222_2tracks","stub3_bx112_fast_2tracks","stub3_bx112_slow_2tracks","stub3_bx122_fast_2tracks","stub3_bx122_slow_2tracks", ]
 categories=["stub4_bx1234","stub4_bx123","stub4_bx1122","stub4_bx1112","stub4_bx1222","stub4_bx124","stub3_bx123_fast","stub3_bx123_slow","stub3_bx124_fast","stub3_bx124_slow","stub3_bx112_fast","stub3_bx112_slow","stub3_bx122_fast","stub3_bx122_slow",
-       "stub4_bx1122_2tracks","stub4_bx1112_2tracks","stub4_bx1222_2tracks","stub3_bx112_fast_2tracks","stub3_bx112_slow_2tracks","stub3_bx122_fast_2tracks","stub3_bx122_slow_2tracks", "stub3_bx123_fast_2tracks","stub3_bx123_slow_2tracks","stub3_bx124_fast_2tracks","stub3_bx124_slow_2tracks", ]
+       "stub4_bx1122_2tracks","stub4_bx1112_2tracks","stub4_bx1222_2tracks","stub3_bx112_fast_2tracks","stub3_bx112_slow_2tracks","stub3_bx122_fast_2tracks","stub3_bx122_slow_2tracks", "stub3_bx123_fast_2tracks","stub3_bx123_slow_2tracks","stub3_bx124_fast_2tracks","stub3_bx124_slow_2tracks", "stub3_bx124", "stub3_bx123" ]
 
 
 for categ in categories:
