@@ -75,6 +75,7 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("eta1", &eta1);
     arbre->SetBranchAddress("eta2", &eta2);
     arbre->SetBranchAddress("phi1", &phi1);
+    arbre->SetBranchAddress("processor1", &processor1);
     arbre->SetBranchAddress("phi2", &phi2);
     arbre->SetBranchAddress("HwK1", &HwK1);
     if(name != "data_obs") arbre->SetBranchAddress("L1MET_pt", &L1MET_pt);
@@ -88,87 +89,6 @@ int main(int argc, char** argv) {
       arbre->SetBranchAddress("met_bxm4", &met_bxm4);
       arbre->SetBranchAddress("met_bxm5", &met_bxm5);
     }
-
-    TH1F* h_qual_nstub2 = new TH1F("h_qual_nstub2","h_qual_nstub2",4,12,16); h_qual_nstub2->Sumw2();
-    TH1F* h_qual_nstub3 = new TH1F("h_qual_nstub3","h_qual_nstub3",4,12,16); h_qual_nstub3->Sumw2();
-    TH1F* h_qual_nstub4 = new TH1F("h_qual_nstub4","h_qual_nstub4",4,12,16); h_qual_nstub4->Sumw2();
-
-    TH1F* h_dxy = new TH1F("h_dxy","h_dxy",80,0,4); h_dxy->Sumw2();
-    TH1F* h_dxy3stubs = new TH1F("h_dxy3stubs","h_dxy3stubs",80,0,4); h_dxy3stubs->Sumw2();
-    TH1F* h_dxy4stubs = new TH1F("h_dxy4stubs","h_dxy4stubs",80,0,4); h_dxy4stubs->Sumw2();
-    TH1F* h_dxy3stubs_wrong = new TH1F("h_dxy3stubs_wrong","h_dxy3stubs_wrong",80,0,4); h_dxy3stubs_wrong->Sumw2();
-    TH1F* h_dxy4stubs_wrong = new TH1F("h_dxy4stubs_wrong","h_dxy4stubs_wrong",80,0,4); h_dxy4stubs_wrong->Sumw2();
-    TH1F* h_phi_2BX        = new TH1F("h_phi_2BX","h_phi_2BX",50,-3.14159,3.14159); h_phi_2BX->Sumw2();
-   
-   TH1F* h_phi_2BX_wrong  = new TH1F("h_phi_2BX_wrong","h_phi_2BX_wrong",50,-3.14159,3.14159); h_phi_2BX_wrong->Sumw2();
-   TH1F* h_phi_gt2BX      = new TH1F("h_phi_gt2BX","h_phi_gt2BX",50,-3.14159,3.14159); h_phi_gt2BX->Sumw2();
-   TH1F* h_phi_gt2BX_wrong= new TH1F("h_phi_gt2BX_wrong","h_phi_gt2BX_wrong",50,-3.14159,3.14159); h_phi_gt2BX_wrong->Sumw2();
-   TH1F* h_1234ordering   = new TH1F("h_1234ordering","h_1234ordering",24,0,24); h_1234ordering->Sumw2();
-
-
-
-    TH1F* h_nstub = new TH1F("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
-    TH1F* h_pt = new TH1F("h_pt","h_pt",400,12.5,1200); h_pt->Sumw2();
-    TH1F* h_qpt = new TH1F("h_qpt","h_qpt",400,-0.08,0.08); h_qpt->Sumw2();
-    TH1F* h_qpt_signal = new TH1F("h_qpt_signal","h_qpt_signal",400,-0.08,0.08); h_qpt_signal->Sumw2();
-    TH1F* h_qpt_wrong = new TH1F("h_qpt_wrong","h_qpt_wrong",400,-0.08,0.08); h_qpt_wrong->Sumw2();
-    TH1F* h_invpt_plus  = new TH1F("h_invpt_plus", "h_invpt_plus", 400, 0, 0.08); h_invpt_plus->Sumw2();
-    TH1F* h_invpt_minus = new TH1F("h_invpt_minus","h_invpt_minus",400, 0, 0.08); h_invpt_minus->Sumw2();
-    TH1F* h_charge = new TH1F("h_charge","h_charge", 3, -1.5, 1.5); h_charge->Sumw2();
-    TH1F* h_pt_minus = new TH1F("h_pt_minus","h_pt_minus", 400, 20, 1200); h_pt_minus->Sumw2();
-    TH1F* h_pt_plus = new TH1F("h_pt_plus","h_pt_plus", 400, 20, 1200); h_pt_plus->Sumw2();
-    
-
-   float bins_recopT[] = {20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250};
-   int  binnum_recopT = sizeof(bins_recopT)/sizeof(Float_t) - 1;
-
-    TProfile* p_qpt_vs_phi   = new TProfile("p_qpt_vs_phi",  "p_qpt_vs_phi",  32, -3.14159, 3.14159);
-   TProfile* p_qpt_vs_eta   = new TProfile("p_qpt_vs_eta",  "p_qpt_vs_eta",  24, -1, 1);
-   TProfile* p_qpt_vs_pt    = new TProfile("p_qpt_vs_pt",   "p_qpt_vs_pt",   binnum_recopT, bins_recopT);
-   TProfile* p_qpt_vs_nstub = new TProfile("p_qpt_vs_nstub","p_qpt_vs_nstub", 3, 2, 5);
-   TProfile* p_qpt_vs_dxy   = new TProfile("p_qpt_vs_dxy",  "p_qpt_vs_dxy",  40, 0, 4);
-
-
-   const int NCAT = 14;
-   TProfile* p_qpt_vs_cat        = new TProfile("p_qpt_vs_cat",       "p_qpt_vs_cat",        NCAT+1, 1, NCAT+1);
-   TProfile* p_qpt_vs_cat_wrongU = new TProfile("p_qpt_vs_cat_wrongU","p_qpt_vs_cat_wrongU", NCAT+1, 1, NCAT+1);
-   TProfile* p_qpt_vs_cat_wrongD = new TProfile("p_qpt_vs_cat_wrongD","p_qpt_vs_cat_wrongD", NCAT+1, 1, NCAT+1);
-   
-   TH2F* h2_qpt_vs_phi = new TH2F("h2_qpt_vs_phi","", 32,-3.14159,3.14159, 200,-0.005,0.005);
-   TProfile* p_invpt_plus_vs_phi  = new TProfile("p_invpt_plus_vs_phi", "",32,-3.14159,3.14159);
-   TProfile* p_invpt_minus_vs_phi = new TProfile("p_invpt_minus_vs_phi","",32,-3.14159,3.14159);
-
-   // integers land on bin centres
-   TH1F* h_K       = new TH1F("h_K","hw curvature K", 1024, -600, 600); h_K->Sumw2();
-   TH1F* h_K_core  = new TH1F("h_K_core","hw curvature K, core", 512, -200, 200); h_K_core->Sumw2();
-   TH1F* h_absK_plus  = new TH1F("h_absK_plus", "|K|, q>0", 1024, -0.5, 600); h_absK_plus->Sumw2();
-   TH1F* h_absK_minus = new TH1F("h_absK_minus","|K|, q<0", 1024, -0.5, 600); h_absK_minus->Sumw2();
-   TProfile* p_K_vs_phi   = new TProfile("p_K_vs_phi",  "p_K_vs_phi",  32, -3.14159, 3.14159);
-   TProfile* p_K_vs_eta   = new TProfile("p_K_vs_eta",  "p_K_vs_eta",  24, -1, 1);
-   TProfile* p_K_vs_pt    = new TProfile("p_K_vs_pt",   "p_K_vs_pt",   binnum_recopT, bins_recopT);
-   TProfile* p_K_vs_nstub = new TProfile("p_K_vs_nstub","p_K_vs_nstub", 3, 2, 5);
-   TProfile* p_K_vs_dxy   = new TProfile("p_K_vs_dxy",  "p_K_vs_dxy",  40, 0, 4);
-
-   TH2F* h2_K_vs_phi = new TH2F("h2_K_vs_phi","K vs #phi", 32,-3.14159,3.14159, 360,-50, 50); h2_K_vs_phi->Sumw2();
-
-   TH1F* h_dK_hw = new TH1F("h_dK_hw","K_{reco} - K_{gen} [LSB]", 257, -128.5, 128.5); h_dK_hw->Sumw2();
-   TProfile* p_dK_hw_vs_eta  = new TProfile("p_dK_hw_vs_eta", "p_dK_hw_vs_eta", 24, -1, 1);
-   TProfile* p_dK_hw_vs_phi  = new TProfile("p_dK_hw_vs_phi", "p_dK_hw_vs_phi", 32, -3.14159, 3.14159);
-   TProfile* p_dK_hw_vs_beta = new TProfile("p_dK_hw_vs_beta","p_dK_hw_vs_beta", 20, 0, 1);
-   TH2F* h2_K_hw_reco_gen = new TH2F("h2_K_hw_reco_gen","K_{reco} vs K_{gen} [LSB]", 200,-400.5,399.5, 200,-400.5,399.5); h2_K_hw_reco_gen->Sumw2();
-
-
-   //MC 
-   float bins_genpT[] = {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000};
-   int  binnum_genpT = sizeof(bins_genpT)/sizeof(Float_t) - 1;
-
-   TH1F* h_dK = new TH1F("h_dK","h_dK", 400, -0.01, 0.01); h_dK->Sumw2();
-   TProfile* p_dK_vs_eta  = new TProfile("p_dK_vs_eta", "", 24, -1.2, 1.2);
-   TProfile* p_dK_vs_phi  = new TProfile("p_dK_vs_phi", "", 32, -3.14159, 3.14159);
-   TProfile* p_dK_vs_genpt= new TProfile("p_dK_vs_genpt","", binnum_genpT, bins_genpT);
-   TProfile* p_dK_vs_beta = new TProfile("p_dK_vs_beta","", 20, 0, 1);
-   TH2F* h2_K_reco_gen = new TH2F("h2_K_reco_gen","", 100,-0.02,0.02, 100,-0.02,0.02);
-
 
     TH1F* h_metbx0_mu0 = new TH1F("h_metbx0_mu0", "h_metbx0_mu0", 40,0,200); h_metbx0_mu0->Sumw2();
     TH1F* h_metbxm1_mu0 = new TH1F("h_metbxm1_mu0", "h_metbxm1_mu0", 40,0,200); h_metbxm1_mu0->Sumw2();
@@ -402,13 +322,70 @@ int main(int argc, char** argv) {
 
 
 
-   TH1F* h_phi_2BX = new TH1F("h_phi_2BX", "h_phi_2BX", 50,-3.14159, 3.14159); h_phi_2BX->Sumw2();
-   TH1F* h_phi_2BX_wrong = new TH1F("h_phi_2BX_wrong", "h_phi_2BX_wrong", 50,-3.14159, 3.14159); h_phi_2BX_wrong->Sumw2();
+   TH1F* h_qual_nstub2 = new TH1F("h_qual_nstub2","h_qual_nstub2",4,12,16); h_qual_nstub2->Sumw2();
+   TH1F* h_qual_nstub3 = new TH1F("h_qual_nstub3","h_qual_nstub3",4,12,16); h_qual_nstub3->Sumw2();
+   TH1F* h_qual_nstub4 = new TH1F("h_qual_nstub4","h_qual_nstub4",4,12,16); h_qual_nstub4->Sumw2();
 
-   TH1F* h_phi_gt2BX = new TH1F("h_phi_gt2BX", "h_phi_gt2BX", 50,-3.14159, 3.14159); h_phi_gt2BX->Sumw2();
-   TH1F* h_phi_gt2BX_wrong = new TH1F("h_phi_gt2BX_wrong", "h_phi_gt2BX_wrong", 50,-3.14159, 3.14159); h_phi_gt2BX_wrong->Sumw2();
+   TH1F* h_dxy = new TH1F("h_dxy","h_dxy",80,0,4); h_dxy->Sumw2();
+   TH1F* h_dxy3stubs = new TH1F("h_dxy3stubs","h_dxy3stubs",80,0,4); h_dxy3stubs->Sumw2();
+   TH1F* h_dxy4stubs = new TH1F("h_dxy4stubs","h_dxy4stubs",80,0,4); h_dxy4stubs->Sumw2();
+   TH1F* h_dxy3stubs_wrong = new TH1F("h_dxy3stubs_wrong","h_dxy3stubs_wrong",80,0,4); h_dxy3stubs_wrong->Sumw2();
+   TH1F* h_dxy4stubs_wrong = new TH1F("h_dxy4stubs_wrong","h_dxy4stubs_wrong",80,0,4); h_dxy4stubs_wrong->Sumw2();
+   TH1F* h_phi_2BX        = new TH1F("h_phi_2BX","h_phi_2BX",50,-3.14159,3.14159); h_phi_2BX->Sumw2();
+   
+   TH1F* h_phi_2BX_wrong  = new TH1F("h_phi_2BX_wrong","h_phi_2BX_wrong",50,-3.14159,3.14159); h_phi_2BX_wrong->Sumw2();
+   TH1F* h_phi_gt2BX      = new TH1F("h_phi_gt2BX","h_phi_gt2BX",50,-3.14159,3.14159); h_phi_gt2BX->Sumw2();
+   TH1F* h_phi_gt2BX_wrong= new TH1F("h_phi_gt2BX_wrong","h_phi_gt2BX_wrong",50,-3.14159,3.14159); h_phi_gt2BX_wrong->Sumw2();
+   TH1F* h_1234ordering   = new TH1F("h_1234ordering","h_1234ordering",24,0,24); h_1234ordering->Sumw2();
 
-   TH1F* h_1234ordering = new TH1F("h_1234ordering", "h_1234ordering", 24,0,24); h_1234ordering->Sumw2();
+   TH1F* h_nstub = new TH1F("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
+
+
+   const double PHI_SHIFT = 0.0;      
+   const int    NK    = 4800;
+   const double KMIN  = -600.0, KMAX = 600.0;  
+
+   TH1F* h_pt = new TH1F("h_pt","h_pt",400,12.5,1300); h_pt->Sumw2();
+   TH1F* h_charge = new TH1F("h_charge","h_charge", 3, -1.5, 1.5); h_charge->Sumw2();
+   TH1F* h_dxy_prompt= new TH1F("h_dxy_prompt","d_{xy}, prompt",400,0,4); h_dxy_prompt->Sumw2();
+   TH2F* h2_K_processor_plus_stub3  = new TH2F("h2_K_processor_plus_stub3", "K vs #phi, q>0, 3 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_plus_stub3->Sumw2();
+   TH2F* h2_K_processor_minus_stub3 = new TH2F("h2_K_processor_minus_stub3","K vs #phi, q<0, 3 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_minus_stub3->Sumw2();
+   TH2F* h2_K_processor_plus_stub4  = new TH2F("h2_K_processor_plus_stub4", "K vs #phi, q>0, 4 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_plus_stub4->Sumw2();
+   TH2F* h2_K_processor_minus_stub4 = new TH2F("h2_K_processor_minus_stub4","K vs #phi, q<0, 4 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_minus_stub4->Sumw2();
+
+   TH2F* h2_K_eta_plus  = new TH2F("h2_K_eta_plus", "K vs #eta, q>0", 30,-1.0,1.0, NK, KMIN, KMAX); h2_K_eta_plus->Sumw2(); 
+   TH2F* h2_K_eta_minus = new TH2F("h2_K_eta_minus","K vs #eta, q<0", 30,-1.0,1.0, NK, KMIN, KMAX); h2_K_eta_minus->Sumw2();
+
+   TH1F* h_K = new TH1F("h_K","hw curvature K", NK, KMIN, KMAX); h_K->Sumw2();
+   TProfile* p_K_vs_phi   = new TProfile("p_K_vs_phi",  "", 12, -3.1415, 3.1415);
+   TProfile* p_K_vs_eta   = new TProfile("p_K_vs_eta",  "", 20, -1.0, 1.0);
+   TProfile* p_K_vs_nstub = new TProfile("p_K_vs_nstub","",  3, 2, 5);
+   TProfile* p_K_vs_dxy   = new TProfile("p_K_vs_dxy",  "", 40, 0, 4);
+
+   TH1F* h_sector_plus  = new TH1F("h_sector_plus", "sector, q>0", 12, 0, 12); h_sector_plus->Sumw2();
+   TH1F* h_sector_minus = new TH1F("h_sector_minus","sector, q<0", 12, 0, 12); h_sector_minus->Sumw2();
+
+   TProfile* p_dxy_vs_phi       = new TProfile("p_dxy_vs_phi",      "", 24, -3.14159, 3.14159);
+   TProfile* p_dxy_vs_phi_plus  = new TProfile("p_dxy_vs_phi_plus", "", 24, -3.14159, 3.14159);
+   TProfile* p_dxy_vs_phi_minus = new TProfile("p_dxy_vs_phi_minus","", 24, -3.14159, 3.14159);
+   TProfile* p_dxy_vs_eta       = new TProfile("p_dxy_vs_eta",      "", 20, -1.0, 1.0);
+
+   TH2F* h2_dxy_vs_phi = new TH2F("h2_dxy_vs_phi","d_{xy} vs #phi", 24,-3.14159,3.14159, 400,0,4); h2_dxy_vs_phi->Sumw2();
+
+   TH2F* h2_K_phi_plus_tightdxy  = new TH2F("h2_K_phi_plus_tightdxy", "", 12,-3.14159,3.14159, NK,KMIN,KMAX); h2_K_phi_plus_tightdxy->Sumw2(); 
+   TH2F* h2_K_phi_minus_tightdxy = new TH2F("h2_K_phi_minus_tightdxy","", 12,-3.14159,3.14159, NK,KMIN,KMAX); h2_K_phi_minus_tightdxy->Sumw2();
+
+
+   TH1F* h_dK_hw = new TH1F("h_dK_hw","K_{reco} - K_{gen} [LSB]", 1025, -128.125, 128.125); h_dK_hw->Sumw2();
+   TProfile* p_dK_hw_vs_eta   = new TProfile("p_dK_hw_vs_eta",  "", 20, -1.0, 1.0);
+   TProfile* p_dK_hw_vs_phi   = new TProfile("p_dK_hw_vs_phi",  "", 12, -3.14159, 3.14159);
+   TProfile* p_dK_hw_vs_beta  = new TProfile("p_dK_hw_vs_beta", "", 20, 0, 1);
+   TProfile* p_dK_hw_vs_Kgen  = new TProfile("p_dK_hw_vs_Kgen", "", 40, -400, 400); 
+   TProfile* p_dK_hw_vs_dxy   = new TProfile("p_dK_hw_vs_dxy",  "", 40, 0, 4);
+   TH2F* h2_K_hw_reco_gen = new TH2F("h2_K_hw_reco_gen","K_{reco} vs K_{gen} [LSB]", 200,-400,400, 200,-400,400); h2_K_hw_reco_gen->Sumw2();
+
+   TProfile* p_dK_hw_vs_phi_plus  = new TProfile("p_dK_hw_vs_phi_plus", "", 12, -3.14159, 3.14159);
+   TProfile* p_dK_hw_vs_phi_minus = new TProfile("p_dK_hw_vs_phi_minus","", 12, -3.14159, 3.14159);
 
 
    //float lumiweight= (37770.0/15.046) + (5440.0/15.060) + (11470.0/15.048);//recorded
@@ -465,7 +442,6 @@ int main(int argc, char** argv) {
       h_dxy->Fill(dxy1);
       h_pt->Fill(pt1);
       double K = charge1/pt1;
-      h_qpt->Fill(K);
 
       bool pass_quality_1=true;
       if (nstub1==2 and qual1<13) pass_quality_1=false;
@@ -526,61 +502,68 @@ int main(int argc, char** argv) {
          if (is_tagged){
             if (nstub1 == 3) h_dxy3stubs->Fill(dxy1);
             if (nstub1 == 4) h_dxy4stubs->Fill(dxy1);
-            h_qpt_signal->Fill(charge1/pt1);
+            h_dxy_prompt->Fill(dxy1, w1);
          }
 
          //if (!is_tagged) cout<<"nstub pt bxspread "<<nstub1<<" "<<pt1<<" "<<bxspread1<<endl;
       }
 
-      if (pass_quality_1) {
-         double K = charge1/pt1;
-         p_qpt_vs_pt->Fill(pt1, K, w1);
 
-         // ---- hardware curvature, no pT gate: needed for the spectrum shape ----
-         h_K->Fill(HwK1, w1);
-         h_K_core->Fill(HwK1, w1);
-         if (charge1 > 0) {h_absK_plus->Fill(fabs(HwK1), w1); h_pt_plus->Fill(pt1, w1);}
-         else             {h_absK_minus->Fill(fabs(HwK1), w1); h_pt_minus->Fill(pt1, w1);}
-         p_K_vs_pt->Fill(pt1, HwK1, w1);
+      
+if (pass_quality_1) {
 
-         if(pt1 > 200){
-            h_qpt->Fill(K, w1);
-            h_charge->Fill(charge1);
-            if (charge1 > 0) { h_invpt_plus->Fill(1.0/pt1, w1);  p_invpt_plus_vs_phi->Fill(phi1, 1.0/pt1, w1); }
-            else             { h_invpt_minus->Fill(1.0/pt1, w1); p_invpt_minus_vs_phi->Fill(phi1, 1.0/pt1, w1); }
-            p_qpt_vs_phi->Fill(phi1, K, w1);
-            h2_qpt_vs_phi->Fill(phi1, K, w1);
-            p_qpt_vs_eta->Fill(eta1, K, w1);
-            p_qpt_vs_nstub->Fill(nstub1, K, w1);
-            p_qpt_vs_dxy->Fill(dxy1, K, w1);
+   h_K->Fill(HwK1, w1);
+   p_K_vs_nstub->Fill(nstub1, HwK1, w1);
+   p_K_vs_dxy->Fill(dxy1, HwK1, w1);
 
-            p_K_vs_phi->Fill(phi1, HwK1, w1);
-            p_K_vs_eta->Fill(eta1, HwK1, w1);
-            p_K_vs_nstub->Fill(nstub1, HwK1, w1);
-            p_K_vs_dxy->Fill(dxy1, HwK1, w1);
-            h2_K_vs_phi->Fill(phi1, HwK1, w1);
-         }
+   // ---- alignment sample: prompt, in-time, >=3 stubs ---------------------
+   // No pt cut. The quantile ladder needs the whole spectrum; cutting on pt
+   // cuts on |K|, which truncates the two charges at different true momenta
+   // (they are offset by 2*Delta) and biases the estimator.
+   bool is_prompt = (bxspread1 == 0) && (name == "data_obs" ? is_colliding : true);
 
-         if (name != "data_obs" && genpt1 > 0) {
-            double dK = K - charge1/genpt1;
-            h_dK->Fill(dK, w1);
-            p_dK_vs_eta->Fill(geneta1, dK, w1);
-            p_dK_vs_phi->Fill(phi1, dK, w1);
-            p_dK_vs_genpt->Fill(genpt1, dK, w1);
-            p_dK_vs_beta->Fill(genbeta1, dK, w1);
-            h2_K_reco_gen->Fill(charge1/genpt1, K, w1);
+   if (is_prompt && nstub1 >= 3) {
 
-            double K_gen_hw = (charge1/genpt1) * 2.0 * 1.17 / 0.8569 / (1.25/8192.0);
-            double dK_hw    = HwK1 - K_gen_hw;
-            h_dK_hw->Fill(dK_hw, w1);
-            p_dK_hw_vs_eta->Fill(geneta1, dK_hw, w1);
-            p_dK_hw_vs_phi->Fill(phi1, dK_hw, w1);
-            p_dK_hw_vs_beta->Fill(genbeta1, dK_hw, w1);
-            h2_K_hw_reco_gen->Fill(K_gen_hw, HwK1, w1);
-         }
-      }
+      const bool pos = (charge1 > 0);
 
+      h_charge->Fill(charge1, w1);
+      p_K_vs_phi->Fill(phi1, HwK1, w1);
+      p_K_vs_eta->Fill(eta1, HwK1, w1);
 
+      int isec = (int)((phi1 + 3.14159) / (3.14159/6.0));
+      if (isec < 0) isec = 0;  if (isec > 11) isec = 11;
+      (pos ? h_sector_plus : h_sector_minus)->Fill(isec, w1);
+
+      if (nstub1 == 3) (pos ? h2_K_processor_plus_stub3 : h2_K_processor_minus_stub3)->Fill(processor1, HwK1, w1);
+      if (nstub1 == 4) (pos ? h2_K_processor_plus_stub4 : h2_K_processor_minus_stub4)->Fill(processor1, HwK1, w1);
+
+      (pos ? h2_K_eta_plus : h2_K_eta_minus)->Fill(eta1, HwK1, w1);
+
+      // dxy: the independent probe of the same displacement
+      h_dxy->Fill(dxy1, w1);
+      p_dxy_vs_phi->Fill(phi1, dxy1, w1);
+      (pos ? p_dxy_vs_phi_plus : p_dxy_vs_phi_minus)->Fill(phi1, dxy1, w1);
+      p_dxy_vs_eta->Fill(eta1, dxy1, w1);
+      h2_dxy_vs_phi->Fill(phi1, dxy1, w1);
+
+      if (dxy1 < 0.5)
+         (pos ? h2_K_phi_plus_tightdxy : h2_K_phi_minus_tightdxy)->Fill(phi1, HwK1, w1);
+   }
+
+   // ---- MC truth -------------------------------------------------------
+   if (name != "data_obs" && genpt1 > 0) {
+      double K_gen_hw = (charge1/genpt1) * 2.0 * 1.17 / 0.8569 / (1.25/8192.0);
+      double dK_hw    = HwK1 - K_gen_hw;
+      h_dK_hw->Fill(dK_hw, w1);
+      p_dK_hw_vs_eta->Fill(geneta1, dK_hw, w1);
+      p_dK_hw_vs_phi->Fill(phi1, dK_hw, w1);
+      p_dK_hw_vs_beta->Fill(genbeta1, dK_hw, w1);
+      p_dK_hw_vs_Kgen->Fill(K_gen_hw, dK_hw, w1);
+      p_dK_hw_vs_dxy->Fill(dxy1, dK_hw, w1);
+      h2_K_hw_reco_gen->Fill(K_gen_hw, HwK1, w1);
+      (charge1 > 0 ? p_dK_hw_vs_phi_plus : p_dK_hw_vs_phi_minus)->Fill(phi1, dK_hw, w1);
+   }
+}
 
       //########################################################################
       //############################### ANALYSIS ###############################
@@ -1079,93 +1062,87 @@ int main(int argc, char** argv) {
       if(is_wrong){
          if(nstub1 == 3) h_dxy3stubs_wrong->Fill(dxy1);
          if(nstub1 == 4) h_dxy4stubs_wrong->Fill(dxy1);
-         h_qpt_wrong->Fill(charge1/pt1);
+         //h_qpt_wrong->Fill(charge1/pt1);
       }
 
-      if (pt1 > 0) {
-         double K = charge1/pt1;
-         if (cat >= 0)                        p_qpt_vs_cat->Fill(cat + 0.5, K, w1);
-         if (cat_wrong >= 0 && wrong_dir > 0) p_qpt_vs_cat_wrongU->Fill(cat_wrong + 0.5, K, w1);
-         if (cat_wrong >= 0 && wrong_dir < 0) p_qpt_vs_cat_wrongD->Fill(cat_wrong + 0.5, K, w1);
-      }
+      // if (pt1 > 0) {
+      //    double K = charge1/pt1;
+      //    if (cat >= 0)                        p_qpt_vs_cat->Fill(cat + 0.5, K, w1);
+      //    if (cat_wrong >= 0 && wrong_dir > 0) p_qpt_vs_cat_wrongU->Fill(cat_wrong + 0.5, K, w1);
+      //    if (cat_wrong >= 0 && wrong_dir < 0) p_qpt_vs_cat_wrongD->Fill(cat_wrong + 0.5, K, w1);
+      // }
 
 
    } // end of loop over events
 
-    TFile *fout = TFile::Open(output.c_str(), "RECREATE");
+   TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
 
 
-   //  shape_stub4_bx1234_3120->Write();
-   //  shape_stub4_bx1234_3201->Write();
-   //  shape_stub4_bx1234_3102->Write();
-   //  shape_stub4_bx1234_3012->Write();
-   //  shape_stub4_bx1234_3021->Write();
-   //  shape_stub4_bx1234_1230->Write();
-   //  shape_stub4_bx1234_1320->Write();
-   //  shape_stub4_bx1234_2130->Write();
-   //  shape_stub4_bx1234_2310->Write();
 
+   //  // ---- MET ----
+   //  h_metbx0_mu0->Write();  h_metbxm1_mu0->Write(); h_metbxm2_mu0->Write();
+   //  h_metbxm3_mu0->Write(); h_metbxm4_mu0->Write(); h_metbxm5_mu0->Write();
+   //  h_metbx0_mu0fail->Write();  h_metbxm1_mu0fail->Write(); h_metbxm2_mu0fail->Write();
+   //  h_metbxm3_mu0fail->Write(); h_metbxm4_mu0fail->Write(); h_metbxm5_mu0fail->Write();
+
+    // ---- basic distributions ----
     h_qual_nstub2->Write();
     h_qual_nstub3->Write();
     h_qual_nstub4->Write();
+    h_nstub->Write();
+    h_pt->Write();
+    h_charge->Write();
     h_dxy->Write();
     h_dxy3stubs->Write();
     h_dxy4stubs->Write();
     h_dxy3stubs_wrong->Write();
     h_dxy4stubs_wrong->Write();
-    h_nstub->Write();
-    h_pt->Write();
-    h_qpt->Write();
-    h_qpt_signal->Write();
-    h_qpt_wrong->Write();
+   //  h_phi_2BX->Write();
+   //  h_phi_2BX_wrong->Write();
+   //  h_phi_gt2BX->Write();
+   //  h_phi_gt2BX_wrong->Write();
+   //  h_1234ordering->Write();
 
-    // ---- charge-split 1/pT ----
-    h_charge->Write();
-    h_invpt_plus->Write();
-    h_invpt_minus->Write();
+    // ---- alignment: K marginals (these four are the measurement) ----
+    h2_K_processor_plus_stub3->Write();
+    h2_K_processor_minus_stub3->Write();
+    h2_K_processor_plus_stub4->Write();
+    h2_K_processor_minus_stub4->Write();
 
-    // ---- <q/pT> profiles ----
-    p_qpt_vs_phi->Write();
-    p_qpt_vs_eta->Write();
-    p_qpt_vs_pt->Write();
-    p_qpt_vs_nstub->Write();
-    p_qpt_vs_dxy->Write();
-    p_qpt_vs_cat->Write();
-    p_qpt_vs_cat_wrongU->Write();
-    p_qpt_vs_cat_wrongD->Write();
-    p_invpt_plus_vs_phi->Write();
-    p_invpt_minus_vs_phi->Write();
-    h2_qpt_vs_phi->Write();
+    h2_K_eta_plus->Write();
+    h2_K_eta_minus->Write();
 
-    // ---- MC truth closure (empty for data_obs) ----
-    h_dK->Write();
-    p_dK_vs_eta->Write();
-    p_dK_vs_phi->Write();
-    p_dK_vs_genpt->Write();
-    p_dK_vs_beta->Write();
-    h2_K_reco_gen->Write();
-
-   // ---- hardware curvature ----
     h_K->Write();
-    h_K_core->Write();
-    h_absK_plus->Write();
-    h_absK_minus->Write();
     p_K_vs_phi->Write();
     p_K_vs_eta->Write();
-    p_K_vs_pt->Write();
     p_K_vs_nstub->Write();
     p_K_vs_dxy->Write();
-    h2_K_vs_phi->Write();
-    h_pt_minus->Write();
-    h_pt_plus->Write();
+    h_sector_plus->Write();
+    h_sector_minus->Write();
 
-    // ---- hardware-units MC closure ----
+    // ---- alignment: dxy ----
+    h_dxy_prompt->Write();
+    p_dxy_vs_phi->Write();
+    p_dxy_vs_phi_plus->Write();
+    p_dxy_vs_phi_minus->Write();
+    p_dxy_vs_eta->Write();
+    h2_dxy_vs_phi->Write();
+    h2_K_phi_plus_tightdxy->Write();
+    h2_K_phi_minus_tightdxy->Write();
+
+    // ---- MC closure (empty for data_obs) ----
     h_dK_hw->Write();
     p_dK_hw_vs_eta->Write();
     p_dK_hw_vs_phi->Write();
     p_dK_hw_vs_beta->Write();
+    p_dK_hw_vs_Kgen->Write();
+    p_dK_hw_vs_dxy->Write();
+    p_dK_hw_vs_phi_plus->Write();
+    p_dK_hw_vs_phi_minus->Write();
     h2_K_hw_reco_gen->Write();
+
+    fout->Close();
 
    //  WriteHistToFile(fout,h_phi_2BX,name,"phi_2BX");
    //  WriteHistToFile(fout,h_phi_2BX_wrong,name,"phi_2BX_wrong");

@@ -62,6 +62,7 @@ df = df.Define("bxspread1", f"GetBxSpread(nL1KBMTF{Mode}, idx1, L1KBMTF{Mode}_nS
        .Define("dxy1",f"L1KBMTF{Mode}_hwDXY[idx1]").Define("dxy2",f"L1KBMTF{Mode}_hwDXY[idx2]") \
        .Define("qual1",f"L1KBMTF{Mode}_hwQual[idx1]").Define("qual2",f"L1KBMTF{Mode}_hwQual[idx2]") \
        .Define("charge1",f"L1KBMTF{Mode}_hwCharge[idx1]").Define("charge2",f"L1KBMTF{Mode}_hwCharge[idx2]") \
+       .Define("processor1",f"L1KBMTF{Mode}_processor[idx1]").Define("processor2",f"L1KBMTF{Mode}_processor[idx2]") \
        .Define("met_bx0", f"GetMET(0,firstbx1,L1KBMTF{Mode}_bx[idx1],L1KBMTF{Mode}_met_bx0[idx1],L1KBMTF{Mode}_met_bxm1[idx1],L1KBMTF{Mode}_met_bxm2[idx1],L1KBMTF{Mode}_met_bxm3[idx1],L1KBMTF{Mode}_met_bxm4[idx1],L1KBMTF{Mode}_met_bxm5[idx1],L1KBMTF{Mode}_met_bxm6[idx1],L1KBMTF{Mode}_met_bxm7[idx1],L1KBMTF{Mode}_met_bxm8[idx1],L1KBMTF{Mode}_met_bxm9[idx1])") \
        .Define("met_bxm1", f"GetMET(1,firstbx1,L1KBMTF{Mode}_bx[idx1],L1KBMTF{Mode}_met_bx0[idx1],L1KBMTF{Mode}_met_bxm1[idx1],L1KBMTF{Mode}_met_bxm2[idx1],L1KBMTF{Mode}_met_bxm3[idx1],L1KBMTF{Mode}_met_bxm4[idx1],L1KBMTF{Mode}_met_bxm5[idx1],L1KBMTF{Mode}_met_bxm6[idx1],L1KBMTF{Mode}_met_bxm7[idx1],L1KBMTF{Mode}_met_bxm8[idx1],L1KBMTF{Mode}_met_bxm9[idx1])") \
        .Define("met_bxm2", f"GetMET(2,firstbx1,L1KBMTF{Mode}_bx[idx1],L1KBMTF{Mode}_met_bx0[idx1],L1KBMTF{Mode}_met_bxm1[idx1],L1KBMTF{Mode}_met_bxm2[idx1],L1KBMTF{Mode}_met_bxm3[idx1],L1KBMTF{Mode}_met_bxm4[idx1],L1KBMTF{Mode}_met_bxm5[idx1],L1KBMTF{Mode}_met_bxm6[idx1],L1KBMTF{Mode}_met_bxm7[idx1],L1KBMTF{Mode}_met_bxm8[idx1],L1KBMTF{Mode}_met_bxm9[idx1])") \
@@ -82,7 +83,7 @@ for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", "is_collidin
         #"nL1KBMTF{Mode}", "L1KBMTF{Mode}_hwCharge", "L1KBMTF{Mode}_hwQual", \
         "idx1", "idx2", \
         "bxspread1", "bxspread2", "stationspread1", "stationspread2", "nstub1", "nstub2", \
-        "firstbx1","firstbx2", "pt1", "pt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", "recobeta1", "recobeta2", "HwK1", "HwK2", \
+        "firstbx1","firstbx2", "pt1", "pt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", "recobeta1", "recobeta2", "HwK1", "HwK2", "processor1", "processor2",\
         "met_bx0","met_bxm1","met_bxm2","met_bxm3","met_bxm4","met_bxm5",):
 
     columns.push_back(c)

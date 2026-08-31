@@ -15,6 +15,7 @@
    Short_t         nstub2;
    Float_t         pt1;
    Float_t         pt2;
+   Short_t           processor1;
    Float_t         eta1;
    Float_t         eta2;
    Float_t         phi1;
