@@ -29,6 +29,7 @@
    Float_t         genpt2;
    Float_t         dxy1;
    Float_t         dxy2;
+   Float_t         HwK1;
    Short_t         qual1;
    Short_t         qual2;
    Short_t         charge1;

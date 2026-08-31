@@ -86,7 +86,6 @@ for categ in categories:
    h_wrong.Write()
    if h_wrongU and not h_wrongU.IsZombie():
        if h_wrongU.GetEntries()==h_wrongD.GetEntries():
-           #print("   -> %s : CLOSURE templates (wrongU==wrongD)" % categ)
            h_wrongU = h_clo_U
            h_wrongD = h_clo_D
        else:

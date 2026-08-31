@@ -487,6 +487,19 @@ int main(int argc, char** argv) {
    else if(name == "HSCP_6000") ngen = 529062;
 
 
+   else if(name == "Gluino_1000") ngen = 50000;
+   else if(name == "Gluino_1500") ngen = 50000;
+   else if(name == "Gluino_2000") ngen = 50000;
+   else if(name == "Gluino_2500") ngen = 50000;
+   else if(name == "Gluino_3000") ngen = 50000;
+   else if(name == "Gluino_3500") ngen = 50000;
+   else if(name == "Gluino_4000") ngen = 50000;
+   else if(name == "Gluino_4500") ngen = 50000;
+   else if(name == "Gluino_5000") ngen = 50000;
+   else if(name == "Gluino_5500") ngen = 50000;
+   else if(name == "Gluino_6000") ngen = 50000;
+
+
 
 
 	if (name!="data_obs") xsweight=(lumiweight*fidweight)/ngen;

@@ -71,7 +71,7 @@ df = df.Define("bxspread1", f"GetBxSpread(nL1KBMTF{Mode}, idx1, L1KBMTF{Mode}_nS
 
 
 #df = df.Filter("(bxspread1>0 || pt1>500) || (bxspread2>0 || pt2>500)")
-df = df.Filter("(bxspread1>0 || bxspread2>0)")
+#df = df.Filter("(bxspread1>0 || bxspread2>0)")
 
 df = df.Define("is_colliding", "IsColliding(run,firstbx1)")
 
