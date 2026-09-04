@@ -98,6 +98,10 @@ class ScalarBranch {
    short stub2Bx2;
    short stub3Bx2;
    short stub4Bx2;
+   Float_t hwK1;
+   Float_t hwK2;
+   Float_t beta1;
+   Float_t beta2;
    Float_t        genpt1;
    Float_t        genpt2;
    Double_t        pt1;

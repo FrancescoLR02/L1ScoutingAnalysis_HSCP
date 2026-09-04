@@ -254,14 +254,14 @@ int main(int argc, char** argv) {
    TH1F* h_stub4_bx1122_wrongU_fail = new TH1F("h_stub4_bx1122_wrongU_fail", "h_stub4_bx1122_wrongU_fail", binnum_highpt, bins_highpt); h_stub4_bx1122_wrongU_fail->Sumw2();
    TH1F* h_stub4_bx1122_wrongD_fail = new TH1F("h_stub4_bx1122_wrongD_fail", "h_stub4_bx1122_wrongD_fail", binnum_highpt, bins_highpt); h_stub4_bx1122_wrongD_fail->Sumw2();
 
-   TH1F* h_stub4_bx1122_2tracks = new TH1F("h_stub4_bx1122_2tracks", "h_stub4_bx1122_2tracks", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks->Sumw2();
-   TH1F* h_stub4_bx1122_2tracks_wrong = new TH1F("h_stub4_bx1122_2tracks_wrong", "h_stub4_bx1122_2tracks_wrong", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks_wrong->Sumw2();
-   TH1F* h_stub4_bx1122_2tracks_wrongU = new TH1F("h_stub4_bx1122_2tracks_wrongU", "h_stub4_bx1122_2tracks_wrongU", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks_wrongU->Sumw2();
-   TH1F* h_stub4_bx1122_2tracks_wrongD = new TH1F("h_stub4_bx1122_2tracks_wrongD", "h_stub4_bx1122_2tracks_wrongD", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks_wrongD->Sumw2();
-   TH1F* h_stub4_bx1122_2tracks_fail = new TH1F("h_stub4_bx1122_2tracks_fail", "h_stub4_bx1122_2tracks_fail", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks_fail->Sumw2();
-   TH1F* h_stub4_bx1122_2tracks_wrong_fail = new TH1F("h_stub4_bx1122_2tracks_wrong_fail", "h_stub4_bx1122_2tracks_wrong_fail", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks_wrong_fail->Sumw2();
-   TH1F* h_stub4_bx1122_2tracks_wrongU_fail = new TH1F("h_stub4_bx1122_2tracks_wrongU_fail", "h_stub4_bx1122_2tracks_wrongU_fail", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks_wrongU_fail->Sumw2();
-   TH1F* h_stub4_bx1122_2tracks_wrongD_fail = new TH1F("h_stub4_bx1122_2tracks_wrongD_fail", "h_stub4_bx1122_2tracks_wrongD_fail", binnum_mediumpt, bins_mediumpt); h_stub4_bx1122_2tracks_wrongD_fail->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks = new TH1F("h_stub4_bx1122_2tracks", "h_stub4_bx1122_2tracks", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks_wrong = new TH1F("h_stub4_bx1122_2tracks_wrong", "h_stub4_bx1122_2tracks_wrong", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks_wrong->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks_wrongU = new TH1F("h_stub4_bx1122_2tracks_wrongU", "h_stub4_bx1122_2tracks_wrongU", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks_wrongU->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks_wrongD = new TH1F("h_stub4_bx1122_2tracks_wrongD", "h_stub4_bx1122_2tracks_wrongD", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks_wrongD->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks_fail = new TH1F("h_stub4_bx1122_2tracks_fail", "h_stub4_bx1122_2tracks_fail", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks_fail->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks_wrong_fail = new TH1F("h_stub4_bx1122_2tracks_wrong_fail", "h_stub4_bx1122_2tracks_wrong_fail", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks_wrong_fail->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks_wrongU_fail = new TH1F("h_stub4_bx1122_2tracks_wrongU_fail", "h_stub4_bx1122_2tracks_wrongU_fail", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks_wrongU_fail->Sumw2();
+   TH1F* h_stub4_bx1122_2tracks_wrongD_fail = new TH1F("h_stub4_bx1122_2tracks_wrongD_fail", "h_stub4_bx1122_2tracks_wrongD_fail", binnum_highpt, bins_highpt); h_stub4_bx1122_2tracks_wrongD_fail->Sumw2();
 
    TH1F* h_stub4_bx1112 = new TH1F("h_stub4_bx1112", "h_stub4_bx1112", binnum_highpt, bins_highpt); h_stub4_bx1112->Sumw2();
    TH1F* h_stub4_bx1112_wrong = new TH1F("h_stub4_bx1112_wrong", "h_stub4_bx1112_wrong", binnum_highpt, bins_highpt); h_stub4_bx1112_wrong->Sumw2();
@@ -326,14 +326,14 @@ int main(int argc, char** argv) {
    TH1F* h_stub3_bx112_fast_wrongU_fail = new TH1F("h_stub3_bx112_fast_wrongU_fail", "h_stub3_bx112_fast_wrongU_fail", binnum_highpt, bins_highpt); h_stub3_bx112_fast_wrongU_fail->Sumw2();
    TH1F* h_stub3_bx112_fast_wrongD_fail = new TH1F("h_stub3_bx112_fast_wrongD_fail", "h_stub3_bx112_fast_wrongD_fail", binnum_highpt, bins_highpt); h_stub3_bx112_fast_wrongD_fail->Sumw2();
 
-   TH1F* h_stub3_bx112_fast_2tracks = new TH1F("h_stub3_bx112_fast_2tracks", "h_stub3_bx112_fast_2tracks", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks->Sumw2();
-   TH1F* h_stub3_bx112_fast_2tracks_wrong = new TH1F("h_stub3_bx112_fast_2tracks_wrong", "h_stub3_bx112_fast_2tracks_wrong", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks_wrong->Sumw2();
-   TH1F* h_stub3_bx112_fast_2tracks_wrongU = new TH1F("h_stub3_bx112_fast_2tracks_wrongU", "h_stub3_bx112_fast_2tracks_wrongU", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks_wrongU->Sumw2();
-   TH1F* h_stub3_bx112_fast_2tracks_wrongD = new TH1F("h_stub3_bx112_fast_2tracks_wrongD", "h_stub3_bx112_fast_2tracks_wrongD", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks_wrongD->Sumw2();
-   TH1F* h_stub3_bx112_fast_2tracks_fail = new TH1F("h_stub3_bx112_fast_2tracks_fail", "h_stub3_bx112_fast_2tracks_fail", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks_fail->Sumw2();
-   TH1F* h_stub3_bx112_fast_2tracks_wrong_fail = new TH1F("h_stub3_bx112_fast_2tracks_wrong_fail", "h_stub3_bx112_fast_2tracks_wrong_fail", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks_wrong_fail->Sumw2();
-   TH1F* h_stub3_bx112_fast_2tracks_wrongU_fail = new TH1F("h_stub3_bx112_fast_2tracks_wrongU_fail", "h_stub3_bx112_fast_2tracks_wrongU_fail", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks_wrongU_fail->Sumw2();
-   TH1F* h_stub3_bx112_fast_2tracks_wrongD_fail = new TH1F("h_stub3_bx112_fast_2tracks_wrongD_fail", "h_stub3_bx112_fast_2tracks_wrongD_fail", binnum_medium_highpt, bins_medium_highpt); h_stub3_bx112_fast_2tracks_wrongD_fail->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks = new TH1F("h_stub3_bx112_fast_2tracks", "h_stub3_bx112_fast_2tracks", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks_wrong = new TH1F("h_stub3_bx112_fast_2tracks_wrong", "h_stub3_bx112_fast_2tracks_wrong", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks_wrong->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks_wrongU = new TH1F("h_stub3_bx112_fast_2tracks_wrongU", "h_stub3_bx112_fast_2tracks_wrongU", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks_wrongU->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks_wrongD = new TH1F("h_stub3_bx112_fast_2tracks_wrongD", "h_stub3_bx112_fast_2tracks_wrongD", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks_wrongD->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks_fail = new TH1F("h_stub3_bx112_fast_2tracks_fail", "h_stub3_bx112_fast_2tracks_fail", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks_fail->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks_wrong_fail = new TH1F("h_stub3_bx112_fast_2tracks_wrong_fail", "h_stub3_bx112_fast_2tracks_wrong_fail", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks_wrong_fail->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks_wrongU_fail = new TH1F("h_stub3_bx112_fast_2tracks_wrongU_fail", "h_stub3_bx112_fast_2tracks_wrongU_fail", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks_wrongU_fail->Sumw2();
+   TH1F* h_stub3_bx112_fast_2tracks_wrongD_fail = new TH1F("h_stub3_bx112_fast_2tracks_wrongD_fail", "h_stub3_bx112_fast_2tracks_wrongD_fail", binnum_highpt, bins_highpt); h_stub3_bx112_fast_2tracks_wrongD_fail->Sumw2();
 
 
    TH1F* h_stub3_bx122_slow = new TH1F("h_stub3_bx122_slow", "h_stub3_bx122_slow", binnum_highpt, bins_highpt); h_stub3_bx122_slow->Sumw2();

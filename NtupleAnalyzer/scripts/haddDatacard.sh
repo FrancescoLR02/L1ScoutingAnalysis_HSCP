@@ -1,14 +1,14 @@
 
 
-DATA_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Classification/AddedTracks_Classification"
-ALL_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/AddedTracks_Classification"
+DATA_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Classification/SlowClassification"
+ALL_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/SlowCombineClassification"
 SHAPE_DIR="/eos/user/f/flarover/HSCP_2025/COMBINE/CMSSW_15_0_10/src/auxiliaries/shapes"
 
-FILE_NAME="AddedTrackSlow"
+FILE_NAME="slow"
 
-# hadd -f ${ALL_DIR}/data_obs.root ${DATA_DIR}/*.root
+hadd -f ${ALL_DIR}/data_obs.root ${DATA_DIR}/*.root
 
-# python3 Create_fakeFra.py --input ${ALL_DIR}/data_obs.root --output ${ALL_DIR}/Fake.root
+python3 Create_fakeFra.py --input ${ALL_DIR}/data_obs.root --output ${ALL_DIR}/Fake.root
 
 hadd -f ${SHAPE_DIR}/${FILE_NAME}.root ${ALL_DIR}/*.root
 

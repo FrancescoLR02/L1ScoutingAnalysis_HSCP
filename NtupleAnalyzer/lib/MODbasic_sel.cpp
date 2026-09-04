@@ -142,34 +142,35 @@ int GetIndex(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_pt, ROOT:
         else return 0;*/
 }
 
-int GetIndex_nostub_hwK(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_pt, ROOT::VecOps::RVec<Float_t> &LepCand_eta, ROOT::VecOps::RVec<Float_t> &LepCand_phi ){//, ROOT::VecOps::RVec<Short_t> &LepCand_hwK){
-        int idxK1=99; int idxK2=99;
-        TLorentzVector my_mu1; my_mu1.SetPtEtaPhiM(0.,0.,0.,0.);
-        TLorentzVector my_mu2; my_mu2.SetPtEtaPhiM(0.,0.,0.,0.);
-        TLorentzVector tmp_mu;
-        if (ncand==1) idxK1=0;
-        else if (ncand>1){
-           float mu1pt=0.; float mu2pt=0.;
-           for (int k=0; k<ncand; ++k){
-              tmp_mu.SetPtEtaPhiM(LepCand_pt[k], LepCand_eta[k], LepCand_phi[k],0.105);
-              if (LepCand_pt[k]>mu1pt) {
-                 if (mu1pt>0 and my_mu1.DeltaR(tmp_mu)>0.30){
-                    my_mu2=my_mu1; mu2pt=mu1pt; idxK2 = idxK1;
-                 }
-                 my_mu1=tmp_mu;
-                 idxK1=k;
-                 mu1pt=LepCand_pt[k];
-              }
-              else if (my_mu1.DeltaR(tmp_mu)>0.30 and LepCand_pt[k]>mu2pt) {
-                 my_mu2=tmp_mu;
-                 idxK2=k;
-                 mu2pt=LepCand_pt[k];
-              }
-           }
-        }
-        if (rank==1) return idxK1;
-        else if (rank==2) return idxK2;
-        else return 0;
+//!Use getOriginal_pT! The missing missalignment correction factor creates an asymmetry between idx1 and idx2 -> more negative than positive charges! 
+int GetIndex_nostub_hwK(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_hwK, ROOT::VecOps::RVec<Float_t> &LepCand_eta, ROOT::VecOps::RVec<Float_t> &LepCand_phi ){//, ROOT::VecOps::RVec<Short_t> &LepCand_hwK){
+   int idxK1=99; int idxK2=99;
+   TLorentzVector my_mu1; my_mu1.SetPtEtaPhiM(0.,0.,0.,0.);
+   TLorentzVector my_mu2; my_mu2.SetPtEtaPhiM(0.,0.,0.,0.);
+   TLorentzVector tmp_mu;
+   if (ncand==1) idxK1=0;
+   else if (ncand>1){
+      float mu1pt=0.; float mu2pt=0.;
+      for (int k=0; k<ncand; ++k){
+         tmp_mu.SetPtEtaPhiM(Get_newpt(LepCand_hwK[k]), LepCand_eta[k], LepCand_phi[k],0.105);
+         if (Get_newpt(LepCand_hwK[k])>mu1pt) {
+            if (mu1pt>0 and my_mu1.DeltaR(tmp_mu)>0.30){
+               my_mu2=my_mu1; mu2pt=mu1pt; idxK2 = idxK1;
+            }
+            my_mu1=tmp_mu;
+            idxK1=k;
+            mu1pt=Get_newpt(LepCand_hwK[k]);
+         }
+         else if (my_mu1.DeltaR(tmp_mu)>0.30 and Get_newpt(LepCand_hwK[k])>mu2pt) {
+            my_mu2=tmp_mu;
+            idxK2=k;
+            mu2pt=Get_newpt(LepCand_hwK[k]);
+         }
+      }
+   }
+   if (rank==1) return idxK1;
+   else if (rank==2) return idxK2;
+   else return 0;
 }
 
 TLorentzVector GetLepVector(int index, ROOT::VecOps::RVec<Float_t> &LepCand_pt, ROOT::VecOps::RVec<Float_t> &LepCand_eta,ROOT::VecOps::RVec<Float_t> &LepCand_phi){
@@ -348,32 +349,6 @@ bool IsEarlierColliding(int run, int bx, int interval, bool is_colliding){
    }
 }
 
-float getCecile_pT(double oldK){
-  float K = oldK-9;
-  if (K==0) K=1;
-  float lsb = 1.25 / float(1 << 13);
-  float FK = abs(K);
-
-  if (FK > 2047)
-    FK = 2047.;
-
-  FK = FK * lsb;
-
-  //step 1 -material and B-field
-  FK = .8569 * FK / (1.0 + 0.1144 * FK);
-
-  float pt = 0;
-  if (FK != 0)
-    pt = float(2.0 / FK);
-
-  if (pt > 2000)
-    pt = 2000;
-
-  if (pt < 8)
-    pt = 8;
-
-  return pt/2;
-}
 
 float getOriginal_pT(double K){
 
@@ -399,72 +374,42 @@ float getOriginal_pT(double K){
   if (FK != 0)
     pt = 1 / FK;
 
+   if (pt < 0) return -99;
+
   if (pt < 4)
-    pt = 4;
+      pt = 4;
 
   return pt;
 }
 
 
-float getNoBMTFScale_pT(double K){
-
-  int charge = (K >= 0) ? +1 : -1;
+float Get_newpt(double oldK){
+  float K = oldK-9;
+  if (K==0) K=1;
   float lsb = 1.25 / float(1 << 13);
-  double FK = fabs(K);
+  float FK = abs(K);
 
-  if (FK > 2047) 
-    FK = 2047.; 
-  if (FK < 8)
-    FK = 8.; 
+  if (FK > 2047)
+    FK = 2047.;
 
   FK = FK * lsb;
 
   //step 1 -material and B-field
   FK = .8569 * FK / (1.0 + 0.1144 * FK);
-  //step 2 - misalignment
-  FK = FK - charge * 1.23e-03;
-  //Get to BMTF scale
-  //FK = FK / 1.17;
 
-  double pt = 0;
+  float pt = 0;
   if (FK != 0)
-    pt = 1 / FK;
+    pt = float(2.0 / FK);
 
-  if (pt < 4)
-    pt = 4;
+  if (pt > 2200)
+    pt = 2200;
 
-  return pt;
+  if (pt < 8)
+    pt = 8;
+
+  return pt/2;
 }
 
-float getNoCharge_pT(double K){
-
-  int charge = (K >= 0) ? +1 : -1;
-  float lsb = 1.25 / float(1 << 13);
-  double FK = fabs(K);
-
-  if (FK > 2047) 
-    FK = 2047.; 
-  if (FK < 8)
-    FK = 8.; 
-
-  FK = FK * lsb;
-
-  //step 1 -material and B-field
-  FK = .8569 * FK / (1.0 + 0.1144 * FK);
-  //step 2 - misalignment
-  FK = FK - 1.23e-03;
-  //Get to BMTF scale
-  FK = FK / 1.17;
-
-  double pt = 0;
-  if (FK != 0)
-    pt = 1 / FK;
-
-  if (pt < 4)
-    pt = 4;
-
-  return pt;
-}
 
 float Get_genpt(float eta, float phi, int ngen, ROOT::VecOps::RVec<Float_t> &Gen_eta, ROOT::VecOps::RVec<Float_t> &Gen_phi, ROOT::VecOps::RVec<Short_t> &Gen_pdgid, ROOT::VecOps::RVec<Float_t> &Gen_pt){
     float out_pt = -1.0;

@@ -58,7 +58,7 @@ else: mode = 'Slow'
 df = df.Filter(f"nL1KBMTF{mode}>1")
 
 #df_var=df.Define("idx1",f"GetIndex_nostub_hwK(1,nL1KBMTF{mode}, L1KBMTF{mode}_pt, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi, L1KBMTF{mode}_hwK)").Define("idx2",f"GetIndex_nostub_hwK(2,nL1KBMTF{mode}, L1KBMTF{mode}_pt, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi, L1KBMTF{mode}_hwK)")
-df_var=df.Define("idx1",f"GetIndex_nostub_hwK(1,nL1KBMTF{mode}, L1KBMTF{mode}_pt, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)").Define("idx2",f"GetIndex_nostub_hwK(2,nL1KBMTF{mode}, L1KBMTF{mode}_pt, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)")
+df_var=df.Define("idx1",f"GetIndex_nostub_hwK(1,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)").Define("idx2",f"GetIndex_nostub_hwK(2,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)")
 
 #df_var=df_var.Define("my_mu1",f"GetLepVector_hwK(idx1,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_hwK)").Define("my_mu2",f"GetLepVector_hwK(idx2,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_hwK)").Define("isOS",f"L1KBMTF{mode}_hwCharge[idx1]*L1KBMTF{mode}_hwCharge[idx2]<0")
 df_var=df_var.Define("my_mu1",f"GetLepVector_hwK(idx1,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_pt)").Define("my_mu2",f"GetLepVector_hwK(idx2,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_pt)").Define("isOS",f"L1KBMTF{mode}_hwCharge[idx1]*L1KBMTF{mode}_hwCharge[idx2]<0")
@@ -66,8 +66,11 @@ df_var=df_var.Define("my_mu1",f"GetLepVector_hwK(idx1,L1KBMTF{mode}_eta,L1KBMTF{
 df_var = df_var.Filter("idx1!=idx2 && my_mu1.Pt()>20 && my_mu2.Pt()>20 && fabs(my_mu1.Eta())<0.83 && fabs(my_mu2.Eta())<0.83")
 
 df_var = df_var.Define("mmumu","(my_mu1+my_mu2).M()").Define("DRmumu","my_mu1.DeltaR(my_mu2)")
+df_var = df_var.Filter("fabs(my_mu1.Eta()-my_mu2.Eta())>0.05")
+
 
 df = df_var.Filter("mmumu>50 && DRmumu>0.3").Define("xsweight","{}".format(weight))
+
 
 df = df.Define("bxspread1", f"GetBxSpread(nL1KBMTF{mode}, idx1, L1KBMTF{mode}_nStub, L1KBMTF{mode}_s1Bx, L1KBMTF{mode}_s2Bx, L1KBMTF{mode}_s3Bx, L1KBMTF{mode}_s4Bx)")\
         .Define("bxspread2", f"GetBxSpread(nL1KBMTF{mode}, idx2, L1KBMTF{mode}_nStub, L1KBMTF{mode}_s1Bx, L1KBMTF{mode}_s2Bx, L1KBMTF{mode}_s3Bx, L1KBMTF{mode}_s4Bx)")\

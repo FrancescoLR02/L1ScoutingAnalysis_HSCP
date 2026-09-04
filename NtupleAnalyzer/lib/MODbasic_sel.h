@@ -32,6 +32,7 @@ int GetFirstBx(int ncand, int index, ROOT::VecOps::RVec<Short_t> &nstub, ROOT::V
 int GetStationSpread(int ncand, int index, ROOT::VecOps::RVec<Short_t> &nstub, ROOT::VecOps::RVec<Short_t> &st1, ROOT::VecOps::RVec<Short_t> &st2, ROOT::VecOps::RVec<Short_t> &st3, ROOT::VecOps::RVec<Short_t> &st4);
 
 int GetNstub(int ncand, int index, ROOT::VecOps::RVec<Short_t> &nstub);
+float Get_newpt(double oldK);
 
 bool IsL1MuMatched(int ncand, int index, ROOT::VecOps::RVec<Float_t> &pt, ROOT::VecOps::RVec<Float_t> &eta,ROOT::VecOps::RVec<Float_t> &phi, int nl1, ROOT::VecOps::RVec<Float_t> &l1pt, ROOT::VecOps::RVec<Float_t> &l1eta,ROOT::VecOps::RVec<Float_t> &l1phi);
 
