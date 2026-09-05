@@ -173,6 +173,22 @@ int GetIndex_nostub_hwK(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCan
    else return 0;
 }
 
+
+// charge = +1 or -1
+int GetIndexByCharge(int charge, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_hwK, ROOT::VecOps::RVec<Float_t> &LepCand_eta, ROOT::VecOps::RVec<Float_t> &LepCand_phi, ROOT::VecOps::RVec<Short_t> &nstub){
+   int idx = 99;
+   int bestNstub = -1;
+   for (int k = 0; k < ncand; ++k){
+      int q = (LepCand_hwK[k] >= 0) ? +1 : -1;   // RAW hwK, no offset
+      if (q != charge) continue;
+      if (nstub[k] > bestNstub){                 // charge-blind tie-break
+         bestNstub = nstub[k];
+         idx = k;
+      }
+   }
+   return idx;
+}
+
 TLorentzVector GetLepVector(int index, ROOT::VecOps::RVec<Float_t> &LepCand_pt, ROOT::VecOps::RVec<Float_t> &LepCand_eta,ROOT::VecOps::RVec<Float_t> &LepCand_phi){
     TLorentzVector my_lep;
     if (index<99) my_lep.SetPtEtaPhiM(LepCand_pt[index],LepCand_eta[index],LepCand_phi[index],0.105);

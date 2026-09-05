@@ -57,8 +57,8 @@ else: mode = 'Slow'
 
 df = df.Filter(f"nL1KBMTF{mode}>1")
 
-#df_var=df.Define("idx1",f"GetIndex_nostub_hwK(1,nL1KBMTF{mode}, L1KBMTF{mode}_pt, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi, L1KBMTF{mode}_hwK)").Define("idx2",f"GetIndex_nostub_hwK(2,nL1KBMTF{mode}, L1KBMTF{mode}_pt, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi, L1KBMTF{mode}_hwK)")
-df_var=df.Define("idx1",f"GetIndex_nostub_hwK(1,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)").Define("idx2",f"GetIndex_nostub_hwK(2,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)")
+#df_var=df.Define("idx1",f"GetIndex_nostub_hwK(1,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)").Define("idx2",f"GetIndex_nostub_hwK(2,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi)")
+df_var=df.Define("idx1",f"GetIndexByCharge(+1,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi, L1KBMTF{mode}_nStub)").Define("idx2",f"GetIndexByCharge(-1,nL1KBMTF{mode}, L1KBMTF{mode}_hwK, L1KBMTF{mode}_eta, L1KBMTF{mode}_phi, L1KBMTF{mode}_nStub)")
 
 #df_var=df_var.Define("my_mu1",f"GetLepVector_hwK(idx1,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_hwK)").Define("my_mu2",f"GetLepVector_hwK(idx2,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_hwK)").Define("isOS",f"L1KBMTF{mode}_hwCharge[idx1]*L1KBMTF{mode}_hwCharge[idx2]<0")
 df_var=df_var.Define("my_mu1",f"GetLepVector_hwK(idx1,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_pt)").Define("my_mu2",f"GetLepVector_hwK(idx2,L1KBMTF{mode}_eta,L1KBMTF{mode}_phi,L1KBMTF{mode}_pt)").Define("isOS",f"L1KBMTF{mode}_hwCharge[idx1]*L1KBMTF{mode}_hwCharge[idx2]<0")

@@ -25,6 +25,7 @@
 #include "TTree.h"
 #include <TRandom3.h>
 #include <algorithm>
+#include "TMath.h"
 #include "modzmumu_Tree.h"
 
 
@@ -32,11 +33,26 @@
 
 using namespace std;
 
+// binning of the charge-odd curvature map
+const int    NPHI      = 12;    // 30 deg bins
+const int    NETA      = 5;     // over |eta| < 0.83
+const int    NPHI_FINE = 72;    // 5 deg bins, for the charge count asymmetry
+const double ETAMAX    = 0.83;
+
+int phiBin(double phi){
+   int b = int((phi + TMath::Pi()) / (2*TMath::Pi()) * NPHI);
+   return std::min(std::max(b, 0), NPHI-1);
+}
+
+int etaBin(double eta){
+   int b = int((eta + ETAMAX) / (2*ETAMAX) * NETA);
+   return std::min(std::max(b, 0), NETA-1);
+}
+
 int main(int argc, char** argv) {
 
    std::string input = *(argv + 1);
    std::string output = *(argv + 2);
-   std::string name = *(argv + 3);
 
    TFile *f_Double = new TFile(input.c_str());
    cout<<"XXXXXXXXXXXXX "<<input.c_str()<<" XXXXXXXXXXXX"<<endl;
@@ -107,8 +123,25 @@ int main(int argc, char** argv) {
 
    TH1F* h_K  = new TH1F("h_K", "hw curvature K", NK, KMIN, KMAX); h_K->Sumw2();
    TH1F* h_K1 = new TH1F("h_K1","hw curvature K, mu1", NK, KMIN, KMAX); h_K1->Sumw2();
-   TH1F* h_K_plus  = new TH1F("h_K_plus", "hw curvature K, K>0", NK/2, 0, 150); h_K_plus->Sumw2();
-   TH1F* h_K_minus = new TH1F("h_K_minus","hw curvature K, K<0", NK/2, 0, 150); h_K_minus->Sumw2();
+   // |K| spectra split by charge, one pair per (phi,eta) cell.
+   // pt>15 reaches |K| ~ 600, so the range must go well past the old 150.
+   TH1F* h_K_plus [NPHI][NETA];
+   TH1F* h_K_minus[NPHI][NETA];
+   for (int i = 0; i < NPHI; ++i){
+      for (int j = 0; j < NETA; ++j){
+         h_K_plus [i][j] = new TH1F(Form("h_K_plus_phi%d_eta%d" ,i,j), "|K|, positive muons", 700, 0, 700);
+         h_K_minus[i][j] = new TH1F(Form("h_K_minus_phi%d_eta%d",i,j), "|K|, negative muons", 700, 0, 700);
+         h_K_plus [i][j]->Sumw2(); h_K_minus[i][j]->Sumw2();
+      }
+   }
+
+   // the same spectra integrated over the map, for the count-above-threshold cross-check
+   TH1F* h_K_plus_all  = new TH1F("h_K_plus_all" ,"|K|, positive muons", 700, 0, 700); h_K_plus_all->Sumw2();
+   TH1F* h_K_minus_all = new TH1F("h_K_minus_all","|K|, negative muons", 700, 0, 700); h_K_minus_all->Sumw2();
+
+   // charge count asymmetry vs phi, fine bins: this is the defect map, not a bias map
+   TH1F* h_phi_plus  = new TH1F("h_phi_plus" ,"phi, positive muons", NPHI_FINE, -TMath::Pi(), TMath::Pi()); h_phi_plus->Sumw2();
+   TH1F* h_phi_minus = new TH1F("h_phi_minus","phi, negative muons", NPHI_FINE, -TMath::Pi(), TMath::Pi()); h_phi_minus->Sumw2();
    TH1F* h_dxy  = new TH1F("h_dxy", "h_dxy", 100, 0, 1); h_dxy->Sumw2();
    TH1F* h_nstub  = new TH1F("h_nstub", "h_nstub", 3, 2, 5); h_nstub->Sumw2();
 
@@ -117,6 +150,7 @@ int main(int argc, char** argv) {
 
    TH1F* h_charge = new TH1F("h_charge","h_charge", 3, -1.5, 1.5); h_charge->Sumw2();
    TH1F* h_pt = new TH1F("h_pt","h_pt",400, 12.5, 1100); h_pt->Sumw2();
+   TH1F* h_pt2 = new TH1F("h_pt2","h_pt2",400, 12.5, 1100); h_pt2->Sumw2();
 
    TH1F* h_beta = new TH1F("h_beta", "h_beta", 50, 0, 1); h_beta->Sumw2();
    TH1F* misID_pt = new TH1F("misID_pt", "misID_pt", 400, 12.5, 1100); misID_pt->Sumw2();
@@ -162,26 +196,35 @@ int main(int argc, char** argv) {
       if (nstub2==3 and qual2<13) continue;
       if (nstub2==2 and qual2<12) continue;
 
-      h_K->Fill(hwK1);// h_K->Fill(hwK2);
-      //h_K1->Fill(hwK1); //h_K2->Fill(hwK2);
-      if (hwK1 > 0) h_K_plus->Fill(hwK1);
-      //if (hwK2 > 0) h_K_plus->Fill(hwK2);
-      if (hwK1 < 0) h_K_minus->Fill(-hwK1);
-      //if (hwK2 < 0) h_K_minus->Fill(hwK2);
+      h_K->Fill(hwK1); h_K->Fill(hwK2);
+      // Fill BOTH legs, opposite sign only, each muon in its own (phi,eta) cell.
+      // Pooling the two legs is what makes the + and - spectra comparable:
+      // leg1 and leg2 have different pt spectra, so either one alone is biased.
+      if (charge1*charge2 < 0){
+         int i1 = phiBin(phi1), j1 = etaBin(eta1);
+         int i2 = phiBin(phi2), j2 = etaBin(eta2);
+
+         if (charge1 > 0){ h_K_plus [i1][j1]->Fill(fabs(hwK1)); h_K_plus_all ->Fill(fabs(hwK1)); h_phi_plus ->Fill(phi1); }
+         else            { h_K_minus[i1][j1]->Fill(fabs(hwK1)); h_K_minus_all->Fill(fabs(hwK1)); h_phi_minus->Fill(phi1); }
+
+         if (charge2 > 0){ h_K_plus [i2][j2]->Fill(fabs(hwK2)); h_K_plus_all ->Fill(fabs(hwK2)); h_phi_plus ->Fill(phi2); }
+         else            { h_K_minus[i2][j2]->Fill(fabs(hwK2)); h_K_minus_all->Fill(fabs(hwK2)); h_phi_minus->Fill(phi2); }
+      }
       
-      h_charge->Fill(charge1); //h_charge->Fill(charge2);
-      h_pt->Fill(pt1); //h_pt->Fill(pt2);
-      h_dxy->Fill(dxy1);
-      h_nstub->Fill(nstub1);
+      h_charge->Fill(charge1); h_charge->Fill(charge2);
+      h_pt->Fill(pt1); h_pt->Fill(pt2);
+      h_dxy->Fill(dxy1); h_dxy->Fill(dxy2);
+      h_nstub->Fill(nstub1); h_nstub->Fill(nstub2);
+      h_mmumu_OS->Fill(mmumu);
 
 
       if(beta1 < 0.95){
          h_beta->Fill(beta1);
-         misID_pt->Fill(pt1);
-         misID_dxy->Fill(dxy1);
-         misID_nstub->Fill(nstub1);
-         misID_K->Fill(hwK1*lsb);
-         misID_invpT->Fill(charge1/pt1);
+         misID_pt->Fill(pt1); misID_pt->Fill(pt2);
+         misID_dxy->Fill(dxy1); misID_dxy->Fill(dxy2);
+         misID_nstub->Fill(nstub1); misID_nstub->Fill(nstub2);
+         misID_K->Fill(hwK1*lsb); misID_K->Fill(hwK2*lsb);
+         misID_invpT->Fill(charge1/pt1); misID_invpT->Fill(charge2/pt2);
          
          if(charge1*charge2<0) misID_mmumuOS->Fill((my_mu1+my_mu2).M());
          if(charge1*charge2>0) misID_mmumuSS->Fill((my_mu1+my_mu2).M());
@@ -201,14 +244,13 @@ int main(int argc, char** argv) {
    dir1->cd();
    //h_mmumu_OS->SetName(name.c_str());
    h_mmumu_OS->Write();
-   h_mmumu_SS->Write();
+   //h_mmumu_SS->Write();
    h_K->Write();
    //h_K2->Write();
-   h_K_plus->Write();
-   h_K_minus->Write();
 
    h_charge->Write();
    h_pt->Write();
+   //h_pt2->Write();
    h_dxy->Write();
    h_nstub->Write();
 
@@ -222,6 +264,16 @@ int main(int argc, char** argv) {
    misID_invpT->Write();
    misID_mmumuOS->Write();
    misID_mmumuSS->Write();
+
+   TDirectory* dir3=fout->mkdir("Kmap");
+   dir3->cd();
+   for (int i = 0; i < NPHI; ++i){
+      for (int j = 0; j < NETA; ++j){ h_K_plus[i][j]->Write(); h_K_minus[i][j]->Write(); }
+   }
+   h_K_plus_all->Write();
+   h_K_minus_all->Write();
+   h_phi_plus->Write();
+   h_phi_minus->Write();
 
    fout->Close();
 }
