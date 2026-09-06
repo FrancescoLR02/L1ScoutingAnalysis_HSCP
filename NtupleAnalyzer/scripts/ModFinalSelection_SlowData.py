@@ -46,8 +46,6 @@ df = df.Define("idx1", f"GetIndex(1, nL1KBMTF{Mode}, L1KBMTF{Mode}_pt, L1KBMTF{M
 
 df = df.Define("nstub1",f"L1KBMTF{Mode}_nStub[idx1]").Define("nstub2",f"L1KBMTF{Mode}_nStub[idx2]") 
 
-
-
 df = df.Define("bxspread1", f"GetBxSpread(nL1KBMTF{Mode}, idx1, L1KBMTF{Mode}_nStub, L1KBMTF{Mode}_s1Bx, L1KBMTF{Mode}_s2Bx, L1KBMTF{Mode}_s3Bx, L1KBMTF{Mode}_s4Bx)") \
        .Define("bxspread2", f"GetBxSpread(nL1KBMTF{Mode}, idx2, L1KBMTF{Mode}_nStub, L1KBMTF{Mode}_s1Bx, L1KBMTF{Mode}_s2Bx, L1KBMTF{Mode}_s3Bx, L1KBMTF{Mode}_s4Bx)") \
        .Define("stationspread1", f"GetStationSpread(nL1KBMTF{Mode}, idx1, L1KBMTF{Mode}_nStub, L1KBMTF{Mode}_s1Station, L1KBMTF{Mode}_s2Station, L1KBMTF{Mode}_s3Station, L1KBMTF{Mode}_s4Station)") \
