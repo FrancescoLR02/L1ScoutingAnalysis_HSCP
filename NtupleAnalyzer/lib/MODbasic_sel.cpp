@@ -399,12 +399,15 @@ float getOriginal_pT(double K){
 }
 
 
-float Get_newpt(double oldK){
-  float K = oldK-9;
-  if (K==0) K=1;
+double ptLUT(double K, int nStubs) {
+  int charge = (K >= 0) ? +1 : -1;
   float lsb = 1.25 / float(1 << 13);
-  float FK = abs(K);
 
+  double Delta = 3.22e-4;
+
+  double FK = fabs(K);
+
+  if (FK < 9) FK = 9;
   if (FK > 2047)
     FK = 2047.;
 
@@ -412,18 +415,20 @@ float Get_newpt(double oldK){
 
   //step 1 -material and B-field
   FK = .8569 * FK / (1.0 + 0.1144 * FK);
+  if(nStubs == 2) Delta += 1.68e-4;
+  if(nStubs == 3) Delta -= 0.35e-4;
+  if(nStubs == 4) Delta -= 0.14e-4;
 
-  float pt = 0;
+  FK = FK - charge*Delta;
+
+  double pt = 0;
   if (FK != 0)
-    pt = float(2.0 / FK);
+    pt = 1 / FK;
 
-  if (pt > 2200)
-    pt = 2200;
+  if (pt < 4)
+    pt = 4;
 
-  if (pt < 8)
-    pt = 8;
-
-  return pt/2;
+  return pt;
 }
 
 

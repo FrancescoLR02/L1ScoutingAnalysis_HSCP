@@ -86,10 +86,10 @@ int main(int argc, char** argv) {
    arbre1->SetBranchAddress("bunchCrossing", &bunchCrossing);
    arbre1->SetBranchAddress("orbitNumber", &orbitNumber);*/
 
-   arbre1->SetBranchAddress("mmumu", &mmumu);
-   arbre1->SetBranchAddress("DRmumu", &DRmumu);
-   arbre1->SetBranchAddress("xsweight", &xsweight);
-   arbre1->SetBranchAddress("met", &met);
+   //arbre1->SetBranchAddress("mmumu", &mmumu);
+   //arbre1->SetBranchAddress("DRmumu", &DRmumu);
+   //arbre1->SetBranchAddress("xsweight", &xsweight);
+   //arbre1->SetBranchAddress("met", &met);
    arbre1->SetBranchAddress("bxspread1", &bxspread1);
    arbre1->SetBranchAddress("bxspread2", &bxspread2);
 //  arbre1->SetBranchAddress("isL1MuMatched1", &isL1MuMatched1);
@@ -102,25 +102,25 @@ int main(int argc, char** argv) {
    arbre1->SetBranchAddress("pt2", &pt2);
    arbre1->SetBranchAddress("eta2", &eta2);
    arbre1->SetBranchAddress("phi2", &phi2);
-   arbre1->SetBranchAddress("stub1Bx1", &stub1Bx1);
-   arbre1->SetBranchAddress("stub2Bx1", &stub2Bx1);
-   arbre1->SetBranchAddress("stub3Bx1", &stub3Bx1);
-   arbre1->SetBranchAddress("stub4Bx1", &stub4Bx1);
-   arbre1->SetBranchAddress("stub1Bx2", &stub1Bx2);
-   arbre1->SetBranchAddress("stub2Bx2", &stub2Bx2);
-   arbre1->SetBranchAddress("stub3Bx2", &stub3Bx2);
-   arbre1->SetBranchAddress("stub4Bx2", &stub4Bx2);
-   arbre1->SetBranchAddress("hwK1", &hwK1);
-   arbre1->SetBranchAddress("hwK2", &hwK2);
+   // arbre1->SetBranchAddress("stub1Bx1", &stub1Bx1);
+   // arbre1->SetBranchAddress("stub2Bx1", &stub2Bx1);
+   // arbre1->SetBranchAddress("stub3Bx1", &stub3Bx1);
+   // arbre1->SetBranchAddress("stub4Bx1", &stub4Bx1);
+   // arbre1->SetBranchAddress("stub1Bx2", &stub1Bx2);
+   // arbre1->SetBranchAddress("stub2Bx2", &stub2Bx2);
+   // arbre1->SetBranchAddress("stub3Bx2", &stub3Bx2);
+   // arbre1->SetBranchAddress("stub4Bx2", &stub4Bx2);
+   arbre1->SetBranchAddress("HwK1", &hwK1);
+   arbre1->SetBranchAddress("HwK2", &hwK2);
    arbre1->SetBranchAddress("beta1", &beta1);
-   arbre1->SetBranchAddress("stub1Station1", &stub1Station1);
-   arbre1->SetBranchAddress("stub2Station1", &stub2Station1);
-   arbre1->SetBranchAddress("stub3Station1", &stub3Station1);
-   arbre1->SetBranchAddress("stub4Station1", &stub4Station1);
-   arbre1->SetBranchAddress("stub1Station2", &stub1Station2);
-   arbre1->SetBranchAddress("stub2Station2", &stub2Station2);
-   arbre1->SetBranchAddress("stub3Station2", &stub3Station2);
-   arbre1->SetBranchAddress("stub4Station2", &stub4Station2);
+   // arbre1->SetBranchAddress("stub1Station1", &stub1Station1);
+   // arbre1->SetBranchAddress("stub2Station1", &stub2Station1);
+   // arbre1->SetBranchAddress("stub3Station1", &stub3Station1);
+   // arbre1->SetBranchAddress("stub4Station1", &stub4Station1);
+   // arbre1->SetBranchAddress("stub1Station2", &stub1Station2);
+   // arbre1->SetBranchAddress("stub2Station2", &stub2Station2);
+   // arbre1->SetBranchAddress("stub3Station2", &stub3Station2);
+   // arbre1->SetBranchAddress("stub4Station2", &stub4Station2);
 
    // charge/qual/dxy change scalar type from one ntuple version to the next
    // (dxy: Int_t in the 2024 skims, Double_t in simulation, Float_t in data),
@@ -131,6 +131,7 @@ int main(int argc, char** argv) {
    charge2.connect(arbre1, "charge2");
    qual2.connect(arbre1, "qual2");
    dxy2.connect(arbre1, "dxy2");
+   
 
    const int    NK    = 2400;
    const double KMIN  = -400.0, KMAX = 400.0;  
@@ -146,7 +147,8 @@ int main(int argc, char** argv) {
 
    TH1F* h_K  = new TH1F("h_K", "hw curvature K", 1000, KMIN, KMAX); h_K->Sumw2();
    TH1F* h_lowK = new TH1F("h_lowK","h_lowK", NK/2, -150, 150); h_lowK->Sumw2();
-   TH1F* h_material_pT = new TH1F("h_material_pT","h_material_pT", 400, 12.5, 1000); h_material_pT->Sumw2();
+   TH1F* h_material_pT = new TH1F("h_material_pT","h_material_pT", 300, 12.5, 1000); h_material_pT->Sumw2();
+   TH1F* h_D_pT = new TH1F("h_D_pT","h_D_pT", 300, 12.5, 1000); h_D_pT->Sumw2();
 
 
 
@@ -193,7 +195,7 @@ int main(int argc, char** argv) {
 
 
    TH1F* h_charge = new TH1F("h_charge","h_charge", 3, -1.5, 1.5); h_charge->Sumw2();
-   TH1F* h_pt = new TH1F("h_pt","h_pt",400, 12.5, 1000); h_pt->Sumw2();
+   TH1F* h_pt = new TH1F("h_pt","h_pt",300, 12.5, 1000); h_pt->Sumw2();
 
    TH1F* h_beta = new TH1F("h_beta", "h_beta", 50, 0, 1); h_beta->Sumw2();
    TH1F* misID_pt = new TH1F("misID_pt", "misID_pt", 100, 12.5, 1000); misID_pt->Sumw2();
@@ -218,7 +220,7 @@ int main(int argc, char** argv) {
    Int_t nentries_wtn = (Int_t) arbre1->GetEntries();
    for (Int_t i = 0; i < nentries_wtn; i++) {
    	arbre1->GetEntry(i);
-      if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
+      if (i % 100000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
       fflush(stdout);
 
       
@@ -226,26 +228,26 @@ int main(int argc, char** argv) {
       TLorentzVector my_mu1; my_mu1.SetPtEtaPhiM(pt1,eta1,phi1,0.105);
       TLorentzVector my_mu2; my_mu2.SetPtEtaPhiM(pt2,eta2,phi2,0.105);
 
-      TLorentzVector my_mu1_corr; my_mu1_corr.SetPtEtaPhiM(Get_pTfromK(hwK1, +1), eta1,phi1,0.105);
-      TLorentzVector my_mu2_corr; my_mu2_corr.SetPtEtaPhiM(Get_pTfromK(hwK2, -1), eta2,phi2,0.105);
+      TLorentzVector my_mu1_corr; my_mu1_corr.SetPtEtaPhiM(Get_pTfromK(hwK1, charge1), eta1,phi1,0.105);
+      TLorentzVector my_mu2_corr; my_mu2_corr.SetPtEtaPhiM(Get_pTfromK(hwK2, charge2), eta2,phi2,0.105);
 
 
       if (dxy1>=1 or dxy2>=1) continue;
-      //if (pt1<15 or pt2<15) continue;
-      //if (pt1<100 or pt2<100) continue;
+      if (pt1<15 or pt2<15) continue;
       if (qual1<12 or qual2<12) continue;
 
       if (nstub1==4 and qual1<14) continue;
       if (nstub1==3 and qual1<13) continue;
-      if (nstub1==2 and qual1<12) continue;
+      if (nstub1==2) continue;
       if (nstub2==4 and qual2<14) continue;
       if (nstub2==3 and qual2<13) continue;
-      if (nstub2==2 and qual2<12) continue;
+      if (nstub2==2) continue;
 
 
       h_K->Fill(hwK1); h_K->Fill(hwK2);
       h_lowK->Fill(hwK1); h_lowK->Fill(hwK2);
       h_material_pT->Fill(MaterialMap_pT(hwK1)); h_material_pT->Fill(MaterialMap_pT(hwK2));
+      h_D_pT->Fill(Get_pTfromK(hwK1, charge1)); h_D_pT->Fill(Get_pTfromK(hwK2, charge2));
 
       double hwK1_corr = hwK1 - D;
       double hwK2_corr = hwK2 - D;
@@ -272,24 +274,24 @@ int main(int argc, char** argv) {
          if(nstub1 == 4) h_K_minus_nStub[2]->Fill(fabs(hwK1_corr));
       }
 
-      if (charge2 > 0){ 
-         h_K_plus_phieta [i2][j2]->Fill(fabs(hwK2_corr)); 
-         h_K_plus_all ->Fill(fabs(hwK2_corr)); h_phi_plus ->Fill(phi2); 
-         h_K_plus_phi[i2]->Fill(fabs(hwK2_corr));
+      // if (charge2 > 0){ 
+      //    h_K_plus_phieta [i2][j2]->Fill(fabs(hwK2_corr)); 
+      //    h_K_plus_all ->Fill(fabs(hwK2_corr)); h_phi_plus ->Fill(phi2); 
+      //    h_K_plus_phi[i2]->Fill(fabs(hwK2_corr));
 
-         if(nstub2 == 2) h_K_plus_nStub[0]->Fill(fabs(hwK2_corr));
-         if(nstub2 == 3) h_K_plus_nStub[1]->Fill(fabs(hwK2_corr));
-         if(nstub2 == 4) h_K_plus_nStub[2]->Fill(fabs(hwK2_corr));
-      }
-      else{
-         h_K_minus_phieta[i2][j2]->Fill(fabs(hwK2_corr)); 
-         h_K_minus_all->Fill(fabs(hwK2_corr)); h_phi_minus->Fill(phi2); 
-         h_K_minus_phi[i2]->Fill(fabs(hwK2_corr));
+      //    if(nstub2 == 2) h_K_plus_nStub[0]->Fill(fabs(hwK2_corr));
+      //    if(nstub2 == 3) h_K_plus_nStub[1]->Fill(fabs(hwK2_corr));
+      //    if(nstub2 == 4) h_K_plus_nStub[2]->Fill(fabs(hwK2_corr));
+      // }
+      // else{
+      //    h_K_minus_phieta[i2][j2]->Fill(fabs(hwK2_corr)); 
+      //    h_K_minus_all->Fill(fabs(hwK2_corr)); h_phi_minus->Fill(phi2); 
+      //    h_K_minus_phi[i2]->Fill(fabs(hwK2_corr));
 
-         if(nstub2 == 2) h_K_minus_nStub[0]->Fill(fabs(hwK2_corr));
-         if(nstub2 == 3) h_K_minus_nStub[1]->Fill(fabs(hwK2_corr));
-         if(nstub2 == 4) h_K_minus_nStub[2]->Fill(fabs(hwK2_corr));
-      }
+      //    if(nstub2 == 2) h_K_minus_nStub[0]->Fill(fabs(hwK2_corr));
+      //    if(nstub2 == 3) h_K_minus_nStub[1]->Fill(fabs(hwK2_corr));
+      //    if(nstub2 == 4) h_K_minus_nStub[2]->Fill(fabs(hwK2_corr));
+      // }
       
       h_charge->Fill(charge1); h_charge->Fill(charge2);
       h_pt->Fill(pt1); h_pt->Fill(pt2);
@@ -302,17 +304,14 @@ int main(int argc, char** argv) {
 
       if(beta1 < 0.95){
          h_beta->Fill(beta1);
-         misID_pt->Fill(pt1); misID_pt->Fill(pt2);
-         misID_dxy->Fill(dxy1); misID_dxy->Fill(dxy2);
-         misID_nstub->Fill(nstub1); misID_nstub->Fill(nstub2);
-         misID_K->Fill(hwK1*lsb); misID_K->Fill(hwK2*lsb);
-         misID_invpT->Fill(charge1/pt1); misID_invpT->Fill(charge2/pt2);
+         misID_pt->Fill(pt1); //misID_pt->Fill(pt2);
+         misID_dxy->Fill(dxy1);// misID_dxy->Fill(dxy2);
+         misID_nstub->Fill(nstub1);// misID_nstub->Fill(nstub2);
+         misID_K->Fill(hwK1*lsb); //misID_K->Fill(hwK2*lsb);
+         misID_invpT->Fill(charge1/pt1); //misID_invpT->Fill(charge2/pt2);
          
          if(charge1*charge2<0) misID_mmumuOS->Fill((my_mu1_corr+my_mu2_corr).M());
 
-         if(nstub1 == 2) nStub2_misID += 1;
-         if(nstub1 == 3) nStub3_misID += 1;
-         if(nstub1 == 4) nStub4_misID += 1;
       }
    } // end of loop over events
 
@@ -330,6 +329,7 @@ int main(int argc, char** argv) {
    h_K->Write();
    h_lowK->Write();
    h_material_pT->Write();
+   h_D_pT->Write();
 
    h_charge->Write();
    h_pt->Write();

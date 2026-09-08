@@ -34,6 +34,7 @@ int GetStationSpread(int ncand, int index, ROOT::VecOps::RVec<Short_t> &nstub, R
 
 int GetNstub(int ncand, int index, ROOT::VecOps::RVec<Short_t> &nstub);
 float Get_newpt(double oldK);
+double ptLUT(double oldK, int nStubs);
 
 bool IsL1MuMatched(int ncand, int index, ROOT::VecOps::RVec<Float_t> &pt, ROOT::VecOps::RVec<Float_t> &eta,ROOT::VecOps::RVec<Float_t> &phi, int nl1, ROOT::VecOps::RVec<Float_t> &l1pt, ROOT::VecOps::RVec<Float_t> &l1eta,ROOT::VecOps::RVec<Float_t> &l1phi);
 

@@ -76,6 +76,8 @@ df = df.Define("bxspread1", f"GetBxSpread(nL1KBMTF{mode}, idx1, L1KBMTF{mode}_nS
         .Define("bxspread2", f"GetBxSpread(nL1KBMTF{mode}, idx2, L1KBMTF{mode}_nStub, L1KBMTF{mode}_s1Bx, L1KBMTF{mode}_s2Bx, L1KBMTF{mode}_s3Bx, L1KBMTF{mode}_s4Bx)")\
         .Define("nstub1", f"GetNstub(nL1KBMTF{mode}, idx1, L1KBMTF{mode}_nStub)")\
         .Define("nstub2", f"GetNstub(nL1KBMTF{mode}, idx2, L1KBMTF{mode}_nStub)")\
+        .Define("new_pT1", f"ptLUT(L1KBMTF{mode}_hwK[idx1], L1KBMTF{mode}_nStub[idx1], L1KBMTF{mode}_hwCharge[idx1])")\
+        .Define("new_pT2", f"ptLUT(L1KBMTF{mode}_hwK[idx2], L1KBMTF{mode}_nStub[idx2], L1KBMTF{mode}_hwCharge[idx2])")\
         .Define("pt1","my_mu1.Pt()").Define("eta1","my_mu1.Eta()").Define("phi1","my_mu1.Phi()") \
         .Define("beta1", f"L1KBMTF{mode}_beta[idx1]").Define("beta2", f"L1KBMTF{mode}_beta[idx2]") \
         .Define("charge1",f"L1KBMTF{mode}_hwCharge[idx1]").Define("qual1",f"L1KBMTF{mode}_hwQual[idx1]") \
@@ -137,7 +139,7 @@ for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", \
         "stub1Station1", "stub2Station1", "stub3Station1", "stub4Station1", "stub1Station2", "stub2Station2", "stub3Station2", "stub4Station2", \
         "stub1Sector1", "stub2Sector1", "stub3Sector1", "stub4Sector1", "stub1Wheel1", "stub2Wheel1", "stub3Wheel1", "stub4Wheel1", \
         "pt1","eta1","phi1","charge1","qual1","dxy1","pt2","eta2","phi2","charge2","qual2","dxy2", "beta1", "beta2", "genK1", "genK2", "hwK1", "hwK2",\
-         "geneta1", "geneta2", "genCharge1", "genCharge2", "ngen"):
+         "geneta1", "geneta2", "genCharge1", "genCharge2", "ngen", "new_pT1", "new_pT2"):
     columns.push_back(c)
 
 #df.Snapshot("Events","/eos/cms/store/cmst3/group/taug2/AnalysisXuelong/ntuples_mutau_2018_basicsel/{}.root".format(sample),columns)
