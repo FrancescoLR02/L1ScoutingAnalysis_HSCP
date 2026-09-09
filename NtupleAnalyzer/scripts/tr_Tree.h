@@ -1,4 +1,34 @@
-   unsigned int bunchCrossing;
+#include "TLeaf.h"
+#include "TBranch.h"
+#include "TObjArray.h"
+
+// Type-agnostic reader for a scalar branch.
+// Does NOT call SetBranchAddress: the branch keeps ROOT's own buffer,
+// and the value is pulled through the leaf, which knows the on-file type.
+class ScalarBranch {
+public:
+  void connect(TTree* t, const char* bname) {
+    leaf_ = nullptr;
+    TBranch* br = t->GetBranch(bname);
+    if (!br) {
+      std::cerr << "ScalarBranch: branch '" << bname << "' not found\n";
+      return;
+    }
+    leaf_ = br->GetLeaf(bname);
+    if (!leaf_ && br->GetListOfLeaves()->GetEntries() > 0)
+      leaf_ = (TLeaf*) br->GetListOfLeaves()->At(0);
+    t->SetBranchStatus(bname, 1);
+  }
+
+  bool  isConnected() const { return leaf_ != nullptr; }
+  double get()        const { return leaf_ ? leaf_->GetValue(0) : 0.0; }
+  operator double()   const { return get(); }
+
+private:
+  TLeaf* leaf_ = nullptr;
+};
+
+unsigned int bunchCrossing;
    Int_t           nL1KBMTFSkimmed;
    Short_t         L1KBMTFSkimmed_hwCharge[5];   //[nL1KBMTFSkimmed]
    Short_t         L1KBMTFSkimmed_hwQual[5];   //[nL1KBMTFSkimmed]
@@ -28,8 +58,10 @@
    Float_t         recobeta2;
    Float_t         genpt1;
    Float_t         genpt2;
-   Float_t         dxy1;
-   Float_t         dxy2;
+   ScalarBranch dxy1;
+   ScalarBranch dxy2;
+   // Float_t         dxy1;
+   // Float_t         dxy2;
    Float_t         HwK1;
    Short_t         qual1;
    Short_t         qual2;

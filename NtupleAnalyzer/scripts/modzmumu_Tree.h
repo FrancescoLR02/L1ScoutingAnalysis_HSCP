@@ -82,6 +82,7 @@ class ScalarBranch {
    Bool_t          isL1MuMatched2;
    Short_t           nstub1;
    Short_t           nstub2;
+   Double_t          new_pT1;
    short stub1Station1;
    short stub2Station1;
    short stub3Station1;
@@ -101,6 +102,7 @@ class ScalarBranch {
    Float_t hwK1;
    Float_t hwK2;
    Float_t beta1;
+   Float_t recobeta1;
    Float_t beta2;
    Float_t        genpt1;
    Float_t        genpt2;

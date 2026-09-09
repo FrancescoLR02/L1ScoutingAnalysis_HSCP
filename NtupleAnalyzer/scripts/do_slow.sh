@@ -1,6 +1,6 @@
 # #! Hadd the simulated events
 
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_1000.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_1000/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_1000.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_1000/*.root
 # hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_1500.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_1500/*.root
 # hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_2000.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_2000/*.root
 # hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_2500.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_2500/*.root
@@ -10,7 +10,7 @@ hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimE
 # hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_4500.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_4500/*.root
 # hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_5000.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_5000/*.root
 # hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_5500.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_5500/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_6000.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_6000/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_6000.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_6000/*.root
 
 
 # # rm -r /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_1000
@@ -66,7 +66,7 @@ hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimE
 
 # IN_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Gluino_Skimming"
 # #OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Classification"
-# OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/AddedTracks_Classification"
+# OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/Combine/SlowCombineClassification"
 
 # ./SlowAnalysis_classification.exe ${IN_DIR}/GluinoSignal_1000.root ${OUT_DIR}/out_Gluino1000.root Gluino_1000
 # ./SlowAnalysis_classification.exe ${IN_DIR}/GluinoSignal_1500.root ${OUT_DIR}/out_Gluino1500.root Gluino_1500
@@ -79,5 +79,28 @@ hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimE
 # ./SlowAnalysis_classification.exe ${IN_DIR}/GluinoSignal_5000.root ${OUT_DIR}/out_Gluino5000.root Gluino_5000
 # ./SlowAnalysis_classification.exe ${IN_DIR}/GluinoSignal_5500.root ${OUT_DIR}/out_Gluino5500.root Gluino_5500
 # ./SlowAnalysis_classification.exe ${IN_DIR}/GluinoSignal_6000.root ${OUT_DIR}/out_Gluino6000.root Gluino_6000
+
+
+
+
+#!-------------------------------------------------MODKBMTF------------------------------------------
+
+###--------------------------- SIMULATION CLASSIFICATION -------------------------------------------
+IN_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator"
+#OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Classification"
+OUT_DIR="/eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/Combine/"
+
+
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_1000.root ${OUT_DIR}/out_HSCP1000.root HSCP_1000
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_1500.root ${OUT_DIR}/out_HSCP1500.root HSCP_1500
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_2000.root ${OUT_DIR}/out_HSCP2000.root HSCP_2000
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_2500.root ${OUT_DIR}/out_HSCP2500.root HSCP_2500
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_3000.root ${OUT_DIR}/out_HSCP3000.root HSCP_3000
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_3500.root ${OUT_DIR}/out_HSCP3500.root HSCP_3500
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_4000.root ${OUT_DIR}/out_HSCP4000.root HSCP_4000
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_4500.root ${OUT_DIR}/out_HSCP4500.root HSCP_4500
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_5000.root ${OUT_DIR}/out_HSCP5000.root HSCP_5000
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_5500.root ${OUT_DIR}/out_HSCP5500.root HSCP_5500
+./ModSlowAnalysis_classification.exe ${IN_DIR}/HSCP_tauPrime_6000.root ${OUT_DIR}/out_HSCP6000.root HSCP_6000
 
 

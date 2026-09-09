@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
     TH1F* h_qual_nstub2 = new TH1F("h_qual_nstub2","h_qual_nstub2",4,12,16); h_qual_nstub2->Sumw2();
     TH1F* h_qual_nstub3 = new TH1F("h_qual_nstub3","h_qual_nstub3",4,12,16); h_qual_nstub3->Sumw2();
     TH1F* h_qual_nstub4 = new TH1F("h_qual_nstub4","h_qual_nstub4",4,12,16); h_qual_nstub4->Sumw2();
-   TH1F* h_dxy = new TH1F("h_dxy","h_dxy",4,0,4); h_dxy->Sumw2();
+    TH1F* h_dxy = new TH1F("h_dxy","h_dxy",4,0,4); h_dxy->Sumw2();
 
 
     TH1F* h_nstub = new TH1F("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
