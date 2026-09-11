@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include "TH1F.h"
+#include "TH1D.h"
 #include "TH2F.h"
 #include "TTree.h"
 #include "TFile.h"
@@ -14,7 +15,7 @@
 #include "TRandom3.h"
 #include <TLorentzVector.h>
 
-void WriteHistToFile(TFile* myfile, TH1F* hist, std::string name, TString dir_name){
+void WriteHistToFile(TFile* myfile, TH1D* hist, std::string name, TString dir_name){
     TDirectory *dir =myfile->mkdir(dir_name);
     dir->cd();
     for (int j=0; j<hist->GetSize()-1; ++j){
