@@ -143,7 +143,7 @@ int GetIndex(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_pt, ROOT:
 }
 
 //!Use getOriginal_pT! The missing missalignment correction factor creates an asymmetry between idx1 and idx2 -> more negative than positive charges! 
-int GetIndex_nostub_hwK(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_hwK, ROOT::VecOps::RVec<Float_t> &LepCand_eta, ROOT::VecOps::RVec<Float_t> &LepCand_phi ){//, ROOT::VecOps::RVec<Short_t> &LepCand_hwK){
+int GetIndex_nostub_hwK(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_pt, ROOT::VecOps::RVec<Float_t> &LepCand_eta, ROOT::VecOps::RVec<Float_t> &LepCand_phi ){//, ROOT::VecOps::RVec<Short_t> &LepCand_hwK){
    int idxK1=99; int idxK2=99;
    TLorentzVector my_mu1; my_mu1.SetPtEtaPhiM(0.,0.,0.,0.);
    TLorentzVector my_mu2; my_mu2.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -152,19 +152,19 @@ int GetIndex_nostub_hwK(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCan
    else if (ncand>1){
       float mu1pt=0.; float mu2pt=0.;
       for (int k=0; k<ncand; ++k){
-         tmp_mu.SetPtEtaPhiM(Get_newpt(LepCand_hwK[k]), LepCand_eta[k], LepCand_phi[k],0.105);
-         if (Get_newpt(LepCand_hwK[k])>mu1pt) {
+         tmp_mu.SetPtEtaPhiM(LepCand_pt[k], LepCand_eta[k], LepCand_phi[k],0.105);
+         if (LepCand_pt[k]>mu1pt) {
             if (mu1pt>0 and my_mu1.DeltaR(tmp_mu)>0.30){
                my_mu2=my_mu1; mu2pt=mu1pt; idxK2 = idxK1;
             }
             my_mu1=tmp_mu;
             idxK1=k;
-            mu1pt=Get_newpt(LepCand_hwK[k]);
+            mu1pt=LepCand_pt[k];
          }
-         else if (my_mu1.DeltaR(tmp_mu)>0.30 and Get_newpt(LepCand_hwK[k])>mu2pt) {
+         else if (my_mu1.DeltaR(tmp_mu)>0.30 and LepCand_pt[k]>mu2pt) {
             my_mu2=tmp_mu;
             idxK2=k;
-            mu2pt=Get_newpt(LepCand_hwK[k]);
+            mu2pt=LepCand_pt[k];
          }
       }
    }

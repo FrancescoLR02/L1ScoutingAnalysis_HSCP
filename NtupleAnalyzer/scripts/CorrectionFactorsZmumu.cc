@@ -50,17 +50,8 @@ int etaBin(double eta){
    return std::min(std::max(b, 0), NETA-1);
 }
 
-double MaterialMap_pT(double K){
-   const double lsb = 1.25 / float(1 << 13);
- 
-   double FK = fabs(K * lsb);
-
-   FK = .8569 * FK / (1.0 + 0.1144 * FK);
-   return 1/FK;
-}
-
-double Get_pTfromK(double K, int charge){
-
+double Get_pTfromK(double K){
+   int charge = (K >= 0) ? +1 : -1;
    const double lsb = 1.25 / float(1 << 13);
  
    double FK = fabs(K * lsb);
@@ -68,7 +59,30 @@ double Get_pTfromK(double K, int charge){
    FK = .8569 * FK / (1.0 + 0.1144 * FK);
    FK = FK - charge*D*lsb;
    return 1/FK;
+}
 
+double ptLUT(double K) { 
+  int charge = (K >= 0) ? +1 : -1;
+  float lsb = 1.25 / float(1 << 13);
+  double FK = fabs(K);
+
+  if (FK > 2047) FK = 2047.; 
+  if (FK < 9) FK = 9.; 
+
+  FK = FK * lsb;
+  //step 1 -material and B-field
+  FK = .8569 * FK / (1.0 + 0.1144 * FK);
+  //step 2 - misalignment
+  FK = FK - charge * 1.23e-03;
+  //Get to BMTF scale
+  FK = FK / 1.17;
+
+  double pt = 0;
+
+  if (FK != 0) pt = 1 / FK;
+  if (pt < 4) pt = 4;
+
+  return pt;
 }
 
 int main(int argc, char** argv) {
@@ -86,14 +100,14 @@ int main(int argc, char** argv) {
    arbre1->SetBranchAddress("bunchCrossing", &bunchCrossing);
    arbre1->SetBranchAddress("orbitNumber", &orbitNumber);*/
 
-   //arbre1->SetBranchAddress("mmumu", &mmumu);
-   //arbre1->SetBranchAddress("DRmumu", &DRmumu);
-   //arbre1->SetBranchAddress("xsweight", &xsweight);
-   //arbre1->SetBranchAddress("met", &met);
+   arbre1->SetBranchAddress("mmumu", &mmumu);
+   arbre1->SetBranchAddress("DRmumu", &DRmumu);
+   arbre1->SetBranchAddress("xsweight", &xsweight);
+   arbre1->SetBranchAddress("met", &met);
    arbre1->SetBranchAddress("bxspread1", &bxspread1);
    arbre1->SetBranchAddress("bxspread2", &bxspread2);
-//  arbre1->SetBranchAddress("isL1MuMatched1", &isL1MuMatched1);
-//  arbre1->SetBranchAddress("isL1MuMatched2", &isL1MuMatched2);
+   arbre1->SetBranchAddress("isL1MuMatched1", &isL1MuMatched1);
+   arbre1->SetBranchAddress("isL1MuMatched2", &isL1MuMatched2);
    arbre1->SetBranchAddress("nstub1", &nstub1);
    arbre1->SetBranchAddress("nstub2", &nstub2);
    arbre1->SetBranchAddress("pt1", &pt1);
@@ -102,25 +116,25 @@ int main(int argc, char** argv) {
    arbre1->SetBranchAddress("pt2", &pt2);
    arbre1->SetBranchAddress("eta2", &eta2);
    arbre1->SetBranchAddress("phi2", &phi2);
-   // arbre1->SetBranchAddress("stub1Bx1", &stub1Bx1);
-   // arbre1->SetBranchAddress("stub2Bx1", &stub2Bx1);
-   // arbre1->SetBranchAddress("stub3Bx1", &stub3Bx1);
-   // arbre1->SetBranchAddress("stub4Bx1", &stub4Bx1);
-   // arbre1->SetBranchAddress("stub1Bx2", &stub1Bx2);
-   // arbre1->SetBranchAddress("stub2Bx2", &stub2Bx2);
-   // arbre1->SetBranchAddress("stub3Bx2", &stub3Bx2);
-   // arbre1->SetBranchAddress("stub4Bx2", &stub4Bx2);
-   arbre1->SetBranchAddress("HwK1", &hwK1);
-   arbre1->SetBranchAddress("HwK2", &hwK2);
+   arbre1->SetBranchAddress("stub1Bx1", &stub1Bx1);
+   arbre1->SetBranchAddress("stub2Bx1", &stub2Bx1);
+   arbre1->SetBranchAddress("stub3Bx1", &stub3Bx1);
+   arbre1->SetBranchAddress("stub4Bx1", &stub4Bx1);
+   arbre1->SetBranchAddress("stub1Bx2", &stub1Bx2);
+   arbre1->SetBranchAddress("stub2Bx2", &stub2Bx2);
+   arbre1->SetBranchAddress("stub3Bx2", &stub3Bx2);
+   arbre1->SetBranchAddress("stub4Bx2", &stub4Bx2);
+   arbre1->SetBranchAddress("hwK1", &hwK1);
+   arbre1->SetBranchAddress("hwK2", &hwK2);
    arbre1->SetBranchAddress("beta1", &beta1);
-   // arbre1->SetBranchAddress("stub1Station1", &stub1Station1);
-   // arbre1->SetBranchAddress("stub2Station1", &stub2Station1);
-   // arbre1->SetBranchAddress("stub3Station1", &stub3Station1);
-   // arbre1->SetBranchAddress("stub4Station1", &stub4Station1);
-   // arbre1->SetBranchAddress("stub1Station2", &stub1Station2);
-   // arbre1->SetBranchAddress("stub2Station2", &stub2Station2);
-   // arbre1->SetBranchAddress("stub3Station2", &stub3Station2);
-   // arbre1->SetBranchAddress("stub4Station2", &stub4Station2);
+   arbre1->SetBranchAddress("stub1Station1", &stub1Station1);
+   arbre1->SetBranchAddress("stub2Station1", &stub2Station1);
+   arbre1->SetBranchAddress("stub3Station1", &stub3Station1);
+   arbre1->SetBranchAddress("stub4Station1", &stub4Station1);
+   arbre1->SetBranchAddress("stub1Station2", &stub1Station2);
+   arbre1->SetBranchAddress("stub2Station2", &stub2Station2);
+   arbre1->SetBranchAddress("stub3Station2", &stub3Station2);
+   arbre1->SetBranchAddress("stub4Station2", &stub4Station2);
 
    // charge/qual/dxy change scalar type from one ntuple version to the next
    // (dxy: Int_t in the 2024 skims, Double_t in simulation, Float_t in data),
@@ -147,8 +161,8 @@ int main(int argc, char** argv) {
 
    TH1F* h_K  = new TH1F("h_K", "hw curvature K", 1000, KMIN, KMAX); h_K->Sumw2();
    TH1F* h_lowK = new TH1F("h_lowK","h_lowK", NK/2, -150, 150); h_lowK->Sumw2();
-   TH1F* h_material_pT = new TH1F("h_material_pT","h_material_pT", 300, 12.5, 1000); h_material_pT->Sumw2();
    TH1F* h_D_pT = new TH1F("h_D_pT","h_D_pT", 300, 12.5, 1000); h_D_pT->Sumw2();
+   TH1F* h_pTLUT = new TH1F("h_pTLUT","h_pTLUT", 300, 12.5, 1000); h_pTLUT->Sumw2();
 
 
 
@@ -238,16 +252,18 @@ int main(int argc, char** argv) {
 
       if (nstub1==4 and qual1<14) continue;
       if (nstub1==3 and qual1<13) continue;
-      if (nstub1==2) continue;
+      if (nstub1==2 and qual1<12) continue;
       if (nstub2==4 and qual2<14) continue;
       if (nstub2==3 and qual2<13) continue;
-      if (nstub2==2) continue;
+      if (nstub2==2 and qual2<12) continue;
 
 
       h_K->Fill(hwK1); h_K->Fill(hwK2);
       h_lowK->Fill(hwK1); h_lowK->Fill(hwK2);
-      h_material_pT->Fill(MaterialMap_pT(hwK1)); h_material_pT->Fill(MaterialMap_pT(hwK2));
-      h_D_pT->Fill(Get_pTfromK(hwK1, charge1)); h_D_pT->Fill(Get_pTfromK(hwK2, charge2));
+      h_D_pT->Fill(Get_pTfromK(hwK1)); h_D_pT->Fill(Get_pTfromK(hwK2));
+      h_pTLUT->Fill(ptLUT(hwK1)); h_pTLUT->Fill(ptLUT(hwK2));
+
+
 
       double hwK1_corr = hwK1 - D;
       double hwK2_corr = hwK2 - D;
@@ -274,24 +290,24 @@ int main(int argc, char** argv) {
          if(nstub1 == 4) h_K_minus_nStub[2]->Fill(fabs(hwK1_corr));
       }
 
-      // if (charge2 > 0){ 
-      //    h_K_plus_phieta [i2][j2]->Fill(fabs(hwK2_corr)); 
-      //    h_K_plus_all ->Fill(fabs(hwK2_corr)); h_phi_plus ->Fill(phi2); 
-      //    h_K_plus_phi[i2]->Fill(fabs(hwK2_corr));
+      if (charge2 > 0){ 
+         h_K_plus_phieta [i2][j2]->Fill(fabs(hwK2_corr)); 
+         h_K_plus_all ->Fill(fabs(hwK2_corr)); h_phi_plus ->Fill(phi2); 
+         h_K_plus_phi[i2]->Fill(fabs(hwK2_corr));
 
-      //    if(nstub2 == 2) h_K_plus_nStub[0]->Fill(fabs(hwK2_corr));
-      //    if(nstub2 == 3) h_K_plus_nStub[1]->Fill(fabs(hwK2_corr));
-      //    if(nstub2 == 4) h_K_plus_nStub[2]->Fill(fabs(hwK2_corr));
-      // }
-      // else{
-      //    h_K_minus_phieta[i2][j2]->Fill(fabs(hwK2_corr)); 
-      //    h_K_minus_all->Fill(fabs(hwK2_corr)); h_phi_minus->Fill(phi2); 
-      //    h_K_minus_phi[i2]->Fill(fabs(hwK2_corr));
+         if(nstub2 == 2) h_K_plus_nStub[0]->Fill(fabs(hwK2_corr));
+         if(nstub2 == 3) h_K_plus_nStub[1]->Fill(fabs(hwK2_corr));
+         if(nstub2 == 4) h_K_plus_nStub[2]->Fill(fabs(hwK2_corr));
+      }
+      else{
+         h_K_minus_phieta[i2][j2]->Fill(fabs(hwK2_corr)); 
+         h_K_minus_all->Fill(fabs(hwK2_corr)); h_phi_minus->Fill(phi2); 
+         h_K_minus_phi[i2]->Fill(fabs(hwK2_corr));
 
-      //    if(nstub2 == 2) h_K_minus_nStub[0]->Fill(fabs(hwK2_corr));
-      //    if(nstub2 == 3) h_K_minus_nStub[1]->Fill(fabs(hwK2_corr));
-      //    if(nstub2 == 4) h_K_minus_nStub[2]->Fill(fabs(hwK2_corr));
-      // }
+         if(nstub2 == 2) h_K_minus_nStub[0]->Fill(fabs(hwK2_corr));
+         if(nstub2 == 3) h_K_minus_nStub[1]->Fill(fabs(hwK2_corr));
+         if(nstub2 == 4) h_K_minus_nStub[2]->Fill(fabs(hwK2_corr));
+      }
       
       h_charge->Fill(charge1); h_charge->Fill(charge2);
       h_pt->Fill(pt1); h_pt->Fill(pt2);
@@ -304,11 +320,11 @@ int main(int argc, char** argv) {
 
       if(beta1 < 0.95){
          h_beta->Fill(beta1);
-         misID_pt->Fill(pt1); //misID_pt->Fill(pt2);
-         misID_dxy->Fill(dxy1);// misID_dxy->Fill(dxy2);
-         misID_nstub->Fill(nstub1);// misID_nstub->Fill(nstub2);
-         misID_K->Fill(hwK1*lsb); //misID_K->Fill(hwK2*lsb);
-         misID_invpT->Fill(charge1/pt1); //misID_invpT->Fill(charge2/pt2);
+         misID_pt->Fill(pt1); misID_pt->Fill(pt2);
+         misID_dxy->Fill(dxy1); misID_dxy->Fill(dxy2);
+         misID_nstub->Fill(nstub1); misID_nstub->Fill(nstub2);
+         misID_K->Fill(hwK1*lsb); misID_K->Fill(hwK2*lsb);
+         misID_invpT->Fill(charge1/pt1); misID_invpT->Fill(charge2/pt2);
          
          if(charge1*charge2<0) misID_mmumuOS->Fill((my_mu1_corr+my_mu2_corr).M());
 
@@ -328,8 +344,8 @@ int main(int argc, char** argv) {
    //h_mmumu_SS->Write();
    h_K->Write();
    h_lowK->Write();
-   h_material_pT->Write();
    h_D_pT->Write();
+   h_pTLUT->Write();
 
    h_charge->Write();
    h_pt->Write();
@@ -341,16 +357,6 @@ int main(int argc, char** argv) {
    h_K_minus_all->Write();
    h_phi_plus->Write();
    h_phi_minus->Write();
-
-   TDirectory* dir2=fout->mkdir("misID_BX");
-   dir2->cd();
-   //h_beta->Write();
-   misID_pt->Write();
-   misID_dxy->Write();
-   misID_nstub->Write();
-   misID_K->Write();
-   misID_invpT->Write();
-   misID_mmumuOS->Write();
 
    TDirectory* dir3=fout->mkdir("KmapPhiEta");
    dir3->cd();
@@ -369,6 +375,16 @@ int main(int argc, char** argv) {
    for (int i = 0; i < 3; ++i){
       h_K_plus_nStub[i]->Write(); h_K_minus_nStub[i]->Write();
    }
+
+   TDirectory* dir2=fout->mkdir("misID_BX");
+   dir2->cd();
+   h_beta->Write();
+   misID_pt->Write();
+   misID_dxy->Write();
+   misID_nstub->Write();
+   misID_K->Write();
+   misID_invpT->Write();
+   misID_mmumuOS->Write();
 
 
 

@@ -112,10 +112,10 @@ int main(int argc, char** argv) {
    float bins_medium_highpt[] = {100,  150, 200, 300, 400, 500, 600};
    int  binnum_medium_highpt = sizeof(bins_medium_highpt)/sizeof(Float_t) - 1;
 
-   float bins_highpt[] = {150, 200, 250, 300, 350, 450, 550, 650, 750, 850, 950};
+   float bins_highpt[] = {150, 200, 250, 300, 350, 450, 550, 650, 750};
    int  binnum_highpt = sizeof(bins_highpt)/sizeof(Float_t) - 1;
 
-   float bins_bx123[]            = {150, 250, 350, 450, 550};
+   float bins_bx123[]            = {150, 250, 350, 450, 550};                       // cats 2, 9
    int  binnum_bx123 = sizeof(bins_bx123)/sizeof(Float_t) - 1;
 
    float bins_merged[]            = {100, 200, 300, 500, 600};
@@ -339,7 +339,7 @@ int main(int argc, char** argv) {
 
    //float lumiweight= (37770.0/15.046) + (5440.0/15.060) + (11470.0/15.048);//recorded
    //    float lumiweight= (40400.0/15.0) + (5820.0/15.0) + (12320.0/15.0); //delivered
-   float lumiweight=3900.0;
+   float lumiweight=8110.0;
    //float xsweight=1.000 * lumiweight; //20000 gen events
    //if (name=="data_obs") xsweight=1.0;
    static TRandom3 randGen(1234);

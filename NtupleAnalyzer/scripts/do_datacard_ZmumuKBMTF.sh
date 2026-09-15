@@ -14,9 +14,9 @@ mkdir -p $OUTDIR/plots
 # ./ZmumuAnalysis.exe $INDIR/DY_Skim.root $OUTDIR/DY.root data_obs KBMTF
 
 ./ZmumuAnalysis.exe $INDIR/reDY_SIM_SkimAll.root  $OUTDIR/DY_SIM.root DY KBMTF
-./ZmumuAnalysis.exe $INDIR/reZmumu.root $OUTDIR/DY.root data_obs KBMTF
+./ZmumuAnalysis.exe $INDIR/398632_903.root $OUTDIR/DY.root data_obs KBMTF
 
 
 python3 Create_fake_Zmumu.py --selection="ZmumuKBMTF" --folder="re"
 hadd -f $OUTDIR/datacard_ZmumuKBMTF.root $OUTDIR/DY.root $OUTDIR/DY_SIM.root $OUTDIR/Fake.root
-python3 Draw_Zmumu.py --selection="ZmumuKBMTF" --folder="re"
+python3 DrawScripts/Draw_Zmumu.py --selection="ZmumuKBMTF" --folder="re"

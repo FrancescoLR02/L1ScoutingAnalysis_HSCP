@@ -1,18 +1,8 @@
-#include <TH2.h>
-#include <TH2F.h>
-#include <TStyle.h>
-#include <TCanvas.h>
-#include <TGraph.h>
-#include <TGraphAsymmErrors.h>
-#include "TMultiGraph.h"
-#include <iostream>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <utility>
+
 #include <stdio.h>
 #include <TF1.h>
 #include <TDirectoryFile.h>
+#include <TRandom3.h>
 #include "TLorentzVector.h"
 #include "TString.h"
 #include "TLegend.h"
@@ -23,73 +13,93 @@
 #include "TPaveLabel.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "zmumu_Tree.h"
 #include <TRandom3.h>
 #include <algorithm>
-#include "modzmumu_Tree.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-   std::string input = *(argv + 1);
-   std::string output = *(argv + 2);
-   std::string name = *(argv + 3);
-   std::string muobject = *(argv + 4);
+    std::string input = *(argv + 1);
+    std::string output = *(argv + 2);
+    std::string name = *(argv + 3);
+    std::string muobject = *(argv + 4);
 
-   TFile *f_Double = new TFile(input.c_str());
-   cout<<"XXXXXXXXXXXXX "<<input.c_str()<<" XXXXXXXXXXXX"<<endl;
-   TTree *arbre1 = (TTree*) f_Double->Get("Events");
+    TFile *f_Double = new TFile(input.c_str());
+    cout<<"XXXXXXXXXXXXX "<<input.c_str()<<" XXXXXXXXXXXX"<<endl;
+    TTree *arbre1 = (TTree*) f_Double->Get("Events");
+    TTree *arbre2 = (TTree*) f_Double->Get("Events");
 
 
-   /*arbre1->SetBranchAddress("run", &run);
-   arbre1->SetBranchAddress("luminosityBlock", &luminosityBlock);
-   arbre1->SetBranchAddress("bunchCrossing", &bunchCrossing);
-   arbre1->SetBranchAddress("orbitNumber", &orbitNumber);*/
+    /*arbre1->SetBranchAddress("run", &run);
+    arbre1->SetBranchAddress("luminosityBlock", &luminosityBlock);
+    arbre1->SetBranchAddress("bunchCrossing", &bunchCrossing);
+    arbre1->SetBranchAddress("orbitNumber", &orbitNumber);*/
 
-   arbre1->SetBranchAddress("mmumu", &mmumu);
-   arbre1->SetBranchAddress("DRmumu", &DRmumu);
-   arbre1->SetBranchAddress("xsweight", &xsweight);
-   arbre1->SetBranchAddress("met", &met);
-   arbre1->SetBranchAddress("bxspread1", &bxspread1);
-   arbre1->SetBranchAddress("bxspread2", &bxspread2);
-//  arbre1->SetBranchAddress("isL1MuMatched1", &isL1MuMatched1);
-//  arbre1->SetBranchAddress("isL1MuMatched2", &isL1MuMatched2);
-   arbre1->SetBranchAddress("nstub1", &nstub1);
-   arbre1->SetBranchAddress("nstub2", &nstub2);
-   arbre1->SetBranchAddress("pt1", &pt1);
-   arbre1->SetBranchAddress("eta1", &eta1);
-   arbre1->SetBranchAddress("phi1", &phi1);
-   arbre1->SetBranchAddress("pt2", &pt2);
-   arbre1->SetBranchAddress("eta2", &eta2);
-   arbre1->SetBranchAddress("phi2", &phi2);
-   arbre1->SetBranchAddress("genpt1", &genpt1);
-   arbre1->SetBranchAddress("genpt2", &genpt2);
-   arbre1->SetBranchAddress("stub1Bx1", &stub1Bx1);
-   arbre1->SetBranchAddress("stub2Bx1", &stub2Bx1);
-   arbre1->SetBranchAddress("stub3Bx1", &stub3Bx1);
-   arbre1->SetBranchAddress("stub4Bx1", &stub4Bx1);
-   arbre1->SetBranchAddress("stub1Bx2", &stub1Bx2);
-   arbre1->SetBranchAddress("stub2Bx2", &stub2Bx2);
-   arbre1->SetBranchAddress("stub3Bx2", &stub3Bx2);
-   arbre1->SetBranchAddress("stub4Bx2", &stub4Bx2);
-   arbre1->SetBranchAddress("stub1Station1", &stub1Station1);
-   arbre1->SetBranchAddress("stub2Station1", &stub2Station1);
-   arbre1->SetBranchAddress("stub3Station1", &stub3Station1);
-   arbre1->SetBranchAddress("stub4Station1", &stub4Station1);
-   arbre1->SetBranchAddress("stub1Station2", &stub1Station2);
-   arbre1->SetBranchAddress("stub2Station2", &stub2Station2);
-   arbre1->SetBranchAddress("stub3Station2", &stub3Station2);
-   arbre1->SetBranchAddress("stub4Station2", &stub4Station2);
+    arbre1->SetBranchAddress("mmumu", &mmumu);
+    arbre1->SetBranchAddress("DRmumu", &DRmumu);
+    arbre1->SetBranchAddress("xsweight", &xsweight);
+    arbre1->SetBranchAddress("met", &met);
+    arbre1->SetBranchAddress("bxspread1", &bxspread1);
+    arbre1->SetBranchAddress("bxspread2", &bxspread2);
+    arbre1->SetBranchAddress("isL1MuMatched1", &isL1MuMatched1);
+    arbre1->SetBranchAddress("isL1MuMatched2", &isL1MuMatched2);
+    arbre1->SetBranchAddress("nstub1", &nstub1);
+    arbre1->SetBranchAddress("nstub2", &nstub2);
+    arbre1->SetBranchAddress("stub1Bx1", &stub1Bx1);
+    arbre1->SetBranchAddress("stub2Bx1", &stub2Bx1);
+    arbre1->SetBranchAddress("stub3Bx1", &stub3Bx1);
+    arbre1->SetBranchAddress("stub4Bx1", &stub4Bx1);
+    arbre1->SetBranchAddress("stub1Bx2", &stub1Bx2);
+    arbre1->SetBranchAddress("stub2Bx2", &stub2Bx2);
+    arbre1->SetBranchAddress("stub3Bx2", &stub3Bx2);
+    arbre1->SetBranchAddress("stub4Bx2", &stub4Bx2);
+    arbre1->SetBranchAddress("stub1Station1", &stub1Station1);
+    arbre1->SetBranchAddress("stub2Station1", &stub2Station1);
+    arbre1->SetBranchAddress("stub3Station1", &stub3Station1);
+    arbre1->SetBranchAddress("stub4Station1", &stub4Station1);
+    arbre1->SetBranchAddress("stub1Station2", &stub1Station2);
+    arbre1->SetBranchAddress("stub2Station2", &stub2Station2);
+    arbre1->SetBranchAddress("stub3Station2", &stub3Station2);
+    arbre1->SetBranchAddress("stub4Station2", &stub4Station2);
+    arbre1->SetBranchAddress("genpt1", &genpt1);
+    arbre1->SetBranchAddress("genpt2", &genpt2);
+    arbre1->SetBranchAddress("pt1", &pt1);
+    arbre1->SetBranchAddress("eta1", &eta1);
+    arbre1->SetBranchAddress("phi1", &phi1);
+    arbre1->SetBranchAddress("charge1", &charge1_short);
+    arbre1->SetBranchAddress("qual1", &qual1_short);
+    arbre1->SetBranchAddress("dxy1", &dxy1_short);
+    arbre1->SetBranchAddress("pt2", &pt2);
+    arbre1->SetBranchAddress("eta2", &eta2);
+    arbre1->SetBranchAddress("phi2", &phi2);
+    arbre1->SetBranchAddress("charge2", &charge2_short);
+    arbre1->SetBranchAddress("qual2", &qual2_short);
+    arbre1->SetBranchAddress("dxy2", &dxy2_short);
 
-   // charge/qual/dxy change scalar type from one ntuple version to the next
-   // (dxy: Int_t in the 2024 skims, Double_t in simulation, Float_t in data),
-   // so they are connected through ScalarBranch, which adapts to the type on file.
-   charge1.connect(arbre1, "charge1");
-   qual1.connect(arbre1, "qual1");
-   dxy1.connect(arbre1, "dxy1");
-   charge2.connect(arbre1, "charge2");
-   qual2.connect(arbre1, "qual2");
-   dxy2.connect(arbre1, "dxy2");
+    arbre2->SetBranchAddress("mmumu", &mmumu);
+    arbre2->SetBranchAddress("DRmumu", &DRmumu);
+    arbre2->SetBranchAddress("xsweight", &xsweight);
+    arbre2->SetBranchAddress("met", &met);
+    arbre2->SetBranchAddress("bxspread1", &bxspread1);
+    arbre2->SetBranchAddress("bxspread2", &bxspread2);
+    arbre2->SetBranchAddress("isL1MuMatched1", &isL1MuMatched1);
+    arbre2->SetBranchAddress("isL1MuMatched2", &isL1MuMatched2);
+    arbre2->SetBranchAddress("nstub1", &nstub1);
+    arbre2->SetBranchAddress("nstub2", &nstub2);
+    arbre2->SetBranchAddress("pt1", &pt1);
+    arbre2->SetBranchAddress("eta1", &eta1);
+    arbre2->SetBranchAddress("phi1", &phi1);
+    arbre2->SetBranchAddress("charge1", &charge1);
+    arbre2->SetBranchAddress("qual1", &qual1);
+    arbre2->SetBranchAddress("dxy1", &dxy1);
+    arbre2->SetBranchAddress("pt2", &pt2);
+    arbre2->SetBranchAddress("eta2", &eta2);
+    arbre2->SetBranchAddress("phi2", &phi2);
+    arbre2->SetBranchAddress("charge2", &charge2);
+    arbre2->SetBranchAddress("qual2", &qual2);
+    arbre2->SetBranchAddress("dxy2", &dxy2);
 
    TH1F* h_mmumu_OS=new TH1F("h_mmumu_OS", "h_mmumu_OS", 50,50,150); h_mmumu_OS->Sumw2();
    TH1F* h_mmumu_SS=new TH1F("h_mmumu_SS", "h_mmumu_SS", 50,50,150); h_mmumu_SS->Sumw2();
@@ -130,8 +140,8 @@ int main(int argc, char** argv) {
 
 
    //float lumiweight= (40400.0/15.046) + (5820.0/15.060) + (12320.0/15.048);
-   float lumiweight = 68.165642 + 35.022010 + 458.565962;
-   //float lumiweight = 3918;
+   //float lumiweight = 68.165642 + 35.022010 + 458.565962;
+   float lumiweight = 3918;
 
    static TRandom3 randGen(1234);
    float ptmin=0.0;
