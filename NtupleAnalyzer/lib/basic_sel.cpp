@@ -354,8 +354,7 @@ float Get_newpt(int oldK){
 
   if (FK > 2047)
     FK = 2047.;
-   if (FK < 28)
-    FK = 28.;
+   //if (FK < 28) FK = 28.;
 
   FK = FK * lsb;
 

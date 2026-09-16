@@ -41,15 +41,9 @@ unsigned int bunchCrossing;
    Int_t           stationspread1;
    Int_t           stationspread2;
    Int_t           ngen;
-   Short_t         nstub1;
-   Short_t         nstub2;
-   Float_t         pt1;
-   Float_t         pt2;
+   Double_t         pt1;
+   Double_t         pt2;
    Short_t           processor1;
-   Float_t         eta1;
-   Float_t         eta2;
-   Float_t         phi1;
-   Float_t         phi2;
    Float_t         genbeta1;
    Float_t         genbeta2;
    Float_t         geneta1;
@@ -62,13 +56,15 @@ unsigned int bunchCrossing;
    ScalarBranch dxy2;
    // Float_t         dxy1;
    // Float_t         dxy2;
-   Float_t         HwK1;
-    Float_t         HwK2;
+   Double_t         hwK1;
+   Double_t         hwK2;
+   Double_t         HwK1;
+   Double_t         HwK2;
    Short_t         qual1;
    Short_t         qual2;
    Short_t         charge1;
    Short_t         charge2;
-   Int_t         idx2;
+   Int_t           idx2;
    Float_t         met_bx0;
    Float_t         met_bxm1;
    Float_t         met_bxm2;
@@ -98,4 +94,21 @@ unsigned int bunchCrossing;
    Short_t         L1KBMTFSkimmed_s4Wheel[5];   //[nL1KBMTFSkimmed]
    Short_t         L1KBMTFSkimmed_s4Sector[5];   //[nL1KBMTFSkimmed]
    Short_t         L1KBMTFSkimmed_s4Bx[5];   //[nL1KBMTFSkimmed]
+
+
+
+
+   // Int_t         nstub1;
+   // Int_t         nstub2;
+   // Double_t         eta1;
+   // Double_t         eta2;
+   // Double_t         phi1;
+   // Double_t         phi2;
+
+   Short_t         nstub1;
+   Short_t         nstub2;
+   Float_t         eta1;
+   Float_t         eta2;
+   Float_t         phi1;
+   Float_t         phi2;
 
