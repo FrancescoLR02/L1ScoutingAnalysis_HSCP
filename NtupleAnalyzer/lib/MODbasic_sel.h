@@ -44,10 +44,14 @@ bool IsColliding(int run, int bx);
 
 bool IsEarlierColliding(int run, int bx, int interval, bool is_colliding);
 
-float getCecile_pT(double oldK);
-float getOriginal_pT(double oldK);
-float getNoBMTFScale_pT(double oldK);
-float getNoCharge_pT(double oldK);
+
+int sectorBin(double phi);
+int etaBin(double eta);
+double deltaNStub(int nstub);
+
+double correctK(double K, double phi, double eta, int nstub);
+double ptLUT(double K, double phi, double eta, int nstub);
+ROOT::VecOps::RVec<Float_t> ptLUTvec(ROOT::VecOps::RVec<Float_t> &K, ROOT::VecOps::RVec<Float_t> &phi, ROOT::VecOps::RVec<Float_t> &eta, ROOT::VecOps::RVec<Short_t> &nstub);
 
 
 //GetIndex returns 99 when there is no such candidate, so every access to a candidate

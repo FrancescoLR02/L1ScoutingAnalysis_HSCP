@@ -37,6 +37,13 @@ const double DELTA_PHI[NSEC] = {
      0.5210699539132264, -14.19312748508228,  -18.101331219109678
 };
 
+// const double DELTA_PHI[NSEC] = {
+//     -0.705100558258536,  6.447155013069908,  9.927400693212297,
+//      -0.7533756368212116,  -7.157159036830576,  -0.5904730290205896,
+//      3.44630981018989,  -1.0617620313119729,  7.600458123480065,
+//      -1.1725784549211977, -6.861690641834912,  -2.9490277079433893
+// };
+
 // step 2: measured on phi-corrected hwK
 const double DELTA_ETA[NETA] = {
    -5.031174684878439, -1.7392444643104927, 0.9836903473143631,
@@ -63,6 +70,15 @@ inline double correctK(double K, double phi, double eta, int nstub, int level = 
    return k;
 }
 
+inline double applyMaterialMap(double K){
+
+   double FK = std::fabs(K);
+   float lsb = 1.25 / float(1 << 13);
+   FK = FK * lsb;
+   FK = .8569 * FK / (1.0 + 0.1144 * FK);
+   return FK / lsb;
+}
+
 inline int chargeFromK(double K){ return (K >= 0) ? +1 : -1; }
 
 // original KBMTF LUT: material/B-field, global misalignment, BMTF scale
@@ -78,12 +94,13 @@ inline double ptLUT_orig(double K){
    double pt = 0;
    if (FK != 0) pt = 1 / FK;
    if (pt < 4) pt = 4;
+   if (pt > 1000) pt = 1000;
    return pt;
 }
 
 
-float Get_newpt(double oldK){
-  float K = static_cast<int>(oldK)-9;
+float Get_newpt(int oldK){
+  float K = oldK-9;
   if (K==0) K=1;
   float lsb = 1.25 / float(1 << 13);
   float FK = abs(K);
@@ -111,7 +128,7 @@ float Get_newpt(double oldK){
 
 // new LUT: Kcorr must already come from correctK()
 // applyMaterial = the material/B-field step of the original LUT (physical scale, as in Get_pTfromK)
-inline double ptLUT_corr(double Kcorr, bool applyMaterial = false){
+inline double ptLUT_corr(double Kcorr, bool applyMaterial = true){
    double FK = std::fabs(Kcorr);
    if (FK > 2047) FK = 2047.;
    if (FK < 3)    FK = 3.;

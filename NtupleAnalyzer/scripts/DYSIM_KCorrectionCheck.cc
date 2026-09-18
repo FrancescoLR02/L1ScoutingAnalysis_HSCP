@@ -10,7 +10,7 @@
 
 using namespace std;
 
-//!  g++ -O3 HSCP_KCorrectionCheck.cc -o HSCP_KCorrectionCheck.exe $(root-config --cflags --glibs)
+//!  g++ -O3 DYSIM_KCorrectionCheck.cc -o DYSIM_KCorrectionCheck.exe $(root-config --cflags --glibs)
 //!  ./HSCP_KCorrectionCheck.exe input.root output.root <sample_name>
 
 bool passSelection(int qual, int nstub, double dxy, double K){
@@ -18,13 +18,14 @@ bool passSelection(int qual, int nstub, double dxy, double K){
    if (qual < 12)               return false;
    if (nstub == 4 && qual < 14) return false;
    if (nstub == 3 && qual < 13) return false;
-   if (std::fabs(K) > 1000)     return false;
+   //if (std::fabs(K) > 1000)     return false;
+   if (nstub <= 2)              return false;
    return true;
 }
 
 const int    NGENPT    = 150;      // 20 GeV bins
 const double GENPT_MIN = 0.;
-const double GENPT_MAX = 3000.;
+const double GENPT_MAX = 1500.;
 
 const int    NTHR = 5;
 const double PT_THR[NTHR] = {5., 20., 22., 50., 100.};
@@ -71,7 +72,7 @@ int main(int argc, char** argv) {
    for (int s = 0; s < NSTAGE; ++s){
       h_hwK[s]         = new TH1D("h_hwK", ";signed hwK [LSB];tracks", 1000, -500, 500);
       h_pt[s]          = new TH1D("h_pt", ";L1 p_{T} [GeV];tracks", 300, 0, 1500);
-      h_resp[s]        = new TH1D("h_resp", Form(";%s;tracks", RLAB), 250, -1, 4);
+      h_resp[s]        = new TH1D("h_resp", Form(";%s;tracks", RLAB), 200, -2, 2);
       h2_resp[s]       = new TH2D("h2_resp_genpt",       Form(";gen p_{T} [GeV];%s", RLAB), NGENPT, GENPT_MIN, GENPT_MAX, 250, -1, 4);
       h2_resp_plus[s]  = new TH2D("h2_resp_genpt_plus",  Form(";gen p_{T} [GeV];%s", RLAB), NGENPT, GENPT_MIN, GENPT_MAX, 250, -1, 4);
       h2_resp_minus[s] = new TH2D("h2_resp_genpt_minus", Form(";gen p_{T} [GeV];%s", RLAB), NGENPT, GENPT_MIN, GENPT_MAX, 250, -1, 4);

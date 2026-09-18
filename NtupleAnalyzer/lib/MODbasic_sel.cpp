@@ -2,6 +2,30 @@
 #include "scheme_run_map_2025.h"
 #include "scheme_bx_map_2025.h"
 
+
+const int    NSEC   = 12;
+const int    NETA   = 5;
+const double ETAMAX = 0.83;
+const double LSB    = 1.25 / double(1 << 13);
+
+const double DELTA_PHI[NSEC] = {
+    -4.517551982392351,  15.357480990344975,  16.890352083459184,
+     4.568931798089349,  -8.445488610821378,  -3.2565913333840792,
+     6.753763570952405,  17.763404130940582,  14.926302197139007,
+     0.5210699539132264, -14.19312748508228,  -18.101331219109678
+};
+
+// step 2: measured on phi-corrected hwK
+const double DELTA_ETA[NETA] = {
+   -5.031174684878439, -1.7392444643104927, 0.9836903473143631,
+    2.591548000863815,  2.8348744112647695
+};
+
+// step 3: measured on phi+eta corrected hwK, nStub = 2, 3, 4
+const double DELTA_NSTUB[3] = { 0.905, -0.490, 0.127 };
+
+
+
 int GetIndex_nostub(int rank, int ncand, ROOT::VecOps::RVec<Float_t> &LepCand_pt, ROOT::VecOps::RVec<Float_t> &LepCand_eta, ROOT::VecOps::RVec<Float_t> &LepCand_phi){
         int idxK1=99; int idxK2=99;
         TLorentzVector my_mu1; my_mu1.SetPtEtaPhiM(0.,0.,0.,0.);
@@ -398,37 +422,56 @@ float getOriginal_pT(double K){
   return pt;
 }
 
+//! MISALIGNMENT CORRECTIONS
+int sectorBin(double phi){
+   const double w = 2*TMath::Pi()/NSEC;
+   double x = std::fmod(phi + 0.5*w, 2*TMath::Pi());
+   if (x < 0) x += 2*TMath::Pi();
+   return std::min(std::max(int(x / w), 0), NSEC-1);
+}
 
-double ptLUT(double K, int nStubs) {
-  int charge = (K >= 0) ? +1 : -1;
-  float lsb = 1.25 / float(1 << 13);
+int etaBin(double eta){
+   int b = int((eta + ETAMAX) / (2*ETAMAX) * NETA);
+   return std::min(std::max(b, 0), NETA-1);
+}
 
-  double Delta = 3.22e-4;
+double deltaNStub(int nstub){
+   int k = nstub - 2;
+   return (k >= 0 && k < 3) ? DELTA_NSTUB[k] : 0.;
+}
 
-  double FK = fabs(K);
+double correctK(double K, double phi, double eta, int nstub){
+   double k = K;
+   
+   k -= DELTA_PHI[sectorBin(phi)];
+   k -= DELTA_ETA[etaBin(eta)];
+   k -= deltaNStub(nstub);
+   return k;
+}
 
-  if (FK < 9) FK = 9;
-  if (FK > 2047)
-    FK = 2047.;
 
-  FK = FK * lsb;
+double ptLUT(double K, double phi, double eta, int nstub){
+   
+   double Kcorr = correctK(K, phi, eta, nstub);
+   
+   double FK = std::fabs(Kcorr);
+   if (FK > 2047) FK = 2047.;
+   if (FK < 3)    FK = 3.;
+   FK = FK * LSB;
+   FK = .8569 * FK / (1.0 + 0.1144 * FK);
+   double pt = 0;
+   if (FK != 0) pt = 1 / FK;
+   if (pt < 4) pt = 4;
+   if (pt > 1000) pt = 1000;
+   return pt;
+}
 
-  //step 1 -material and B-field
-  FK = .8569 * FK / (1.0 + 0.1144 * FK);
-  if(nStubs == 2) Delta += 1.68e-4;
-  if(nStubs == 3) Delta -= 0.35e-4;
-  if(nStubs == 4) Delta -= 0.14e-4;
-
-  FK = FK - charge*Delta;
-
-  double pt = 0;
-  if (FK != 0)
-    pt = 1 / FK;
-
-  if (pt < 4)
-    pt = 4;
-
-  return pt;
+//Apply the function to the vector
+ROOT::VecOps::RVec<Float_t> ptLUTvec(ROOT::VecOps::RVec<Float_t> &K, ROOT::VecOps::RVec<Float_t> &phi, ROOT::VecOps::RVec<Float_t> &eta, ROOT::VecOps::RVec<Short_t> &nstub){
+   ROOT::VecOps::RVec<Float_t> out(K.size());
+   for (size_t i = 0; i < K.size(); ++i)
+      out[i] = (Float_t)ptLUT(K[i], phi[i], eta[i], (int)nstub[i]);
+   return out;
 }
 
 
