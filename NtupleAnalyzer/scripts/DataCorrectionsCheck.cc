@@ -199,7 +199,7 @@ int main(int argc, char** argv) {
       int    Kint  = static_cast<int>(K);
       double Kcorr = kcorr::correctK(K, phi, eta, nstub);
 
-      double Ks[NSTAGE]  = {double(Kint), double(Kint), Kcorr};
+      double Ks[NSTAGE]  = {double(Kint), Kint, Kcorr};
       double ptS[NSTAGE] = {kcorr::ptLUT_orig(Kint),
                             kcorr::Get_newpt(Kint),
                             kcorr::ptLUT_corr(Kcorr, true)};

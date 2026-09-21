@@ -63,6 +63,7 @@ df = df.Define("bxspread1", "GetBxSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_n
        .Define("firstbx1", "GetFirstBx(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
        .Define("firstbx2", "GetFirstBx(nL1KBMTFSkimmed, idx2, L1KBMTFSkimmed_nStub, L1KBMTFSkimmed_s1Bx, L1KBMTFSkimmed_s2Bx, L1KBMTFSkimmed_s3Bx, L1KBMTFSkimmed_s4Bx)") \
        .Define("pt1", "Get_newpt(L1KBMTFSkimmed_hwK[idx1])").Define("pt2", "Get_newpt(L1KBMTFSkimmed_hwK[idx2])") \
+       .Define("hwK1", "L1KBMTFSkimmed_hwK[idx1]").Define("hwK2", "L1KBMTFSkimmed_hwK[idx2]") \
        .Define("eta1","L1KBMTFSkimmed_eta[idx1]").Define("eta2","L1KBMTFSkimmed_eta[idx2]") \
        .Define("phi1","L1KBMTFSkimmed_phi[idx1]").Define("phi2","L1KBMTFSkimmed_phi[idx2]") \
        .Define("dxy1","L1KBMTFSkimmed_hwDXY[idx1]").Define("dxy2","L1KBMTFSkimmed_hwDXY[idx2]") \
@@ -86,7 +87,7 @@ df = df.Define("bxspread1", "GetBxSpread(nL1KBMTFSkimmed, idx1, L1KBMTFSkimmed_n
        #.Define("met_bxm9_1","L1KBMTFSkimmed_met_bxm9[idx1]").Define("met_bxm9_2","L1KBMTFSkimmed_met_bxm9[idx2]")
 
 #df = df.Filter("(bxspread1>0 || pt1>500) || (bxspread2>0 || pt2>500)")
-#df = df.Filter("(bxspread1>0 || bxspread2>0)")
+df = df.Filter("(bxspread1>0 || bxspread2>0)")
 
 df = df.Define("is_colliding", "IsColliding(run,firstbx1)")
 
@@ -98,7 +99,7 @@ for c in ("run", "luminosityBlock", "bunchCrossing", "orbitNumber", "is_collidin
         "idx1", "idx2", \
         "bxspread1", "bxspread2", "stationspread1", "stationspread2", "nstub1", "nstub2", "isL1MuMatched1", "isL1MuMatched2", \
         "firstbx1","firstbx2", "pt1", "pt2", "eta1", "eta2", "phi1", "phi2", "dxy1", "dxy2", "qual1", "qual2", "charge1", "charge2", \
-        "met_bx0","met_bxm1","met_bxm2","met_bxm3","met_bxm4","met_bxm5"):
+        "met_bx0","met_bxm1","met_bxm2","met_bxm3","met_bxm4","met_bxm5", "hwK1", "hwK2"):
         #"met_bx0_1","met_bxm1_1","met_bxm2_1","met_bxm3_1","met_bxm4_1","met_bxm5_1", \
         #"met_bx0_2","met_bxm1_2","met_bxm2_2","met_bxm3_2","met_bxm4_2","met_bxm5_2", \
         #"met_bx6_1","met_bxm7_1","met_bxm8_1","met_bxm9_1", \

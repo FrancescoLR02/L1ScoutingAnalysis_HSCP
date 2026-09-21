@@ -31,7 +31,9 @@
    Short_t         qual2;
    Short_t         charge1;
    Short_t         charge2;
-   Int_t         idx2;
+   Int_t           idx2;
+   Int_t           hwK1;
+   Int_t           hwK2;
    Float_t         met_bx0;
    Float_t         met_bxm1;
    Float_t         met_bxm2;

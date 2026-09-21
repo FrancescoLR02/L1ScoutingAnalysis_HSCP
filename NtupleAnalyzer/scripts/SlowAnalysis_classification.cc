@@ -86,6 +86,7 @@ int main(int argc, char** argv) {
     TH1D* h_nstub = new TH1D("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
     TH1D* h_ptbefore = new TH1D("h_ptbefore","h_ptbefore",49,20,1000); h_ptbefore->Sumw2();
     TH1D* h_ptafter = new TH1D("h_ptafter","h_ptafter",49,20,1000); h_ptafter->Sumw2();
+    TH1D* h_hwK1 = new TH1D("h_hwK1","h_hwK1",49,20,1000); h_hwK1->Sumw2();
 
    float bins_lowpt[] = {15,20,25, 30,40, 50};
    int  binnum_lowpt = sizeof(bins_lowpt)/sizeof(Float_t) - 1;

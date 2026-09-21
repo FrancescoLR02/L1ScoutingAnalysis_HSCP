@@ -52,14 +52,13 @@ unsigned int bunchCrossing;
    Float_t         recobeta2;
    Float_t         genpt1;
    Float_t         genpt2;
-   ScalarBranch dxy1;
-   ScalarBranch dxy2;
+
+  ScalarBranch nstub1, nstub2;
+  ScalarBranch eta1, eta2, phi1, phi2;
+  ScalarBranch hwK1, hwK2;
+  ScalarBranch dxy1, dxy2;
    // Float_t         dxy1;
    // Float_t         dxy2;
-   Double_t         hwK1;
-   Double_t         hwK2;
-   Double_t         HwK1;
-   Double_t         HwK2;
    Short_t         qual1;
    Short_t         qual2;
    Short_t         charge1;
@@ -105,10 +104,10 @@ unsigned int bunchCrossing;
    // Double_t         phi1;
    // Double_t         phi2;
 
-   Short_t         nstub1;
-   Short_t         nstub2;
-   Float_t         eta1;
-   Float_t         eta2;
-   Float_t         phi1;
-   Float_t         phi2;
+  //  Short_t         nstub1;
+  //  Short_t         nstub2;
+  //  Float_t         eta1;
+  //  Float_t         eta2;
+  //  Float_t         phi1;
+  //  Float_t         phi2;
 
