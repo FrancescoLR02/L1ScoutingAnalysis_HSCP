@@ -70,6 +70,7 @@ unsigned int bunchCrossing;
    Float_t         met_bxm3;
    Float_t         met_bxm4;
    Float_t         met_bxm5;
+   Float_t          genCharge1;
    Int_t           nL1MET;
    Float_t         L1MET_pt[1];   //[nL1MET]
    Bool_t          isL1MuMatched1;

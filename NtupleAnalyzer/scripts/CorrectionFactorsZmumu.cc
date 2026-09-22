@@ -27,9 +27,11 @@
 #include <algorithm>
 #include "TMath.h"
 #include "modzmumu_Tree.h"
+#include "SIM_KCorrection.h"
+#include "KCorrection.h"
 
 
-// g++ -O3 CorrectionFactorsZmumu.cc -o CorrectionFactorsZmumu.exe $(root-config --cflags --glibs)
+//! g++ -O3 CorrectionFactorsZmumu.cc -o CorrectionFactorsZmumu.exe $(root-config --cflags --glibs)
 
 using namespace std;
 
@@ -94,30 +96,26 @@ double ptLUT(double K) {
   return pt;
 }
 
+
+//! #########################################----FOR DATA----#########################################
 //Delta values in each sector
 const double DELTA_LUT[12] = {
-    -4.517551982392351,  15.357480990344975,  16.890352083459184,
-     4.568931798089349,  -8.445488610821378,  -3.2565913333840792,
-     6.753763570952405,  17.763404130940582,  14.926302197139007,
-     0.5210699539132264, -14.19312748508228,  -18.101331219109678
+    -4.121600895927393,  15.268176696901339,  16.787513577493744,
+     4.406041792725551,  -8.46837104099353,  -3.180584293957883,
+     6.320765159884926,  16.940575782840046,  14.18659262902967,
+     0.4998920018405677, -13.971459858714335,  -17.433843353574677
 };
 
 //Mow we apply eta dependent corrections! 
 //Delta values in each eta bin, measured on the phi-corrected K 
 const double DELTA_ETA_LUT[NETA] = {
-   -5.031174684878439, -1.7392444643104927, 0.9836903473143631,
-    2.591548000863815,  2.8348744112647695
+   -5.214493750819151, -1.7104149649665852, 0.8090226883473493,
+    2.7723186296461275,  3.649231297455045
 };
-
-double deltaKEta(double eta){ return DELTA_ETA_LUT[etaBin(eta)]; }
-
-
-int deltaBin(double phi){ return phiBin(phi, 12); }
-double deltaK(double phi){ return DELTA_LUT[deltaBin(phi)]; }
 
 
 //Delta values vs number of stubs, measured on the phi+eta corrected K
-const double DELTA_NSTUB_LUT[3] = { 0.970, -0.471, 0.084 };  
+const double DELTA_NSTUB_LUT[3] = { -0.527, 0.287, -0.342 };  
 
 double deltaKNStub(int nstub){
    int k = nstub - 2;
@@ -125,12 +123,50 @@ double deltaKNStub(int nstub){
    return DELTA_NSTUB_LUT[k];
 }
 
+//! #########################################----FOR MC----#########################################
+const double SIM_DELTA_LUT[12] = {
+    -0.6656115789503491,  -0.6024211748377769,  -0.38664883470196904,
+     0.02802301613413231,  -0.21031079826257004,  1.3810076416207244,
+     0.926119139428978,  0.684088435972341,  0.3154056354069209,
+     0.6381518398346407, 0.9539349815733138,  -0.6950778163658007
+};
+
+
+const double SIM_DELTA_ETA_LUT[NETA] = {
+   -1.5380498657976593, -0.08751784172181956, -0.08327343890645025,
+    0.9894452604402946,  0.8721101070058656
+};
+
+const double SIM_DELTA_NSTUB_LUT[3] = { -0.438, 0.329, -0.109 };  
+
+
+
+//! #########################################----Helper finctions----#########################################
+
+
+double deltaKEta(double eta, std::string name){ 
+   
+   if(name == "SIM") return SIM_DELTA_ETA_LUT[etaBin(eta)]; 
+   else return DELTA_ETA_LUT[etaBin(eta)]; 
+
+}
+
+
+int deltaBin(double phi){ return phiBin(phi, 12); }
+
+double deltaK(double phi, std::string name){
+   if(name == "SIM") return SIM_DELTA_LUT[deltaBin(phi)]; 
+   else return DELTA_LUT[deltaBin(phi)]; 
+}
+
+
 
 
 int main(int argc, char** argv) {
 
    std::string input = *(argv + 1);
    std::string output = *(argv + 2);
+   std::string name = *(argv + 3);
 
    TFile *f_Double = new TFile(input.c_str());
    cout<<"XXXXXXXXXXXXX "<<input.c_str()<<" XXXXXXXXXXXX"<<endl;
@@ -166,8 +202,8 @@ int main(int argc, char** argv) {
    arbre1->SetBranchAddress("stub2Bx2", &stub2Bx2);
    arbre1->SetBranchAddress("stub3Bx2", &stub3Bx2);
    arbre1->SetBranchAddress("stub4Bx2", &stub4Bx2);
-   arbre1->SetBranchAddress("hwK1", &hwK1);
-   arbre1->SetBranchAddress("hwK2", &hwK2);
+   //arbre1->SetBranchAddress("hwK1", &hwK1);
+   //arbre1->SetBranchAddress("hwK2", &hwK2);
    arbre1->SetBranchAddress("beta1", &beta1);
    arbre1->SetBranchAddress("stub1Station1", &stub1Station1);
    arbre1->SetBranchAddress("stub2Station1", &stub2Station1);
@@ -187,6 +223,8 @@ int main(int argc, char** argv) {
    charge2.connect(arbre1, "charge2");
    qual2.connect(arbre1, "qual2");
    dxy2.connect(arbre1, "dxy2");
+   hwK1.connect(arbre1, "hwK1");
+   hwK2.connect(arbre1, "hwK2");
    
 
    const int    NK    = 2400;
@@ -196,9 +234,6 @@ int main(int argc, char** argv) {
    TH1F* h_mmumu_OS=new TH1F("h_mmumu_OS", "h_mmumu_OS", 50,50,160); h_mmumu_OS->Sumw2();
    TH1F* h_mmumu_SS=new TH1F("h_mmumu_SS", "h_mmumu_SS", 50,50,160); h_mmumu_SS->Sumw2();
    TH1F* h_mmumu_OS_corr = new TH1F("h_mmumu_OS_corr","h_mmumu_OS_corr", 50,50,160); h_mmumu_OS_corr->Sumw2();
-
-   TH1F* h_pt_OS=new TH1F("h_pt_OS", "h_pt_OS", 13,0,260); h_pt_OS->Sumw2();
-   TH1F* h_pt_SS=new TH1F("h_pt_SS", "h_pt_SS", 13,0,260); h_pt_SS->Sumw2();
 
 
    TH1F* h_K  = new TH1F("h_K", "hw curvature K", 1000, KMIN, KMAX); h_K->Sumw2();
@@ -239,7 +274,14 @@ int main(int argc, char** argv) {
    // the LUT itself, for bookkeeping
    TH1F* h_deltaLUT = new TH1F("h_deltaLUT", "Delta(phi) LUT;phi bin;#Delta [LSB]", 12, -0.5, 11.5);
    h_deltaLUT->SetDirectory(nullptr);
-   for (int k = 0; k < 12; ++k) h_deltaLUT->SetBinContent(k+1, DELTA_LUT[k]);
+
+   if (name == "SIM"){
+      for (int k = 0; k < 12; ++k) h_deltaLUT->SetBinContent(k+1, SIM_DELTA_LUT[k]);   
+   }
+   else{
+      for (int k = 0; k < 12; ++k) h_deltaLUT->SetBinContent(k+1, DELTA_LUT[k]);
+   }
+   
 
 
    //! Phi-Eta dependent, after the phi LUT and then the eta LUT
@@ -254,7 +296,14 @@ int main(int argc, char** argv) {
    } 
 
    TH1F* h_deltaEtaLUT = new TH1F("h_deltaEtaLUT", "Delta(eta) LUT after phi correction;eta bin;#Delta [LSB]", NETA, -0.5, NETA-0.5);
-   for (int j = 0; j < NETA; ++j) h_deltaEtaLUT->SetBinContent(j+1, DELTA_ETA_LUT[j]);
+   
+   if(name == "SIM"){
+      for (int j = 0; j < NETA; ++j) h_deltaEtaLUT->SetBinContent(j+1, SIM_DELTA_ETA_LUT[j]);
+   }
+   else{
+      for (int j = 0; j < NETA; ++j) h_deltaEtaLUT->SetBinContent(j+1, DELTA_ETA_LUT[j]);
+   }
+   
 
 
    //! Phi-Eta dependent, after the phi, eta and nStub LUTs
@@ -278,7 +327,14 @@ int main(int argc, char** argv) {
    }
 
    TH1F* h_deltaNStubLUT = new TH1F("h_deltaNStubLUT", "Delta(nStub) LUT after phi+eta correction;nStub;#Delta [LSB]", 3, 1.5, 4.5);
-   for (int k = 0; k < 3; ++k) h_deltaNStubLUT->SetBinContent(k+1, DELTA_NSTUB_LUT[k]);
+
+   if(name == "SIM"){
+      for (int k = 0; k < 3; ++k) h_deltaNStubLUT->SetBinContent(k+1, SIM_DELTA_NSTUB_LUT[k]);
+   }
+   else{
+      for (int k = 0; k < 3; ++k) h_deltaNStubLUT->SetBinContent(k+1, DELTA_NSTUB_LUT[k]);
+   }
+   
 
 
    //! Phi dependent
@@ -340,13 +396,23 @@ int main(int argc, char** argv) {
       if (i % 100000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
       fflush(stdout);
 
-      
+      double kcorr1 = 0;
+      double kcorr2 = 0;
 
       TLorentzVector my_mu1; my_mu1.SetPtEtaPhiM(pt1,eta1,phi1,0.105);
       TLorentzVector my_mu2; my_mu2.SetPtEtaPhiM(pt2,eta2,phi2,0.105);
 
-      TLorentzVector my_mu1_corr; my_mu1_corr.SetPtEtaPhiM(Get_pTfromK(hwK1), eta1,phi1,0.105);
-      TLorentzVector my_mu2_corr; my_mu2_corr.SetPtEtaPhiM(Get_pTfromK(hwK2), eta2,phi2,0.105);
+      if(name == "SIM"){
+         kcorr1 = sim_kcorr::correctK(hwK1, phi1, eta1, nstub1);
+         kcorr2 = sim_kcorr::correctK(hwK2, phi2, eta2, nstub2);
+      }
+      else{
+         kcorr1 = kcorr::correctK(hwK1, phi1, eta1, nstub1);
+         kcorr2 = kcorr::correctK(hwK2, phi2, eta2, nstub2);
+      }
+
+      TLorentzVector my_mu1_corr; my_mu1_corr.SetPtEtaPhiM(kcorr::ptLUT_corr(kcorr1), eta1,phi1,0.105);
+      TLorentzVector my_mu2_corr; my_mu2_corr.SetPtEtaPhiM(kcorr::ptLUT_corr(kcorr2), eta2,phi2,0.105);
 
 
       if (dxy1>=1 or dxy2>=1) continue;
@@ -376,8 +442,8 @@ int main(int argc, char** argv) {
 
       
       //Compute the corrected hwK with the LUT values defined before      
-      double hwK1_lut = hwK1 - deltaK(phi1);
-      double hwK2_lut = hwK2 - deltaK(phi2);
+      double hwK1_lut = hwK1 - deltaK(phi1, name);
+      double hwK2_lut = hwK2 - deltaK(phi2, name);
       
       if (charge1 > 0) h_K_plus_phieta_corr [i1f][j1]->Fill(fabs(hwK1_lut));
       else h_K_minus_phieta_corr[i1f][j1]->Fill(fabs(hwK1_lut));
@@ -386,8 +452,8 @@ int main(int argc, char** argv) {
 
 
       //Compute the corrected hwK with the LUT values for ETA defined before
-      double hwK1_lut2 = hwK1_lut - deltaKEta(eta1);
-      double hwK2_lut2 = hwK2_lut - deltaKEta(eta2);
+      double hwK1_lut2 = hwK1_lut - deltaKEta(eta1, name);
+      double hwK2_lut2 = hwK2_lut - deltaKEta(eta2, name);
 
       if (charge1 > 0) h_K_plus_phieta_corr2 [i1f][j1]->Fill(fabs(hwK1_lut2));
       else             h_K_minus_phieta_corr2[i1f][j1]->Fill(fabs(hwK1_lut2));

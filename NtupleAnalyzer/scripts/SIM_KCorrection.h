@@ -1,7 +1,7 @@
 //! Apply a LUT for the corrections on the curvature hwK
 
-#ifndef KCORRECTION_H
-#define KCORRECTION_H
+#ifndef SIM_KCORRECTION_H
+#define SIM_KCORRECTION_H
 
 
 
@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "TMath.h"
 
-namespace kcorr {
+namespace sim_kcorr {
 
 const int    NSEC   = 12;
 const int    NETA   = 5;
@@ -29,25 +29,26 @@ inline int etaBin(double eta){
    return std::min(std::max(b, 0), NETA-1);
 }
 
-const double DELTA_PHI[12] = {
-    -4.121600895927393,  15.268176696901339,  16.787513577493744,
-     4.406041792725551,  -8.46837104099353,  -3.180584293957883,
-     6.320765159884926,  16.940575782840046,  14.18659262902967,
-     0.4998920018405677, -13.971459858714335,  -17.433843353574677
-};
-
-const double DELTA_ETA[NETA] = {
-   -5.214493750819151, -1.7104149649665852, 0.8090226883473493,
-    2.7723186296461275,  3.649231297455045
+//! #########################################----FOR MC----#########################################
+const double SIM_DELTA_PHI[12] = {
+    -0.6656115789503491,  -0.6024211748377769,  -0.38664883470196904,
+     0.02802301613413231,  -0.21031079826257004,  1.3810076416207244,
+     0.926119139428978,  0.684088435972341,  0.3154056354069209,
+     0.6381518398346407, 0.9539349815733138,  -0.6950778163658007
 };
 
 
-const double DELTA_NSTUB[3] = { -0.527, 0.287, -0.342 };  
+const double SIM_DELTA_ETA[NETA] = {
+   -1.5380498657976593, -0.08751784172181956, -0.08327343890645025,
+    0.9894452604402946,  0.8721101070058656
+};
+
+const double SIM_DELTA_NSTUB[3] = { -0.438, 0.329, -0.109 };  
 
 
 inline double deltaNStub(int nstub){
    int k = nstub - 2;
-   return (k >= 0 && k < 3) ? DELTA_NSTUB[k] : 0.;
+   return (k >= 0 && k < 3) ? SIM_DELTA_NSTUB[k] : 0.;
 }
 
 enum Level { kNone = 0, kPhi = 1, kPhiEta = 2, kFull = 3 };
@@ -55,8 +56,8 @@ enum Level { kNone = 0, kPhi = 1, kPhiEta = 2, kFull = 3 };
 // signed hwK in, signed corrected hwK out
 inline double correctK(double K, double phi, double eta, int nstub, int level = kFull){
    double k = K;
-   if (level >= kPhi)    k -= DELTA_PHI[sectorBin(phi)];
-   if (level >= kPhiEta) k -= DELTA_ETA[etaBin(eta)];
+   if (level >= kPhi)    k -= SIM_DELTA_PHI[sectorBin(phi)];
+   if (level >= kPhiEta) k -= SIM_DELTA_ETA[etaBin(eta)];
    if (level >= kFull)   k -= deltaNStub(nstub);
    return k;
 }

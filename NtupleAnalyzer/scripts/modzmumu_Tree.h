@@ -99,8 +99,10 @@ class ScalarBranch {
    short stub2Bx2;
    short stub3Bx2;
    short stub4Bx2;
-   Float_t hwK1;
-   Float_t hwK2;
+   // Float_t hwK1;
+   // Float_t hwK2;
+   ScalarBranch hwK1;
+   ScalarBranch hwK2;
    Float_t beta1;
    Float_t recobeta1;
    Float_t beta2;
