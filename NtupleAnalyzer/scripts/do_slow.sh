@@ -41,6 +41,19 @@
 # python3 FinalSelection_SlowNoFilter.py /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skim_SimEmulator/HSCP_tauPrime_6000.root root://eosuser.cern.ch//eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_6000.root
 
 
+#hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_1000.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_1000/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_1500.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_1500/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_2000.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_2000/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_2500.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_2500/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_3000.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_3000/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_3500.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_3500/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_4000.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_4000/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_4500.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_4500/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_5000.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_5000/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_5500.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_5500/*.root
+# hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_6000.root /eos/user/f/flarover/DATA/AnalysisHSCP/reKBMTF/SlowHSCP_Sim/Skimming/HSCP_tauPrime_6000/*.root
+
+
 # #! Classify the simulated events
 
 # ./Make.sh SlowAnalysis_classification.cc

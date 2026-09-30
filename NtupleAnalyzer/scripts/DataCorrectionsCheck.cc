@@ -13,18 +13,19 @@ using namespace std;
 //!  g++ -O3 DataCorrectionsCheck.cc -o DataCorrectionsCheck.exe $(root-config --cflags --glibs)
 //!  ./DataCorrectionsCheck.exe input.root output.root <sample_name> [all|even|odd]
 
-const double PT_MIN = 15.;   // same pT cut used to derive the LUTs
+const double PT_MIN = 20.;   // same pT cut used to derive the LUTs
 const double KCUT = 700;
 
 bool passSelection(int qual, int nstub, double dxy, double ptreco){
    if (nstub <= 2)              return false;
-   //if (ptreco < PT_MIN)         return false;
+   if (ptreco < PT_MIN)         return false;
    if (dxy >= 1)                return false;
    if (qual < 12)               return false;
    if (nstub == 4 && qual < 14) return false;
    if (nstub == 3 && qual < 13) return false;
    return true;
 }
+
 
 const int    NTHR = 5;
 const double PT_THR[NTHR] = {5., 20., 22., 50., 100.};
@@ -156,6 +157,17 @@ int main(int argc, char** argv) {
       for (int k = 0; k < NTHR; ++k) h_npass[s]->GetXaxis()->SetBinLabel(k+1, Form("p_{T} > %.0f", PT_THR[k]));
    }
 
+   const int    NDXYBIN = 80;
+   const double DXYMAX  = 4.;
+   TH1D* h_dxymap[2][kcorr::NSEC][kcorr::NETA];
+   TH1D* h_dxysec[2][kcorr::NSEC];
+   for (int q = 0; q < 2; ++q)
+      for (int i = 0; i < kcorr::NSEC; ++i) {
+         h_dxysec[q][i] = new TH1D(Form("h_dxy_%s_phi%d", QN[q], i), "d_{xy}", NDXYBIN, 0, DXYMAX);
+         for (int j = 0; j < kcorr::NETA; ++j)
+            h_dxymap[q][i][j] = new TH1D(Form("h_dxy_%s_phi%d_eta%d", QN[q], i, j), "d_{xy}", NDXYBIN, 0, DXYMAX);
+      }
+
    TH1D* h_flip = new TH1D("h_flip_pt", "charge sign changed by the correction;L1 p_{T} (orig) [GeV]", 150, 0, 1050);
    TH1D* h_charge = new TH1D("h_charge", "h_charge", 3, -1, 2);
 
@@ -190,6 +202,15 @@ int main(int argc, char** argv) {
       int    bxspread      = int(b_bxspread);
       int    stationspread = int(b_stationspread);
 
+      // dxy maps: same selection without the dxy cut, so the tail is kept
+      if (passSelection(qual, nstub, 0., ptreco)) {
+         int qd = (charge > 0) ? 0 : 1;
+         int sd = kcorr::sectorBin(phi);
+         int ed = kcorr::etaBin(eta);
+         h_dxymap[qd][sd][ed]->Fill(dxy);
+         h_dxysec[qd][sd]->Fill(dxy);
+      }
+
       if (!passSelection(qual, nstub, dxy, ptreco)) continue;
       ++nTrk;
       if ((K >= 0) == (charge > 0)) ++nSignOK;
@@ -199,7 +220,7 @@ int main(int argc, char** argv) {
       int    Kint  = static_cast<int>(K);
       double Kcorr = kcorr::correctK(K, phi, eta, nstub);
 
-      double Ks[NSTAGE]  = {double(Kint), Kint, Kcorr};
+      double Ks[NSTAGE]  = {int(Kint), kcorr::applyOriginalCorrections(K), Kcorr};
       double ptS[NSTAGE] = {kcorr::ptLUT_orig(Kint),
                             kcorr::Get_newpt(Kint),
                             kcorr::ptLUT_corr(Kcorr, true)};
@@ -295,6 +316,13 @@ int main(int argc, char** argv) {
       top->mkdir(MOD_DIR[m])->cd();
       for (int c = 0; c < NCAT; ++c) h_cat[m][c]->Write();
    }
+
+   top->mkdir("dxy")->cd();
+   for (int q = 0; q < 2; ++q)
+      for (int i = 0; i < kcorr::NSEC; ++i) {
+         h_dxysec[q][i]->Write();
+         for (int j = 0; j < kcorr::NETA; ++j) h_dxymap[q][i][j]->Write();
+      }
 
    fout->Close();
    return 0;

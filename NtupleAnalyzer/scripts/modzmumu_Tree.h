@@ -8,8 +8,9 @@
 #include "TString.h"
 
 // Some branches do not have the same scalar type in every ntuple version:
-// dxy1/dxy2 are Int_t in the 2024 skims, Double_t in simulation and Float_t in data
-// (same story for charge and qual, which are Int_t in the 2024 skims and Short_t now).
+// dxy is Int_t in the 2024 skims, Double_t in simulation and Float_t in data;
+// charge/qual/nstub are Int_t in the 2024 skims and Short_t now;
+// pt/eta/phi are Double_t in the DY skims and Float_t in the data skims.
 // Binding them with a fixed type reads garbage, so they go through this small wrapper
 // which looks up the type on file and converts to double.
 class ScalarBranch {
@@ -67,22 +68,22 @@ class ScalarBranch {
       } buffer;
 };
 
-   unsigned int          run;
-   unsigned int          luminosityBlock;
-   unsigned int          bunchCrossing;
-   unsigned int          orbitNumber;
-   Double_t        mmumu;
+   unsigned int    run;
+   unsigned int    luminosityBlock;
+   unsigned int    bunchCrossing;
+   unsigned int    orbitNumber;
+   ScalarBranch    mmumu;
    Bool_t          isOS;
    Double_t        DRmumu;
    Double_t        xsweight;
    Float_t         met;
-   int           bxspread1;
-   int           bxspread2;
+   int             bxspread1;
+   int             bxspread2;
    Bool_t          isL1MuMatched1;
    Bool_t          isL1MuMatched2;
-   Int_t           nstub1;
-   Int_t           nstub2;
-   Double_t          new_pT1;
+   ScalarBranch    nstub1;
+   ScalarBranch    nstub2;
+   Double_t        new_pT1;
    short stub1Station1;
    short stub2Station1;
    short stub3Station1;
@@ -99,24 +100,22 @@ class ScalarBranch {
    short stub2Bx2;
    short stub3Bx2;
    short stub4Bx2;
-   // Float_t hwK1;
-   // Float_t hwK2;
-   ScalarBranch hwK1;
-   ScalarBranch hwK2;
-   Float_t beta1;
-   Float_t recobeta1;
-   Float_t beta2;
-   Float_t        genpt1;
-   Float_t        genpt2;
-   Double_t        pt1;
-   Double_t        eta1;
-   Double_t        phi1;
+   ScalarBranch    hwK1;
+   ScalarBranch    hwK2;
+   Float_t         beta1;
+   Float_t         recobeta1;
+   Float_t         beta2;
+   ScalarBranch    genpt1;
+   ScalarBranch    genpt2;
+   ScalarBranch    pt1;
+   ScalarBranch    eta1;
+   ScalarBranch    phi1;
    ScalarBranch    charge1;
    ScalarBranch    qual1;
    ScalarBranch    dxy1;
-   Double_t        pt2;
-   Double_t        eta2;
-   Double_t        phi2;
+   ScalarBranch    pt2;
+   ScalarBranch    eta2;
+   ScalarBranch    phi2;
    ScalarBranch    charge2;
    ScalarBranch    qual2;
    ScalarBranch    dxy2;

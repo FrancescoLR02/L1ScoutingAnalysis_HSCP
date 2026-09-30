@@ -1,9 +1,0 @@
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_0.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_0/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_1.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_1/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_2.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_2/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_3.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_3/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_4.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_4/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_5.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_5/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_6.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_6/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_7.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_7/*.root
-hadd -j 8 /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/HaddSkim/398290_368_8.root /eos/user/f/flarover/DATA/AnalysisHSCP/modKBMTF/SkimData/398290_368_8/*.root

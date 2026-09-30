@@ -1,3 +1,5 @@
+//From this script the correction factors can be retrieved for DY and data. 
+
 #include <TH2.h>
 #include <TH2F.h>
 #include <TStyle.h>
@@ -125,19 +127,19 @@ double deltaKNStub(int nstub){
 
 //! #########################################----FOR MC----#########################################
 const double SIM_DELTA_LUT[12] = {
-    -0.6656115789503491,  -0.6024211748377769,  -0.38664883470196904,
-     0.02802301613413231,  -0.21031079826257004,  1.3810076416207244,
-     0.926119139428978,  0.684088435972341,  0.3154056354069209,
-     0.6381518398346407, 0.9539349815733138,  -0.6950778163658007
+    -0.5808543299800815,  -0.4482559634934374,  -0.39470292489693337,
+    -0.32173030915407824, -0.29121521935873984,  0.9848557834538392,
+     0.5273392636005425,   0.6048884361602552,  -0.07746586458272894,
+     0.822882273931358,    0.7732244600819353,  -0.805566929640018
 };
 
 
 const double SIM_DELTA_ETA_LUT[NETA] = {
-   -1.5380498657976593, -0.08751784172181956, -0.08327343890645025,
-    0.9894452604402946,  0.8721101070058656
+   -1.0229336713155375, -0.4689045276261802, -0.08774475563269833,
+    0.7737097341785608,   0.889865916802925
 };
 
-const double SIM_DELTA_NSTUB_LUT[3] = { -0.438, 0.329, -0.109 };  
+const double SIM_DELTA_NSTUB_LUT[3] = { -0.438, 0.434, -0.214 };  
 
 
 
@@ -178,22 +180,15 @@ int main(int argc, char** argv) {
    arbre1->SetBranchAddress("bunchCrossing", &bunchCrossing);
    arbre1->SetBranchAddress("orbitNumber", &orbitNumber);*/
 
-   arbre1->SetBranchAddress("mmumu", &mmumu);
-   arbre1->SetBranchAddress("DRmumu", &DRmumu);
-   arbre1->SetBranchAddress("xsweight", &xsweight);
-   arbre1->SetBranchAddress("met", &met);
-   arbre1->SetBranchAddress("bxspread1", &bxspread1);
-   arbre1->SetBranchAddress("bxspread2", &bxspread2);
-   arbre1->SetBranchAddress("isL1MuMatched1", &isL1MuMatched1);
-   arbre1->SetBranchAddress("isL1MuMatched2", &isL1MuMatched2);
-   arbre1->SetBranchAddress("nstub1", &nstub1);
-   arbre1->SetBranchAddress("nstub2", &nstub2);
-   arbre1->SetBranchAddress("pt1", &pt1);
-   arbre1->SetBranchAddress("eta1", &eta1);
-   arbre1->SetBranchAddress("phi1", &phi1);
-   arbre1->SetBranchAddress("pt2", &pt2);
-   arbre1->SetBranchAddress("eta2", &eta2);
-   arbre1->SetBranchAddress("phi2", &phi2);
+   mmumu.connect(arbre1, "mmumu");
+   nstub1.connect(arbre1, "nstub1");
+   nstub2.connect(arbre1, "nstub2");
+   pt1.connect(arbre1, "pt1");
+   eta1.connect(arbre1, "eta1");
+   phi1.connect(arbre1, "phi1");
+   pt2.connect(arbre1, "pt2");
+   eta2.connect(arbre1, "eta2");
+   phi2.connect(arbre1, "phi2");
    arbre1->SetBranchAddress("stub1Bx1", &stub1Bx1);
    arbre1->SetBranchAddress("stub2Bx1", &stub2Bx1);
    arbre1->SetBranchAddress("stub3Bx1", &stub3Bx1);

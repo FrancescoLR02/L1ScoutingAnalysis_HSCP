@@ -89,6 +89,20 @@ inline double ptLUT_orig(double K){
    return pt;
 }
 
+inline double applyOriginalCorrections(double K){
+   int charge = chargeFromK(K);
+   double FK = std::fabs(K);
+   //if (FK > 2047) FK = 2047.;
+   //if (FK < 9)    FK = 9.;
+   FK = FK * LSB;
+   //FK = .8569 * FK / (1.0 + 0.1144 * FK);
+   FK = FK - charge * 1.23e-03;
+   //FK = FK / 1.17;
+
+   double Knew = FK*charge/LSB;
+   return Knew;
+}
+
 
 float Get_newpt(int oldK){
   float K = oldK-9;

@@ -66,8 +66,6 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("firstbx2", &firstbx2);
     arbre->SetBranchAddress("charge1", &charge1);
     arbre->SetBranchAddress("charge2", &charge2);
-    arbre->SetBranchAddress("dxy1", &dxy1);
-    arbre->SetBranchAddress("dxy2", &dxy2);
     arbre->SetBranchAddress("qual1", &qual1);
     arbre->SetBranchAddress("qual2", &qual2);
     arbre->SetBranchAddress("pt1", &pt1);
@@ -75,9 +73,10 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("eta1", &eta1);
     arbre->SetBranchAddress("eta2", &eta2);
     arbre->SetBranchAddress("phi1", &phi1);
-    arbre->SetBranchAddress("processor1", &processor1);
     arbre->SetBranchAddress("phi2", &phi2);
     arbre->SetBranchAddress("HwK1", &HwK1);
+    dxy1.connect(arbre, "dxy1");
+   dxy2.connect(arbre, "dxy2");
     if(name != "data_obs") arbre->SetBranchAddress("L1MET_pt", &L1MET_pt);
 
 
@@ -341,53 +340,6 @@ int main(int argc, char** argv) {
    TH1F* h_nstub = new TH1F("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
 
 
-   const double PHI_SHIFT = 0.0;      
-   const int    NK    = 4800;
-   const double KMIN  = -600.0, KMAX = 600.0;  
-
-   TH1F* h_pt = new TH1F("h_pt","h_pt",400,12.5,1300); h_pt->Sumw2();
-   TH1F* h_charge = new TH1F("h_charge","h_charge", 3, -1.5, 1.5); h_charge->Sumw2();
-   TH1F* h_dxy_prompt= new TH1F("h_dxy_prompt","d_{xy}, prompt",400,0,4); h_dxy_prompt->Sumw2();
-   TH2F* h2_K_processor_plus_stub3  = new TH2F("h2_K_processor_plus_stub3", "K vs #phi, q>0, 3 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_plus_stub3->Sumw2();
-   TH2F* h2_K_processor_minus_stub3 = new TH2F("h2_K_processor_minus_stub3","K vs #phi, q<0, 3 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_minus_stub3->Sumw2();
-   TH2F* h2_K_processor_plus_stub4  = new TH2F("h2_K_processor_plus_stub4", "K vs #phi, q>0, 4 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_plus_stub4->Sumw2();
-   TH2F* h2_K_processor_minus_stub4 = new TH2F("h2_K_processor_minus_stub4","K vs #phi, q<0, 4 stubs", 12, 0, 12, NK, KMIN, KMAX); h2_K_processor_minus_stub4->Sumw2();
-
-   TH2F* h2_K_eta_plus  = new TH2F("h2_K_eta_plus", "K vs #eta, q>0", 30,-1.0,1.0, NK, KMIN, KMAX); h2_K_eta_plus->Sumw2(); 
-   TH2F* h2_K_eta_minus = new TH2F("h2_K_eta_minus","K vs #eta, q<0", 30,-1.0,1.0, NK, KMIN, KMAX); h2_K_eta_minus->Sumw2();
-
-   TH1F* h_K = new TH1F("h_K","hw curvature K", NK, KMIN, KMAX); h_K->Sumw2();
-   TProfile* p_K_vs_phi   = new TProfile("p_K_vs_phi",  "", 12, -3.1415, 3.1415);
-   TProfile* p_K_vs_eta   = new TProfile("p_K_vs_eta",  "", 20, -1.0, 1.0);
-   TProfile* p_K_vs_nstub = new TProfile("p_K_vs_nstub","",  3, 2, 5);
-   TProfile* p_K_vs_dxy   = new TProfile("p_K_vs_dxy",  "", 40, 0, 4);
-
-   TH1F* h_sector_plus  = new TH1F("h_sector_plus", "sector, q>0", 12, 0, 12); h_sector_plus->Sumw2();
-   TH1F* h_sector_minus = new TH1F("h_sector_minus","sector, q<0", 12, 0, 12); h_sector_minus->Sumw2();
-
-   TProfile* p_dxy_vs_phi       = new TProfile("p_dxy_vs_phi",      "", 24, -3.14159, 3.14159);
-   TProfile* p_dxy_vs_phi_plus  = new TProfile("p_dxy_vs_phi_plus", "", 24, -3.14159, 3.14159);
-   TProfile* p_dxy_vs_phi_minus = new TProfile("p_dxy_vs_phi_minus","", 24, -3.14159, 3.14159);
-   TProfile* p_dxy_vs_eta       = new TProfile("p_dxy_vs_eta",      "", 20, -1.0, 1.0);
-
-   TH2F* h2_dxy_vs_phi = new TH2F("h2_dxy_vs_phi","d_{xy} vs #phi", 24,-3.14159,3.14159, 400,0,4); h2_dxy_vs_phi->Sumw2();
-
-   TH2F* h2_K_phi_plus_tightdxy  = new TH2F("h2_K_phi_plus_tightdxy", "", 12,-3.14159,3.14159, NK,KMIN,KMAX); h2_K_phi_plus_tightdxy->Sumw2(); 
-   TH2F* h2_K_phi_minus_tightdxy = new TH2F("h2_K_phi_minus_tightdxy","", 12,-3.14159,3.14159, NK,KMIN,KMAX); h2_K_phi_minus_tightdxy->Sumw2();
-
-
-   TH1F* h_dK_hw = new TH1F("h_dK_hw","K_{reco} - K_{gen} [LSB]", 1025, -128.125, 128.125); h_dK_hw->Sumw2();
-   TProfile* p_dK_hw_vs_eta   = new TProfile("p_dK_hw_vs_eta",  "", 20, -1.0, 1.0);
-   TProfile* p_dK_hw_vs_phi   = new TProfile("p_dK_hw_vs_phi",  "", 12, -3.14159, 3.14159);
-   TProfile* p_dK_hw_vs_beta  = new TProfile("p_dK_hw_vs_beta", "", 20, 0, 1);
-   TProfile* p_dK_hw_vs_Kgen  = new TProfile("p_dK_hw_vs_Kgen", "", 40, -400, 400); 
-   TProfile* p_dK_hw_vs_dxy   = new TProfile("p_dK_hw_vs_dxy",  "", 40, 0, 4);
-   TH2F* h2_K_hw_reco_gen = new TH2F("h2_K_hw_reco_gen","K_{reco} vs K_{gen} [LSB]", 200,-400,400, 200,-400,400); h2_K_hw_reco_gen->Sumw2();
-
-   TProfile* p_dK_hw_vs_phi_plus  = new TProfile("p_dK_hw_vs_phi_plus", "", 12, -3.14159, 3.14159);
-   TProfile* p_dK_hw_vs_phi_minus = new TProfile("p_dK_hw_vs_phi_minus","", 12, -3.14159, 3.14159);
-
-
    //float lumiweight= (37770.0/15.046) + (5440.0/15.060) + (11470.0/15.048);//recorded
    //    float lumiweight= (40400.0/15.0) + (5820.0/15.0) + (12320.0/15.0); //delivered
    float lumiweight=5380.0;
@@ -440,7 +392,6 @@ int main(int argc, char** argv) {
       h_nstub->Fill(nstub1);
       if (pt2>15) h_nstub->Fill(nstub2);
       h_dxy->Fill(dxy1);
-      h_pt->Fill(pt1);
       double K = charge1/pt1;
 
       bool pass_quality_1=true;
@@ -499,71 +450,13 @@ int main(int argc, char** argv) {
          if (nstub1==3 and pt1>50 and is_slow and bxspread1==1000){is_tagged=true; }//bx112 slow
          if (nstub1==3 and pt1>50 and !is_slow and bxspread1==1000){  is_tagged=true; }//bx112 fast
 
-         if (is_tagged){
-            if (nstub1 == 3) h_dxy3stubs->Fill(dxy1);
-            if (nstub1 == 4) h_dxy4stubs->Fill(dxy1);
-            h_dxy_prompt->Fill(dxy1, w1);
-         }
+         // if (is_tagged){
+         //    if (nstub1 == 3) h_dxy3stubs->Fill(dxy1);
+         //    if (nstub1 == 4) h_dxy4stubs->Fill(dxy1);
+         // }
 
          //if (!is_tagged) cout<<"nstub pt bxspread "<<nstub1<<" "<<pt1<<" "<<bxspread1<<endl;
       }
-
-
-      
-if (pass_quality_1) {
-
-   h_K->Fill(HwK1, w1);
-   p_K_vs_nstub->Fill(nstub1, HwK1, w1);
-   p_K_vs_dxy->Fill(dxy1, HwK1, w1);
-
-   // ---- alignment sample: prompt, in-time, >=3 stubs ---------------------
-   // No pt cut. The quantile ladder needs the whole spectrum; cutting on pt
-   // cuts on |K|, which truncates the two charges at different true momenta
-   // (they are offset by 2*Delta) and biases the estimator.
-   bool is_prompt = (bxspread1 == 0) && (name == "data_obs" ? is_colliding : true);
-
-   if (is_prompt && nstub1 >= 3) {
-
-      const bool pos = (charge1 > 0);
-
-      h_charge->Fill(charge1, w1);
-      p_K_vs_phi->Fill(phi1, HwK1, w1);
-      p_K_vs_eta->Fill(eta1, HwK1, w1);
-
-      int isec = (int)((phi1 + 3.14159) / (3.14159/6.0));
-      if (isec < 0) isec = 0;  if (isec > 11) isec = 11;
-      (pos ? h_sector_plus : h_sector_minus)->Fill(isec, w1);
-
-      if (nstub1 == 3) (pos ? h2_K_processor_plus_stub3 : h2_K_processor_minus_stub3)->Fill(processor1, HwK1, w1);
-      if (nstub1 == 4) (pos ? h2_K_processor_plus_stub4 : h2_K_processor_minus_stub4)->Fill(processor1, HwK1, w1);
-
-      (pos ? h2_K_eta_plus : h2_K_eta_minus)->Fill(eta1, HwK1, w1);
-
-      // dxy: the independent probe of the same displacement
-      h_dxy->Fill(dxy1, w1);
-      p_dxy_vs_phi->Fill(phi1, dxy1, w1);
-      (pos ? p_dxy_vs_phi_plus : p_dxy_vs_phi_minus)->Fill(phi1, dxy1, w1);
-      p_dxy_vs_eta->Fill(eta1, dxy1, w1);
-      h2_dxy_vs_phi->Fill(phi1, dxy1, w1);
-
-      if (dxy1 < 0.5)
-         (pos ? h2_K_phi_plus_tightdxy : h2_K_phi_minus_tightdxy)->Fill(phi1, HwK1, w1);
-   }
-
-   // ---- MC truth -------------------------------------------------------
-   if (name != "data_obs" && genpt1 > 0) {
-      double K_gen_hw = (charge1/genpt1) * 2.0 * 1.17 / 0.8569 / (1.25/8192.0);
-      double dK_hw    = HwK1 - K_gen_hw;
-      h_dK_hw->Fill(dK_hw, w1);
-      p_dK_hw_vs_eta->Fill(geneta1, dK_hw, w1);
-      p_dK_hw_vs_phi->Fill(phi1, dK_hw, w1);
-      p_dK_hw_vs_beta->Fill(genbeta1, dK_hw, w1);
-      p_dK_hw_vs_Kgen->Fill(K_gen_hw, dK_hw, w1);
-      p_dK_hw_vs_dxy->Fill(dxy1, dK_hw, w1);
-      h2_K_hw_reco_gen->Fill(K_gen_hw, HwK1, w1);
-      (charge1 > 0 ? p_dK_hw_vs_phi_plus : p_dK_hw_vs_phi_minus)->Fill(phi1, dK_hw, w1);
-   }
-}
 
       //########################################################################
       //############################### ANALYSIS ###############################
@@ -572,16 +465,17 @@ if (pass_quality_1) {
       // ############### Across 3 or 4 BXs ################
       
       bool is_wrong = false;
+      bool is_right = false;
       int cat = -1;
       int cat_wrong = -1;
       int wrong_dir = 0;
-      
+
       bool is_1234_1 = (nstub1==4 and (bxspread1==3210 or bxspread1==3120 or bxspread1==3201 or bxspread1==3102 or bxspread1==3012 or bxspread1==3021 or bxspread1==1230 or bxspread1==1320 or bxspread1==2130 or bxspread1==2310));
       if (name=="fid0p45" or name=="fid0p50" or name=="fid0p55" or name=="fid0p60" or name=="fid0p65" or name=="fid0p70" or name=="fid0p75" or name=="fid0p80") is_1234_1 = false;
       if (is_1234_1){
          if (bxspread1==3210){
             if (qual1>=15) {
-               h_stub4_bx1234->Fill(pt1,w1); is_accepted=true;
+               h_stub4_bx1234->Fill(pt1,w1); is_accepted=true; is_right = true;
                cat = 3;
             }
             else if (qual1>=1) {h_stub4_bx1234_fail->Fill(pt1,w1); is_accepted=true;}
@@ -616,7 +510,7 @@ if (pass_quality_1) {
       if (is_123_3stubs_fast_1){
          if (bxspread1==2100){
             if (qual1>=14) {
-               h_stub3_bx123_fast->Fill(pt1,w1); is_accepted=true;
+               h_stub3_bx123_fast->Fill(pt1,w1); is_accepted=true; is_right = true;
                cat = 10;
             }
             else {h_stub3_bx123_fast_fail->Fill(pt1,w1); is_accepted=true;}
@@ -641,7 +535,7 @@ if (pass_quality_1) {
          if (is_123_3stubs_slow_1){
             if (bxspread1==2100){
                if (qual1>=14) {
-                  h_stub3_bx123_slow->Fill(pt1,w1); is_accepted=true;
+                  h_stub3_bx123_slow->Fill(pt1,w1); is_accepted=true; is_right = true;
                   cat = 9;
                }
                else {h_stub3_bx123_slow_fail->Fill(pt1,w1); is_accepted=true;}
@@ -665,7 +559,7 @@ if (pass_quality_1) {
          if (is_123_4stubs_1){
             if (bxspread1==2100 or bxspread1==2110 or bxspread1==2210){
                if (qual1>=15) {
-                  h_stub4_bx123->Fill(pt1,w1); is_accepted=true;
+                  h_stub4_bx123->Fill(pt1,w1); is_accepted=true; is_right = true;
                   cat = 2;
                }
                else if (qual1>=1) {h_stub4_bx123_fail->Fill(pt1,w1); is_accepted=true;}
@@ -691,7 +585,7 @@ if (pass_quality_1) {
          if (is_124_4stubs_1){
             if (bxspread1==3100 or bxspread1==3110 or bxspread1==3310 or bxspread1==3200 or bxspread1==3220 or bxspread1==3320){
                if (qual1>=15) {
-                  h_stub4_bx124->Fill(pt1,w1); is_accepted=true;
+                  h_stub4_bx124->Fill(pt1,w1); is_accepted=true; is_right = true;
                   cat = 1;
                }
                else if (qual1>=1) {h_stub4_bx124_fail->Fill(pt1,w1); is_accepted=true;}
@@ -714,7 +608,7 @@ if (pass_quality_1) {
          if (is_124_3stubs_slow_1){
             if (bxspread1==3200 or bxspread1==3100){
                if (qual1>=14) {
-                  h_stub3_bx124_slow->Fill(pt1,w1); is_accepted=true;
+                  h_stub3_bx124_slow->Fill(pt1,w1); is_accepted=true; is_right = true;
                   cat = 7;
                }
                else {h_stub3_bx124_slow_fail->Fill(pt1,w1); is_accepted=true;}
@@ -738,7 +632,7 @@ if (pass_quality_1) {
          if (is_124_3stubs_fast_1){
             if (bxspread1==3200 or bxspread1==3100){
                if (qual1>=14) {
-                  h_stub3_bx124_fast->Fill(pt1,w1); is_accepted=true;
+                  h_stub3_bx124_fast->Fill(pt1,w1); is_accepted=true; is_right = true;
                   cat = 8;
                }
                else {h_stub3_bx124_fast_fail->Fill(pt1,w1); is_accepted=true;}
@@ -770,8 +664,8 @@ if (pass_quality_1) {
             else{
                if (qual1>=15) {
                   h_stub4_bx1122_wrong->Fill(pt1,w2); is_accepted=true;
-                  if (bxspread1==1001 or bxspread1==1010) {h_stub4_bx1122_wrongU->Fill(pt1,w2); is_wrong = true;} //FIXME 1010 used twice
-                  if (bxspread1==1010 or bxspread1==110){ h_stub4_bx1122_wrongD->Fill(pt1,w2); is_wrong = true;}
+                  if (bxspread1==1001 or bxspread1==1010) {h_stub4_bx1122_wrongU->Fill(pt1,w2);} //FIXME 1010 used twice
+                  if (bxspread1==1010 or bxspread1==110){ h_stub4_bx1122_wrongD->Fill(pt1,w2); }
                }
                else if (qual1<15) {
                   h_stub4_bx1122_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -784,7 +678,7 @@ if (pass_quality_1) {
       bool is_1122_2tracks_4stubs_1 = (has_2tracks and nstub1==4 and (bxspread1==1100 or bxspread1==1001 or bxspread1==1010 or (bxspread1==110)));
       if (is_1122_2tracks_4stubs_1){
          if (bxspread1==1100){
-            if (qual1>=15 and has_2goodtracks) {h_stub4_bx1122_2tracks->Fill(pt1,w2); is_accepted=true; cat = 5;}
+            if (qual1>=15 and has_2goodtracks) {h_stub4_bx1122_2tracks->Fill(pt1,w2); is_accepted=true; is_right = true; cat = 5;}
             else if (qual1<15) {h_stub4_bx1122_2tracks_fail->Fill(pt1,w2); is_accepted=true;}
          }
          else{
@@ -806,15 +700,15 @@ if (pass_quality_1) {
       if (is_1112_4stubs_1){
          if (bxspread1==1000){
             if (qual1>=15) {
-               h_stub4_bx1112->Fill(pt1,w2); is_accepted=true;
+               h_stub4_bx1112->Fill(pt1,w2); is_accepted=true; 
             }
             else if (qual1<15) {h_stub4_bx1112_fail->Fill(pt1,w2); is_accepted=true;}
          }
          else{
             if (qual1>=15) {
                h_stub4_bx1112_wrong->Fill(pt1,w2); is_accepted=true;
-               if (bxspread1==100) {h_stub4_bx1112_wrongU->Fill(pt1,w2); is_wrong = true;}//FIXME not same U/D convention
-               if (bxspread1==10) {h_stub4_bx1112_wrongD->Fill(pt1,w2); is_wrong = true;}
+               if (bxspread1==100) {h_stub4_bx1112_wrongU->Fill(pt1,w2); }//FIXME not same U/D convention
+               if (bxspread1==10) {h_stub4_bx1112_wrongD->Fill(pt1,w2); }
             }
             else if (qual1<15) {
                h_stub4_bx1112_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -827,7 +721,7 @@ if (pass_quality_1) {
       bool is_1112_2tracks_4stubs_1 = (has_2tracks and nstub1==4 and (bxspread1==1000 or bxspread1==100 or bxspread1==10));
       if (is_1112_2tracks_4stubs_1){
          if (bxspread1==1000){
-            if (qual1>=15 and has_2goodtracks) { h_stub4_bx1112_2tracks->Fill(pt1,w2); is_accepted=true; cat = 6;}
+            if (qual1>=15 and has_2goodtracks) { h_stub4_bx1112_2tracks->Fill(pt1,w2); is_accepted=true; is_right = true; cat = 6;}
             else if (qual1<15) {h_stub4_bx1112_2tracks_fail->Fill(pt1,w2); is_accepted=true;}
          }
          else{
@@ -849,15 +743,15 @@ if (pass_quality_1) {
          if (is_1222_4stubs_1){
             if (bxspread1==1110){
                if (qual1>=15) {
-               h_stub4_bx1222->Fill(pt1,w2); is_accepted=true;
+               h_stub4_bx1222->Fill(pt1,w2); is_accepted=true; 
             }
                else if (qual1<15) {h_stub4_bx1222_fail->Fill(pt1,w2); is_accepted=true;} 
             }
             else{
                if (qual1>=15) {
                h_stub4_bx1222_wrong->Fill(pt1,w2); is_accepted=true;
-         if (bxspread1==1101) {h_stub4_bx1222_wrongU->Fill(pt1,w2); is_wrong = true;}//FIXME not same U/D convention
-                  if (bxspread1==1011) {h_stub4_bx1222_wrongD->Fill(pt1,w2); is_wrong = true;}
+         if (bxspread1==1101) {h_stub4_bx1222_wrongU->Fill(pt1,w2); }//FIXME not same U/D convention
+                  if (bxspread1==1011) {h_stub4_bx1222_wrongD->Fill(pt1,w2); }
             }
                else if (qual1<15) { 
                h_stub4_bx1222_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -870,7 +764,7 @@ if (pass_quality_1) {
       bool is_1222_2tracks_4stubs_1 = (has_2tracks and nstub1==4 and (bxspread1==1110 or bxspread1==1101 or bxspread1==1011));
          if (is_1222_2tracks_4stubs_1){
             if (bxspread1==1110){
-               if (qual1>=15 and has_2goodtracks) {h_stub4_bx1222_2tracks->Fill(pt1,w2); is_accepted=true; cat = 4;}
+               if (qual1>=15 and has_2goodtracks) {h_stub4_bx1222_2tracks->Fill(pt1,w2); is_accepted=true; is_right = true; cat = 4;}
                else if (qual1<15) {h_stub4_bx1222_2tracks_fail->Fill(pt1,w2); is_accepted=true;}
             }
             else{
@@ -892,15 +786,15 @@ if (pass_quality_1) {
          if (is_112_3stubs_fast_1){
             if (bxspread1==1000){
                if (qual1>=14) {
-                  h_stub3_bx112_fast->Fill(pt1,w2); is_accepted=true;
+                  h_stub3_bx112_fast->Fill(pt1,w2); is_accepted=true; 
                }
                else if (qual1<14) {h_stub3_bx112_fast_fail->Fill(pt1,w2); is_accepted=true;}
             }
             else{
                if (qual1>=14) {
                   h_stub3_bx112_fast_wrong->Fill(pt1,w2); is_accepted=true;
-                  if (bxspread1==100) {h_stub3_bx112_fast_wrongU->Fill(pt1,w2); is_wrong = true;}
-                  if (bxspread1==100) {h_stub3_bx112_fast_wrongD->Fill(pt1,w2); is_wrong = true;} //FIXME up and down same
+                  if (bxspread1==100) {h_stub3_bx112_fast_wrongU->Fill(pt1,w2); }
+                  if (bxspread1==100) {h_stub3_bx112_fast_wrongD->Fill(pt1,w2); } //FIXME up and down same
                }
                else if (qual1<14){
                   h_stub3_bx112_fast_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -913,7 +807,7 @@ if (pass_quality_1) {
       bool is_112_3stubs_fast_2tracks_1 = (has_2tracks and nstub1==3 and (bxspread1==1000 or bxspread1==100) and (stationspread1==4310 or stationspread1==4210));
          if (is_112_3stubs_fast_2tracks_1){
             if (bxspread1==1000){
-               if (qual1>=14 and has_2goodtracks) { h_stub3_bx112_fast_2tracks->Fill(pt1,w2); is_accepted=true; cat = 14;}
+               if (qual1>=14 and has_2goodtracks) { h_stub3_bx112_fast_2tracks->Fill(pt1,w2); is_accepted=true; is_right = true; cat = 14;}
                else if (qual1<14) {h_stub3_bx112_fast_2tracks_fail->Fill(pt1,w2); is_accepted=true;}
             }
             else{
@@ -935,15 +829,15 @@ if (pass_quality_1) {
          if (is_112_3stubs_slow_1){
             if (bxspread1==1000){
                if (qual1>=14) {
-               h_stub3_bx112_slow->Fill(pt1,w2); is_accepted=true;
+               h_stub3_bx112_slow->Fill(pt1,w2); is_accepted=true; 
             }
                else if (qual1<14) {h_stub3_bx112_slow_fail->Fill(pt1,w2); is_accepted=true;}
             }
             else{
                if (qual1>=14) {
                h_stub3_bx112_slow_wrong->Fill(pt1,w2); is_accepted=true;
-         if (bxspread1==100){ h_stub3_bx112_slow_wrongU->Fill(pt1,w2); is_wrong = true;}
-         if (bxspread1==100){ h_stub3_bx112_slow_wrongD->Fill(pt1,w2);  is_wrong = true;}//FIXME up and down same
+         if (bxspread1==100){ h_stub3_bx112_slow_wrongU->Fill(pt1,w2); }
+         if (bxspread1==100){ h_stub3_bx112_slow_wrongD->Fill(pt1,w2); }//FIXME up and down same
             }
                else if (qual1<14){
                h_stub3_bx112_slow_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -956,7 +850,7 @@ if (pass_quality_1) {
       bool is_112_3stubs_slow_2tracks_1 = (has_2tracks and nstub1==3 and (bxspread1==1000 or bxspread1==100) and (stationspread1==3210 or stationspread1==4320));
          if (is_112_3stubs_slow_2tracks_1){
             if (bxspread1==1000){
-               if (qual1>=14 and has_2goodtracks) { h_stub3_bx112_slow_2tracks->Fill(pt1,w2); is_accepted=true; cat = 13;}
+               if (qual1>=14 and has_2goodtracks) { h_stub3_bx112_slow_2tracks->Fill(pt1,w2); is_accepted=true; is_right = true; cat = 13;}
                else if (qual1<14) {h_stub3_bx112_slow_2tracks_fail->Fill(pt1,w2); is_accepted=true;}
             }
             else{
@@ -985,8 +879,8 @@ if (pass_quality_1) {
             else{
                if (qual1>=14) {
                   h_stub3_bx122_fast_wrong->Fill(pt1,w2); is_accepted=true;
-                  if (bxspread1==1010) {h_stub3_bx122_fast_wrongU->Fill(pt1,w2); is_wrong = true;}//FIXME same up and down
-                  if (bxspread1==1010) {h_stub3_bx122_fast_wrongD->Fill(pt1,w2);is_wrong = true;}
+                  if (bxspread1==1010) {h_stub3_bx122_fast_wrongU->Fill(pt1,w2);}//FIXME same up and down
+                  if (bxspread1==1010) {h_stub3_bx122_fast_wrongD->Fill(pt1,w2);}
                }
                else if (qual1<14){
                   h_stub3_bx122_fast_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -999,7 +893,7 @@ if (pass_quality_1) {
       bool is_122_3stubs_fast_2tracks_1 = (has_2tracks and nstub1==3 and (bxspread1==1100 or bxspread1==1010) and (stationspread1==4310 or stationspread1==4210));
       if (is_122_3stubs_fast_2tracks_1){
          if (bxspread1==1100){
-            if (qual1>=14 and has_2goodtracks) {h_stub3_bx122_fast_2tracks->Fill(pt1,w2); is_accepted=true; cat = 12;}
+            if (qual1>=14 and has_2goodtracks) {h_stub3_bx122_fast_2tracks->Fill(pt1,w2); is_accepted=true; is_right = true; cat = 12;}
             else if (qual1<14) {h_stub3_bx122_fast_2tracks_fail->Fill(pt1,w2); is_accepted=true;}
          }
          else{
@@ -1021,15 +915,15 @@ if (pass_quality_1) {
       if (is_122_3stubs_slow_1){
          if (bxspread1==1100){
             if (qual1>=14) {
-               h_stub3_bx122_slow->Fill(pt1,w2); is_accepted=true;
+               h_stub3_bx122_slow->Fill(pt1,w2); is_accepted=true; 
             }
             else if (qual1<14) {h_stub3_bx122_slow_fail->Fill(pt1,w2); is_accepted=true;}
          }
          else{
             if (qual1>=14) {
                h_stub3_bx122_slow_wrong->Fill(pt1,w2); is_accepted=true;
-               if (bxspread1==1010) {h_stub3_bx122_slow_wrongU->Fill(pt1,w2); is_wrong = true;}//FIXME same up and down
-               if (bxspread1==1010) {h_stub3_bx122_slow_wrongD->Fill(pt1,w2);is_wrong = true;}
+               if (bxspread1==1010) {h_stub3_bx122_slow_wrongU->Fill(pt1,w2); }//FIXME same up and down
+               if (bxspread1==1010) {h_stub3_bx122_slow_wrongD->Fill(pt1,w2);}
             }
             else if (qual1<14){
                h_stub3_bx122_slow_wrong_fail->Fill(pt1,w2); is_accepted=true;
@@ -1042,7 +936,7 @@ if (pass_quality_1) {
       bool is_122_3stubs_slow_2tracks_1 = (has_2tracks and nstub1==3 and (bxspread1==1100 or bxspread1==1010) and (stationspread1==3210 or stationspread1==4320));
       if (is_122_3stubs_slow_2tracks_1){
          if (bxspread1==1100){
-            if (qual1>=14 and has_2goodtracks) {h_stub3_bx122_slow_2tracks->Fill(pt1,w2); is_accepted=true; cat = 11;}
+            if (qual1>=14 and has_2goodtracks) {h_stub3_bx122_slow_2tracks->Fill(pt1,w2); is_accepted=true; is_right = true; cat = 11;}
             else if (qual1<14) {h_stub3_bx122_slow_2tracks_fail->Fill(pt1,w2); is_accepted=true;}
          }
          else{
@@ -1059,18 +953,16 @@ if (pass_quality_1) {
          }
       }
 
-      if(is_wrong){
-         if(nstub1 == 3) h_dxy3stubs_wrong->Fill(dxy1);
-         if(nstub1 == 4) h_dxy4stubs_wrong->Fill(dxy1);
-         //h_qpt_wrong->Fill(charge1/pt1);
+      if (is_right && pt1 > (is_1234_1 ? 15. : 50.)) {
+         if (nstub1 == 3) h_dxy3stubs->Fill(dxy1);
+         if (nstub1 == 4) h_dxy4stubs->Fill(dxy1);
       }
 
-      // if (pt1 > 0) {
-      //    double K = charge1/pt1;
-      //    if (cat >= 0)                        p_qpt_vs_cat->Fill(cat + 0.5, K, w1);
-      //    if (cat_wrong >= 0 && wrong_dir > 0) p_qpt_vs_cat_wrongU->Fill(cat_wrong + 0.5, K, w1);
-      //    if (cat_wrong >= 0 && wrong_dir < 0) p_qpt_vs_cat_wrongD->Fill(cat_wrong + 0.5, K, w1);
-      // }
+      if (is_wrong && pt1 > (is_1234_1 ? 15. : 50.)) {
+         if (nstub1 == 3) h_dxy3stubs_wrong->Fill(dxy1);
+         if (nstub1 == 4) h_dxy4stubs_wrong->Fill(dxy1);
+      }
+
 
 
    } // end of loop over events
@@ -1091,8 +983,6 @@ if (pass_quality_1) {
     h_qual_nstub3->Write();
     h_qual_nstub4->Write();
     h_nstub->Write();
-    h_pt->Write();
-    h_charge->Write();
     h_dxy->Write();
     h_dxy3stubs->Write();
     h_dxy4stubs->Write();
@@ -1104,242 +994,10 @@ if (pass_quality_1) {
    //  h_phi_gt2BX_wrong->Write();
    //  h_1234ordering->Write();
 
-    // ---- alignment: K marginals (these four are the measurement) ----
-    h2_K_processor_plus_stub3->Write();
-    h2_K_processor_minus_stub3->Write();
-    h2_K_processor_plus_stub4->Write();
-    h2_K_processor_minus_stub4->Write();
 
-    h2_K_eta_plus->Write();
-    h2_K_eta_minus->Write();
-
-    h_K->Write();
-    p_K_vs_phi->Write();
-    p_K_vs_eta->Write();
-    p_K_vs_nstub->Write();
-    p_K_vs_dxy->Write();
-    h_sector_plus->Write();
-    h_sector_minus->Write();
-
-    // ---- alignment: dxy ----
-    h_dxy_prompt->Write();
-    p_dxy_vs_phi->Write();
-    p_dxy_vs_phi_plus->Write();
-    p_dxy_vs_phi_minus->Write();
-    p_dxy_vs_eta->Write();
-    h2_dxy_vs_phi->Write();
-    h2_K_phi_plus_tightdxy->Write();
-    h2_K_phi_minus_tightdxy->Write();
-
-    // ---- MC closure (empty for data_obs) ----
-    h_dK_hw->Write();
-    p_dK_hw_vs_eta->Write();
-    p_dK_hw_vs_phi->Write();
-    p_dK_hw_vs_beta->Write();
-    p_dK_hw_vs_Kgen->Write();
-    p_dK_hw_vs_dxy->Write();
-    p_dK_hw_vs_phi_plus->Write();
-    p_dK_hw_vs_phi_minus->Write();
-    h2_K_hw_reco_gen->Write();
 
     fout->Close();
 
-   //  WriteHistToFile(fout,h_phi_2BX,name,"phi_2BX");
-   //  WriteHistToFile(fout,h_phi_2BX_wrong,name,"phi_2BX_wrong");
-   //  WriteHistToFile(fout,h_phi_gt2BX,name,"phi_gt2BX");
-   //  WriteHistToFile(fout,h_phi_gt2BX_wrong,name,"phi_gt2BX_wrong");
-
-   //  WriteHistToFile(fout,h_stub4_bx1234,name,"stub4_bx1234");
-   //  WriteHistToFile(fout,h_stub4_bx1234_wrong,name,"stub4_bx1234_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx1234_wrongU,name,"stub4_bx1234_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx1234_wrongD,name,"stub4_bx1234_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx1234_fail,name,"stub4_bx1234_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1234_wrong_fail,name,"stub4_bx1234_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1234_wrongU_fail,name,"stub4_bx1234_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1234_wrongD_fail,name,"stub4_bx1234_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx123_slow,name,"stub3_bx123_slow");
-   //  WriteHistToFile(fout,h_stub3_bx123_slow_wrong,name,"stub3_bx123_slow_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx123_slow_wrongU,name,"stub3_bx123_slow_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx123_slow_wrongD,name,"stub3_bx123_slow_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx123_slow_fail,name,"stub3_bx123_slow_fail");
-   //  WriteHistToFile(fout,h_stub3_bx123_slow_wrong_fail,name,"stub3_bx123_slow_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx123_slow_wrongU_fail,name,"stub3_bx123_slow_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx123_slow_wrongD_fail,name,"stub3_bx123_slow_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx123_fast,name,"stub3_bx123_fast");
-   //  WriteHistToFile(fout,h_stub3_bx123_fast_wrong,name,"stub3_bx123_fast_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx123_fast_wrongU,name,"stub3_bx123_fast_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx123_fast_wrongD,name,"stub3_bx123_fast_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx123_fast_fail,name,"stub3_bx123_fast_fail");
-   //  WriteHistToFile(fout,h_stub3_bx123_fast_wrong_fail,name,"stub3_bx123_fast_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx123_fast_wrongU_fail,name,"stub3_bx123_fast_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx123_fast_wrongD_fail,name,"stub3_bx123_fast_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx123,name,"stub4_bx123");
-   //  WriteHistToFile(fout,h_stub4_bx123_neutron,name,"stub4_bx123_neutron");
-   //  WriteHistToFile(fout,h_stub4_bx123_wrong,name,"stub4_bx123_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx123_wrongU,name,"stub4_bx123_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx123_wrongD,name,"stub4_bx123_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx123_fail,name,"stub4_bx123_fail");
-   //  WriteHistToFile(fout,h_stub4_bx123_wrong_fail,name,"stub4_bx123_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx123_wrongU_fail,name,"stub4_bx123_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx123_wrongD_fail,name,"stub4_bx123_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx124_slow,name,"stub3_bx124_slow");
-   //  WriteHistToFile(fout,h_stub3_bx124_slow_wrong,name,"stub3_bx124_slow_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx124_slow_wrongU,name,"stub3_bx124_slow_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx124_slow_wrongD,name,"stub3_bx124_slow_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx124_slow_fail,name,"stub3_bx124_slow_fail");
-   //  WriteHistToFile(fout,h_stub3_bx124_slow_wrong_fail,name,"stub3_bx124_slow_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx124_slow_wrongU_fail,name,"stub3_bx124_slow_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx124_slow_wrongD_fail,name,"stub3_bx124_slow_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx124_fast,name,"stub3_bx124_fast");
-   //  WriteHistToFile(fout,h_stub3_bx124_fast_wrong,name,"stub3_bx124_fast_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx124_fast_wrongU,name,"stub3_bx124_fast_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx124_fast_wrongD,name,"stub3_bx124_fast_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx124_fast_fail,name,"stub3_bx124_fast_fail");
-   //  WriteHistToFile(fout,h_stub3_bx124_fast_wrong_fail,name,"stub3_bx124_fast_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx124_fast_wrongU_fail,name,"stub3_bx124_fast_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx124_fast_wrongD_fail,name,"stub3_bx124_fast_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx124,name,"stub4_bx124");
-   //  WriteHistToFile(fout,h_stub4_bx124_wrong,name,"stub4_bx124_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx124_wrongU,name,"stub4_bx124_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx124_wrongD,name,"stub4_bx124_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx124_fail,name,"stub4_bx124_fail");
-   //  WriteHistToFile(fout,h_stub4_bx124_wrong_fail,name,"stub4_bx124_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx124_wrongU_fail,name,"stub4_bx124_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx124_wrongD_fail,name,"stub4_bx124_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx112_fast,name,"stub3_bx112_fast");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_wrong,name,"stub3_bx112_fast_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_wrongU,name,"stub3_bx112_fast_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_wrongD,name,"stub3_bx112_fast_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_fail,name,"stub3_bx112_fast_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_wrong_fail,name,"stub3_bx112_fast_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_wrongU_fail,name,"stub3_bx112_fast_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_wrongD_fail,name,"stub3_bx112_fast_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks,name,"stub3_bx112_fast_2tracks");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks_wrong,name,"stub3_bx112_fast_2tracks_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks_wrongU,name,"stub3_bx112_fast_2tracks_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks_wrongD,name,"stub3_bx112_fast_2tracks_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks_fail,name,"stub3_bx112_fast_2tracks_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks_wrong_fail,name,"stub3_bx112_fast_2tracks_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks_wrongU_fail,name,"stub3_bx112_fast_2tracks_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_fast_2tracks_wrongD_fail,name,"stub3_bx112_fast_2tracks_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx112_slow,name,"stub3_bx112_slow");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_wrong,name,"stub3_bx112_slow_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_wrongU,name,"stub3_bx112_slow_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_wrongD,name,"stub3_bx112_slow_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_fail,name,"stub3_bx112_slow_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_wrong_fail,name,"stub3_bx112_slow_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_wrongU_fail,name,"stub3_bx112_slow_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_wrongD_fail,name,"stub3_bx112_slow_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks,name,"stub3_bx112_slow_2tracks");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks_wrong,name,"stub3_bx112_slow_2tracks_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks_wrongU,name,"stub3_bx112_slow_2tracks_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks_wrongD,name,"stub3_bx112_slow_2tracks_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks_fail,name,"stub3_bx112_slow_2tracks_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks_wrong_fail,name,"stub3_bx112_slow_2tracks_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks_wrongU_fail,name,"stub3_bx112_slow_2tracks_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx112_slow_2tracks_wrongD_fail,name,"stub3_bx112_slow_2tracks_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx122_fast,name,"stub3_bx122_fast");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_wrong,name,"stub3_bx122_fast_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_wrongU,name,"stub3_bx122_fast_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_wrongD,name,"stub3_bx122_fast_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_fail,name,"stub3_bx122_fast_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_wrong_fail,name,"stub3_bx122_fast_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_wrongU_fail,name,"stub3_bx122_fast_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_wrongD_fail,name,"stub3_bx122_fast_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks,name,"stub3_bx122_fast_2tracks");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks_wrong,name,"stub3_bx122_fast_2tracks_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks_wrongU,name,"stub3_bx122_fast_2tracks_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks_wrongD,name,"stub3_bx122_fast_2tracks_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks_fail,name,"stub3_bx122_fast_2tracks_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks_wrong_fail,name,"stub3_bx122_fast_2tracks_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks_wrongU_fail,name,"stub3_bx122_fast_2tracks_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_fast_2tracks_wrongD_fail,name,"stub3_bx122_fast_2tracks_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx122_slow,name,"stub3_bx122_slow");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_wrong,name,"stub3_bx122_slow_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_wrongU,name,"stub3_bx122_slow_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_wrongD,name,"stub3_bx122_slow_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_fail,name,"stub3_bx122_slow_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_wrong_fail,name,"stub3_bx122_slow_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_wrongU_fail,name,"stub3_bx122_slow_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_wrongD_fail,name,"stub3_bx122_slow_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks,name,"stub3_bx122_slow_2tracks");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks_wrong,name,"stub3_bx122_slow_2tracks_wrong");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks_wrongU,name,"stub3_bx122_slow_2tracks_wrongU");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks_wrongD,name,"stub3_bx122_slow_2tracks_wrongD");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks_fail,name,"stub3_bx122_slow_2tracks_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks_wrong_fail,name,"stub3_bx122_slow_2tracks_wrong_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks_wrongU_fail,name,"stub3_bx122_slow_2tracks_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub3_bx122_slow_2tracks_wrongD_fail,name,"stub3_bx122_slow_2tracks_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx1122,name,"stub4_bx1122");
-   //  WriteHistToFile(fout,h_stub4_bx1122_wrong,name,"stub4_bx1122_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx1122_wrongU,name,"stub4_bx1122_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx1122_wrongD,name,"stub4_bx1122_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx1122_fail,name,"stub4_bx1122_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1122_wrong_fail,name,"stub4_bx1122_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1122_wrongU_fail,name,"stub4_bx1122_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1122_wrongD_fail,name,"stub4_bx1122_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks,name,"stub4_bx1122_2tracks");
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks_wrong,name,"stub4_bx1122_2tracks_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks_wrongU,name,"stub4_bx1122_2tracks_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks_wrongD,name,"stub4_bx1122_2tracks_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks_fail,name,"stub4_bx1122_2tracks_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks_wrong_fail,name,"stub4_bx1122_2tracks_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks_wrongU_fail,name,"stub4_bx1122_2tracks_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1122_2tracks_wrongD_fail,name,"stub4_bx1122_2tracks_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx1112,name,"stub4_bx1112");
-   //  WriteHistToFile(fout,h_stub4_bx1112_wrong,name,"stub4_bx1112_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx1112_wrongU,name,"stub4_bx1112_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx1112_wrongD,name,"stub4_bx1112_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx1112_fail,name,"stub4_bx1112_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1112_wrong_fail,name,"stub4_bx1112_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1112_wrongU_fail,name,"stub4_bx1112_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1112_wrongD_fail,name,"stub4_bx1112_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks,name,"stub4_bx1112_2tracks");
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks_wrong,name,"stub4_bx1112_2tracks_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks_wrongU,name,"stub4_bx1112_2tracks_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks_wrongD,name,"stub4_bx1112_2tracks_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks_fail,name,"stub4_bx1112_2tracks_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks_wrong_fail,name,"stub4_bx1112_2tracks_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks_wrongU_fail,name,"stub4_bx1112_2tracks_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1112_2tracks_wrongD_fail,name,"stub4_bx1112_2tracks_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx1222,name,"stub4_bx1222");
-   //  WriteHistToFile(fout,h_stub4_bx1222_wrong,name,"stub4_bx1222_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx1222_wrongU,name,"stub4_bx1222_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx1222_wrongD,name,"stub4_bx1222_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx1222_fail,name,"stub4_bx1222_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1222_wrong_fail,name,"stub4_bx1222_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1222_wrongU_fail,name,"stub4_bx1222_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1222_wrongD_fail,name,"stub4_bx1222_wrongD_fail");
-
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks,name,"stub4_bx1222_2tracks");
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks_wrong,name,"stub4_bx1222_2tracks_wrong");
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks_wrongU,name,"stub4_bx1222_2tracks_wrongU");
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks_wrongD,name,"stub4_bx1222_2tracks_wrongD");
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks_fail,name,"stub4_bx1222_2tracks_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks_wrong_fail,name,"stub4_bx1222_2tracks_wrong_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks_wrongU_fail,name,"stub4_bx1222_2tracks_wrongU_fail");
-   //  WriteHistToFile(fout,h_stub4_bx1222_2tracks_wrongD_fail,name,"stub4_bx1222_2tracks_wrongD_fail");
-
-    //cout<<h_stub4_bx1222_2tracks->Integral()<<endl;
-
+   
     fout->Close();
 }

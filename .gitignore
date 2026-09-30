@@ -12,3 +12,4 @@ __pycache__/
 *.out
 condor_logs/
 tmp/
+NtupleAnalyzer/lib/*ACLiC*
