@@ -82,8 +82,9 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("recobeta2", &recobeta2);
     dxy1.connect(arbre, "dxy1");
     dxy2.connect(arbre, "dxy2");
-   HwK1.connect(arbre, "HwK1");
-    HwK2.connect(arbre, "HwK2");
+   //hwK1.connect(arbre, "hwK1");
+    //HwK2.connect(arbre, "HwK2");
+    arbre->SetBranchAddress("hwK1", &hwK1);
     
 
     TH1D* h_qual_nstub2 = new TH1D("h_qual_nstub2","h_qual_nstub2",4,12,16); h_qual_nstub2->Sumw2();
@@ -106,6 +107,8 @@ int main(int argc, char** argv) {
     TH1D* h_nstub = new TH1D("h_nstub","h_nstub",3,2,5); h_nstub->Sumw2();
     TH1D* h_ptbefore = new TH1D("h_ptbefore","h_ptbefore",80,20,1200); h_ptbefore->Sumw2();
     TH1D* h_ptafter = new TH1D("h_ptafter","h_ptafter",80,20,1200); h_ptafter->Sumw2();
+   TH1D* h_hwKbefore = new TH1D("h_hwKbefore","h_hwKbefore",1000,-500,500); h_hwKbefore->Sumw2();
+   TH1D* h_hwKafter  = new TH1D("h_hwKafter","h_hwKafter",1000,-500,500);   h_hwKafter->Sumw2();
 
 
    float bins_lowpt[] = {15,20,25,30,35};
@@ -475,46 +478,46 @@ int main(int argc, char** argv) {
       }	
 
       h_ptbefore->Fill(pt1);
+      if(nstub1 != 2) h_hwKbefore->Fill(hwK1);
 
       double Kcorr = 0;
       
-      //Apply data LUT
-      if(name == "data_obs"){
-         Kcorr = kcorr::correctK(HwK1, phi1, eta1, nstub1);
-         pt1 = kcorr::ptLUT_corr(Kcorr, true);
-      }
+      // //Apply data LUT
+      // if(name == "data_obs"){
+      //    Kcorr = kcorr::correctK(hwK1, phi1, eta1, nstub1);
+      //    pt1 = kcorr::ptLUT_corr(Kcorr, true);
+      // }
 
-      //Apply simulation LUT
-      else{
-         Kcorr = sim_kcorr::correctK(HwK1, phi1, eta1, nstub1);
-         pt1 = sim_kcorr::ptLUT_corr(Kcorr, true);
-      }
+      // //Apply simulation LUT
+      // else{
+      //    Kcorr = sim_kcorr::correctK(hwK1, phi1, eta1, nstub1);
+      //    pt1 = sim_kcorr::ptLUT_corr(Kcorr, true);
+      // }
 
       // Muon energy resolution
-         double smearFactor1 = randGen.Gaus(1.0, 0.05);
-         double smearFactor2 = randGen.Gaus(1.0, 0.05);
-         if (name!="data_obs"){
-            pt1 = pt1 * smearFactor1;
-            pt2 = pt2 * smearFactor2;
-         }
-      h_ptafter->Fill(pt1);
-
+      double smearFactor1 = randGen.Gaus(1.0, 0.05);
+      double smearFactor2 = randGen.Gaus(1.0, 0.05);
+      if (name!="data_obs"){
+         pt1 = pt1 * smearFactor1;
+         pt2 = pt2 * smearFactor2;
+      }
+      
       if (i==0) {
          h_cutflow->Fill(0.5,ngenl);
          h_cutflow_gt2BX->Fill(0.5,ngenl);
          h_cutflow_2BX->Fill(0.5,ngenl);
          h_cutflow_2BX_2tracks->Fill(0.5,ngenl);
       }
-
+      
       if (pt1>15){ 
-            h_cutflow->Fill(1.5);
+         h_cutflow->Fill(1.5);
          h_cutflow_gt2BX->Fill(1.5);
          h_cutflow_2BX->Fill(1.5);
          h_cutflow_2BX_2tracks->Fill(1.5);
       }
-
+      
       float weight=1.0;
-
+      
       //###########################################################
       //############## CHECK QUALITY CRITERIA #####################
       //###########################################################
@@ -541,10 +544,12 @@ int main(int argc, char** argv) {
          if (dxy1>0.3) pass_quality_1=false;
          if (dxy1>0.3) continue;
       }
-
+      
       if (dxy1>1) pass_quality_1=false;
       if (dxy1>1) continue;
-
+      
+      h_ptafter->Fill(pt1);
+      if(nstub1 != 2) h_hwKafter->Fill(hwK1);
 
 
       bool has_2goodtracks=false;
@@ -1209,6 +1214,8 @@ int main(int argc, char** argv) {
     h_nstub->Write();
     h_ptbefore->Write();
     h_ptafter->Write();
+    h_hwKbefore->Write();
+    h_hwKafter->Write();
 
     WriteHistToFile(fout, h_recobeta, name, "recoBeta");
     WriteHistToFile(fout, h_recobeta_wrong, name, "recoBeta_wrong");
